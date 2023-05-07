@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../resources/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../resources/css/bootstrap.min.css.map">
+    <link rel="stylesheet" href="../../resources/css/bootstrap.css.map">
+    <link rel="stylesheet" href="../../resources/css/private.css">
+    <link rel="shortcut icon" href="../../resources/img/logos/logo.png" type="image/x-icon">
+    <title>Electrodomesticos SV</title>
+</head>
+
+<body>
+    <div class="nav-render"></div>
+    <div class="container container-catalog">
+        <form method="post" id="form-producto">
+
+            <div class="row">
+
+                <!-- id producto -->
+                <div class="form-floating mb-3">
+                    <input type="number" name="idproducto" id="idproducto" class="hide">
+                    <label class="hide" for="idproducto">IDProducto</label>
+                </div>
+                <div class="col-6">
+
+                    <!-- producto -->
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="producto" placeholder="producto" name="producto">
+                        <label for="producto">Producto</label>
+                    </div>
+
+                </div>
+                <div class="col-6">
+                    <div class="row">
+                        <div class="col-6">
+
+                            <!-- precio -->
+                            <div class="form-floating mb-3">
+                                <input type="text" pattern="\d+(\.\d{1,2})?" class="form-control" id="precio"
+                                    placeholder="precio" name="precio">
+                                <label for="precio">Precio</label>
+                            </div>
+
+                        </div>
+                        <div class="col-6">
+
+                            <!-- existencias -->
+                            <div class="form-floating mb-3">
+                                <input type="number" pattern="\d" class="form-control" id="existencias"
+                                    placeholder="existencias" name="existencias">
+                                <label for="existencias">Existencias</label>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- descripcion -->
+            <div class="form-floating mb-3">
+                <div class="form-floating">
+                    <textarea class="form-control"name="descripcion" placeholder="Leave a comment here" id="descripcion"></textarea>
+                    <label for="descripcion">Descripcion</label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-4 mb-4">
+                    <!-- categorias -->
+                    <div class="form-floating">
+                        <select class="form-select" id="categorias" name="categorias" id="categorias" aria-label="Floating label select example">
+
+                        </select>
+                        <label for="categorias">Categorias</label>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <!-- marcas -->
+                    <div class="form-floating">
+                        <select class="form-select" id="marcas" id="marcas" name="marcas" aria-label="Floating label select example">
+
+                        </select>
+                        <label for="marcas">Marcas</label>
+                    </div>
+                </div>
+                <div class="col-4 switch">
+
+                    <label for="estado">Activo</label>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" name="estado" id="estado" type="checkbox" id="estado" checked>
+                    </div>
+                    <label>Inactivo</label>
+
+                </div>
+            </div>
+
+            <!-- imagen -->
+            <div class="input-group mb-3">
+                <label class="input-group-text" for="image">Seleccionar</label>
+                <input type="file" name="image" id="image" class="form-control" id="image">
+            </div>
+
+            <!--botones  -->
+            <button type="reset" id="cancelar" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-success" id="proceso">
+                <div class="hide">a</div>
+            
+            
+            </button>
+        </form>
+
+    </div>
+
+    <script src="../../resources/js/bootstrap.bundle.min.js"></script>
+    <script src="../../controllers/private/render.js"></script>
+    <script src="../../resources/js/sweetalert.min.js"></script>
+    <script type="module" src="../../controllers/private/productos.js"></script>
+</body>
+
+</html>

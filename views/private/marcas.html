@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../resources/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../resources/css/bootstrap.min.css.map">
+    <link rel="stylesheet" href="../../resources/css/bootstrap.css.map">
+    <link rel="stylesheet" href="../../resources/css/private.css">
+    <link rel="shortcut icon" href="../../resources/img/logos/logo.png" type="image/x-icon">
+    <title>Electrodomesticos SV</title>
+</head>
+
+<body>
+    <div class="nav-render"></div>
+    <div class="container container-catalog">
+        <div class="top">
+            <h3>Marcas</h3>
+            <!-- trigger del modal -->
+            <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#Modal" id="btn-agregar">
+                Agregar
+            </button>
+        </div>
+        <div class="table">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Marca</th>
+                        <th>Cantidad de productos</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody-marca"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="Modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Agregar marca</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="post" id="form-marca">
+                    <div class="modal-body">
+                        <input type="number" name="idmarca" id="idmarca" class="hide">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="marca" placeholder="Marca" name="marca">
+                            <label for="marca">Marca</label>
+                        </div>               
+                    </div>
+                    <div class="modal-footer">
+                        <button type="reset" id="cancelar" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-success" id="proceso"></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="../../resources/js/bootstrap.bundle.min.js"></script>
+    <script src="../../controllers/private/render.js"></script>
+    <script src="../../resources/js/sweetalert.min.js"></script>
+    <script type="module" src="../../controllers/private/marcas.js"></script>
+</body>
+
+</html>
