@@ -61,3 +61,9 @@
     border-color: #6c757d;
     box-shadow: #5f676e;
 }
+/* estilos en tabla productos, col botones, form */
+.buttons-tb{
+    flex-direction: row;
+    display: flex;
+    gap: .5%;
+}

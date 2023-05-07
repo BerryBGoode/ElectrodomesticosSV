@@ -74,9 +74,19 @@ if (!isset($_GET['action'])) {
 
                 if (!PRODUCTO->setId($_POST['idproducto'])) {
                     $res['excep'] = 'Error al seleccionar producto';
+                    // obtener datos de la imagen a borrar
+                } elseif (!$producto = $query->registro()) {
+                    $res['excep'] = 'Producto no registrado';
                 } elseif ($query->eliminar()) {
                     $res['status'] = 1;
-                    $res['msg'] = 'Registro eliminado';
+                    // eliminar imagen
+                    if (Validate::destroyFile(PRODUCTO->getPath(), $producto['imagen'])) {
+                        $res['msg'] = 'Registro eliminado';
+                        
+                    } else {
+                        $res['msg'] = 'Registro eliminado, '.Validate::getErrorFile();
+                    }
+                    
                 } else {
                     $res['excep'] = Database::getException();
                 }
@@ -110,6 +120,56 @@ if (!isset($_GET['action'])) {
                 }
 
 
+                break;
+
+            case 'actualizar':
+                $_POST = Validate::form($_POST);
+                
+
+                if (!PRODUCTO->setId($_POST['idproducto'])) {
+                    $res['excep'] = 'Error al obtener registro';
+                    // obtener el registro, para obtener el nombre de la imagen anterior
+                }elseif (!$producto = $query->registro()) {
+                    $res['excep'] = 'Producto no registrado';
+                }
+                elseif (!PRODUCTO->setProducto($_POST['producto'])) {
+                    $res['excep'] = 'Nombre incorrecto';
+                } elseif (!PRODUCTO->setDescripcion($_POST['descripcion'])) {
+                    $res['excep'] = 'Descripción incorrecto';
+                } elseif (!PRODUCTO->setPrecio($_POST['precio'])) {
+                    $res['excep'] = 'Formato del precio incorrecto';
+                } elseif (!PRODUCTO->setExistencias($_POST['existencias'])) {
+                    $res['excep'] = 'Existencias invalidas';
+                    // si no se seleccionado nueva imagen
+                } elseif (!is_uploaded_file($_FILES['image']['tmp_name'])) {
+                        
+                    if ($query->actualizar($producto['imagen'])) {
+                        $res['status'] = 1;
+                        $res['msg'] = 'Registro modificado';
+                    }else {
+                        $res['excep'] = Database::getException();
+                    }
+                    
+                } elseif (!PRODUCTO->setImg($_FILES['image'])) {
+                    $res['excep'] = Validate::getErrorFile();
+                } elseif (!PRODUCTO->setCategoria($_POST['categorias'])) {
+                    $res['excep'] = 'Categoria incorrecto';
+                } elseif (!PRODUCTO->setMarca($_POST['marcas'])) {
+                    $res['excep'] = 'Marca incorrecto';
+                } elseif (!PRODUCTO->setEstado($_POST['chkestado'])) {
+                    $res['excep'] = 'Estado incorrecto';
+                    // si se ha seleccionado una imagen nueva
+                } elseif ($query->actualizar($producto['imagen'])) {
+                    $res['status'] = 1;
+                    
+                    if (Validate::storeFile($_FILES['image'], PRODUCTO->getPath(), PRODUCTO->getImg())) {
+                        $res['msg'] = 'Registro modificado';
+                    } else {
+                        $res['msg'] = 'Registro modificado sin imagen';
+                    }
+                } else {
+                    $res['excep'] = Database::getException();
+                }
                 break;
             default:
                 $res['excep'] = 'Acción no encontrada';

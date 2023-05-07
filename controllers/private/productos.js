@@ -14,7 +14,8 @@ const PATH = '../../api/images/productos/';
 
 let accion;
 let estado;
-
+let contenedorswitch = document.querySelector('.switch');
+let imagenformulario = document.querySelector('.imagen-producto');
 
 // se encierrar en un if para verificar sí se encontró ese elemento
 if (SWITCH) {
@@ -27,15 +28,48 @@ if (SWITCH) {
     })
 }
 
+const getProductoURL = () => {
+    const URL = new URLSearchParams(window.location.search);
+    const VALUE = URL.get('productoid');
+    return VALUE;
+}
+
+const toActualizar = async (json) => {
+    contenedorswitch.style.visibility = 'hidden';
+    console.log(json);
+    cargarSelect(CATEGORIA, 'categorias', json.idcategoria);
+    cargarSelect(MARCA, 'marcas', json.idmarca)
+
+    document.getElementById('producto').value = json.nombre;
+    document.getElementById('precio').value = json.precio;
+    document.getElementById('existencias').value = json.existencias;
+    document.getElementById('descripcion').value = json.descripcion;
+    document.getElementById('idproducto').value = json.idproducto;
+    
+    // imagenformulario.innerHTML = `<img src="${PATH + json.imagen}" alt="" width="50px" height="50px">`;
+    
+}
+
 document.addEventListener('DOMContentLoaded', async (event) => {
     event.preventDefault();
-    // verificar la página, sí es agregar
-    if (location.href.indexOf('agregar') !== -1) {
 
+    // verificar la página, sí es agregarproducto.html
+    if (location.href.indexOf('agregar') !== -1) {
+        
         // verificar sí el proceso para carga los selects
-        if (document.getElementById('idproducto').value) {
-            console.log('actualizar');
+        // verificar proceso por medio de url
+        if (getProductoURL()) {            
+            PROCESO.innerText = `Actualizar`;
+            const DATO = new FormData;            
+            DATO.append('idproducto', getProductoURL());
+            const JSON = await request(PRODUCTO, 'registro', DATO);
+            if (JSON.status) {
+                toActualizar(JSON.data);
+            } else {
+                notificacionURL('error', JSON.excep, false);
+            }
         } else {
+            PROCESO.innerText = `Agregar`;
             cargarSelect(CATEGORIA, 'categorias');
             cargarSelect(MARCA, 'marcas');
         }
@@ -68,41 +102,47 @@ const cargarTabla = async () => {
     TABLA.innerHTML = ``;
     const JSON = await request(PRODUCTO, 'cargar');
     if (JSON.status) {
-        // let index = 0;
         JSON.data.forEach(element => {
             TABLA.innerHTML += `<tr>
-                    <td>
-                        <img src="${PATH + element.imagen}" alt="${element.nombre}" width="75px" height="75px">
-                        ${element.nombre}
-                    </td>
-                    <td>${element.precio}</td>
-                    <td>${element.existencias}</td>
-                    <td>${element.categoria}</td>
-                    <td>${element.marca}</td>
-                    <td class="tb-switch">
-                        ${(element.estado) ? 
-                            COL.innerHTML = `<div class="form-check form-switch"> 
-                                <input class="form-check-input estado" name="estado" id="estado" type="checkbox" id="estado" checked> 
-                            </div>`
-                            :
-                            COL.innerHTML = `<div class="form-check form-switch"> 
-                                <input class="form-check-input estado" name="estado" id="estado" type="checkbox" id="estado"> 
-                            </div>`
-                        }
-                    </td>
-                    <td>
-                        <!-- boton para actualizar -->
-                        <button class="btn btn-secondary actualizar" data-bs-toggle="modal" data-bs-target="#Modal" value="${element.idproducto}">Actualizar</button>
+                <td>
+                    <img src="${PATH + element.imagen}" alt="${element.nombre}" width="75px" height="75px">
+                    ${element.nombre}
+                </td>
+                <td>${element.precio}</td>
+                <td>${element.existencias}</td>
+                <td>${element.categoria}</td>
+                <td>${element.marca}</td>
+                <td class="tb-switch">
+                    ${(element.estado) ?
+                COL.innerHTML = `<div class="form-check form-switch"> 
+                            <input class="form-check-input estado" name="estado" id="estado" type="checkbox" id="estado" checked> 
+                        </div>`
+                :
+                COL.innerHTML = `<div class="form-check form-switch"> 
+                            <input class="form-check-input estado" name="estado" id="estado" type="checkbox" id="estado"> 
+                        </div>`
+                }
+                </td>
+                <td class="buttons-tb">
+                    <form action="agregarproducto.html" method="get" class="form-button">
+                        <!-- boton para actualizar -->                        
+                            <button type="submit" class="btn btn-secondary actualizar" data-bs-toggle="modal" data-bs-target="#Modal" value="${element.idproducto}">Actualizar</button>
+                            <input type="number" name="productoid" class="hide" id="productoid" value="${element.idproducto}">                        
+                    </form>
                         <!-- boton para eliminar -->
-                        <button class="btn btn-danger eliminar" value="${element.idproducto}">Eliminar</button>
-                    </td>
-                </tr>`;
-                // (element.estado) ? estado = true : estado  = false;
-            // index++;
+                    <button class="btn btn-danger eliminar" value="${element.idproducto}">Eliminar</button>
+                </td>
+            </tr>`;
         });
 
         const ACTUALIZAR = document.getElementsByClassName('actualizar');
-        
+        // for (let i = 0; i < ACTUALIZAR.length; i++) {
+        //     ACTUALIZAR[i].addEventListener('click', () => {
+        //         location.href = '';
+        //         location.href.search = 'agregarproducto.html?' + ACTUALIZAR[i].value;
+        //     })
+
+        // }
 
         const ELIMINAR = document.getElementsByClassName('eliminar');
         for (let i = 0; i < ELIMINAR.length; i++) {
@@ -126,7 +166,7 @@ const cargarTabla = async () => {
         // obtener todos los switch de la tabla
         const ESTADO = document.getElementsByClassName('estado');
         // recorrer todos switch para y a cada uno crearle un evento
-        for(let i = 0; i < ESTADO.length; i++){
+        for (let i = 0; i < ESTADO.length; i++) {
             ESTADO[i].addEventListener('change', async (event) => {
                 event.preventDefault();
                 // evaluar sí el valor del input es true
@@ -135,10 +175,10 @@ const cargarTabla = async () => {
                 // adjuntar el id del producto
                 DATOS.append('idproducto', ACTUALIZAR[i].value);
                 // adjuntar nuevo estado
-                if (ESTADO[i].checked) {                    
+                if (ESTADO[i].checked) {
                     // estado true
                     estado = true;
-                }else{
+                } else {
                     // estado false
                     estado = false;
                 }
@@ -146,7 +186,7 @@ const cargarTabla = async () => {
                 const JSON = await request(PRODUCTO, 'actualizarEstado', DATOS);
                 if (!JSON.status) {
                     // sí hay error en la petición informar al usuario
-                    notificacionURL('error', JSON.excep, false);  
+                    notificacionURL('error', JSON.excep, false);
                 }
             });
         }

@@ -92,7 +92,7 @@ class Validate
             self::$errorFile = 'El formato de la imagen deber ser .jpg o .png';
         }
         //if con el caso ideal, validando el tipo de imagen
-        if ($type == 2 || 3) {
+        if ($type == 2 || $type == 3) {
             //después verificar el valor de está var
             $result = true;
             //obtener la extensión del archivo para convertir a minúsculas

@@ -129,7 +129,7 @@ export const cargarSelect = async(filename, select, selected = null, idselect = 
     if (JSON.status) {
         //si existen valores
         //agregar a la lista
-        list += `<option disabled selected>Select option</option>`;
+        list += `<option disabled selected>Seleccionar</option>`;
         //recorrer los datos obtenidos
         JSON.data.forEach(element => {
             //obtener el valor del id
@@ -147,7 +147,7 @@ export const cargarSelect = async(filename, select, selected = null, idselect = 
         });
     } else {
         // si no existen datos u ocurre algún error
-        option = `<option> void options </option>`;
+        option = `<option>No existen opciones</option>`;
     }
     //agregar las opciones
     document.getElementById(select).innerHTML = list;
