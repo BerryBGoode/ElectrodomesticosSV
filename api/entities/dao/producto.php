@@ -76,16 +76,21 @@ class ProductoQuery
      * Método para actualizar datos segú registro seleccionado
      * retorna la cantidad de registros modificados
      */
-    public function actualizar($img)
-    {                
+    public function actualizar($img = null)
+    {
         // verificar la imagen, para así quitar la actual y agregar la nueva
         // (PRODUCTO->getImg() == $img) ? Validate::destroyFile(PRODUCTO->getPath(), $img) : PRODUCTO->setImg($img);
-
+        $a = array(
+            PRODUCTO->getProducto(), PRODUCTO->getPrecio(), PRODUCTO->getExistencias(),
+            PRODUCTO->getImg(), PRODUCTO->getCategoria(), PRODUCTO->getMarca(),
+            PRODUCTO->getDescripcion(), PRODUCTO->getId()
+        );
+        print_r(json_encode($a));
         $sql = 'UPDATE productos 
                 SET nombre = ?, precio = ?, existencias = ?, imagen = ?, 
                 idcategoria = ?, idmarca = ?, descripcion = ? 
                 WHERE idproducto = ?';
-                
+        
         $params = array(
             PRODUCTO->getProducto(), PRODUCTO->getPrecio(), PRODUCTO->getExistencias(),
             PRODUCTO->getImg(), PRODUCTO->getCategoria(), PRODUCTO->getMarca(),
