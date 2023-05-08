@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', async (event) => {
         // VERIFICAR SÍ EXISTE ESTA TABLA
         // PORQUE SE EXPORTA ESTE MODULO SE EJECUTA EL CARGADO DEL DOM
         if (TABLA) {
-            cargarTabla('cargarAdmins', COL, TABLA, 'agregarusuarios.html');            
+            cargarTabla('cargarAdmins', COL, TABLA, 'agregarusuarios.html');
         }
     }
 })
@@ -175,14 +175,19 @@ export const cargarTabla = async (cargar, col, tabla, view) => {
         for (let index = 0; index < ELIMINAR.length; index++) {
             ELIMINAR[index].addEventListener('click', async (event) => {
                 event.preventDefault();
-                const DATO = new FormData;
-                DATO.append('idusuario', ELIMINAR[index].value);
-                const JSON = await request(USUARIO, 'eliminar', DATO);
-                if (JSON.status) {
-                    cargarTabla('cargarAdmins', COL, TABLA, 'agregarusuario.html');
-                    notificacionURL('success', JSON.msg, true);
-                } else {
-                    notificacionURL('error', JSON.excep, false);
+                // verificar sí viene de clientes
+                accion = await notificacionAccion('Desea eliminar este usuario o cliente,probablemente \neste tenga pedidos registradas');
+
+                if (accion) {
+                    const DATO = new FormData;
+                    DATO.append('idusuario', ELIMINAR[index].value);
+                    const JSON = await request(USUARIO, 'eliminar', DATO);
+                    if (JSON.status) {
+                        cargarTabla('cargarAdmins', COL, TABLA, 'agregarusuario.html');
+                        notificacionURL('success', JSON.msg, true);
+                    } else {
+                        notificacionURL('error', JSON.excep, false);
+                    }
                 }
             })
 
