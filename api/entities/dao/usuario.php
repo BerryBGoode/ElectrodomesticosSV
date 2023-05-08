@@ -43,6 +43,17 @@ class UsuarioQuery
         return Database::storeProcedure($sql, $params);
     }
 
+    /**
+     * Método para cargar los datos de los usuarios administradores
+     * retorna un arreglo con los datos recuperados
+     */
+    public function cargarAdmins()
+    {
+        $admin = 1;
+        $sql = 'SELECT * FROM usuarios WHERE tipousuario = ?';
+        $param = array($admin);
+        return Database::all($sql, $param);
+    }
 }
 // try {
 //     //code...
@@ -59,4 +70,3 @@ class UsuarioQuery
 // } catch (\Throwable $th) {
 //     echo $th;
 // }
-

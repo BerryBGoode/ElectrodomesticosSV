@@ -70,6 +70,19 @@ if (isset($_GET['action'])) {
                 }
                 break;
 
+            case 'cargarAdmins':
+                
+                if ($res['data'] = $query->cargarAdmins()) {
+                    $res['status'] = 1;
+                    $res['msg'] = count($res['data']);
+                } elseif (Database::getException()) {
+                    $res['excep'] = Database::getException();
+                } else {
+                    $res['excep'] = 'No se encontraron registros';
+                }
+                
+
+                break;
             default:
                 $res['excep'] = 'Acción dentro de sesión no encontrada';
                 break;

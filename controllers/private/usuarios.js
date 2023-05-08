@@ -5,7 +5,8 @@ const CANCELAR = document.getElementById('cancelar');
 const PROCESO = document.getElementById('proceso');
 const FORM = document.getElementById('form-usuario');
 const SWITCH = document.getElementById('estado');
-
+const TABLA = document.getElementById('tbody-usuario');
+const COL = document.querySelectorAll('.tb-switch');
 let accion;
 let estado;
 let contenedorswitch = document.querySelector('.switch');
@@ -27,7 +28,7 @@ document.addEventListener('DOMContentLoaded', async (event) => {
     if (location.href.indexOf('agregar') !== -1) {
         // verificar el proceso de actualizar o eliminar
     }else{
-        // cargar tabla
+        cargarTabla();
     }
 })
 
@@ -46,4 +47,44 @@ if (FORM) {
             notificacionURL('error', JSON.excep, false);
         }
     })
+}
+
+const cargarTabla = async(event) => {
+    
+    TABLA.innerHTML = ``;
+    const JSON = await request(USUARIO, 'cargarAdmins');
+    if (JSON.status) {
+        
+        JSON.data.forEach(element => {
+            
+            TABLA.innerHTML += `<tr>
+                <td>${element.nombreusuario}</td>
+                <td>${element.nombre}</td>
+                <td>${element.apellido}</td>
+                <td>${element.correo}</td>
+                <td class="tb-switch">
+                    ${(element.estado) ?
+                COL.innerHTML = `<div class="form-check form-switch"> 
+                            <input class="form-check-input estado" name="estado" id="estado" type="checkbox" id="estado" checked> 
+                        </div>`
+                :
+                COL.innerHTML = `<div class="form-check form-switch"> 
+                            <input class="form-check-input estado" name="estado" id="estado" type="checkbox" id="estado"> 
+                        </div>`
+                }
+                </td>
+                <td class="buttons-tb">
+                    <form action="agregarusuario.html" method="get" class="form-button">
+                        <!-- boton para actualizar -->                        
+                            <button type="submit" class="btn btn-secondary actualizar" data-bs-toggle="modal" data-bs-target="#Modal" value="${element.idusuario}">Actualizar</button>
+                            <input type="number" name="usuarioid" class="hide" id="productoid" value="${element.idusuario}">                        
+                    </form>
+                        <!-- boton para eliminar -->
+                    <button class="btn btn-danger eliminar" value="${element.idusuario}">Eliminar</button>
+                </td>
+            </tr>`;
+        });
+    } else {
+        
+    }
 }
