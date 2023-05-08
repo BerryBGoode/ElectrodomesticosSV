@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../resources/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../resources/css/bootstrap.min.css.map">
+    <link rel="stylesheet" href="../../resources/css/bootstrap.css.map">
+    <link rel="stylesheet" href="../../resources/css/private.css">
+    <link rel="shortcut icon" href="../../resources/img/logos/logo.png" type="image/x-icon">
+    <title>Electrodomesticos SV</title>
+</head>
+
+<body>
+    <div class="nav-render"></div>
+    <div class="container container-catalog">
+        <form method="post" id="form-usuario">
+
+            <div class="row">
+
+                <!-- id producto -->
+                <div class="form-floating mb-3">
+                    <input type="number" name="idusuario" id="idusuario" class="hide">
+                    <label class="hide" for="idusuario">idusuario</label>
+                </div>
+                <div class="col-6">
+
+                    <!-- Nombres -->
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="nombres" placeholder="nombres" name="nombres">
+                        <label for="nombres">Nombres</label>
+                    </div>
+
+                </div>
+                <div class="col-6">
+                    <!-- Apellidos -->
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="apellidos" placeholder="apellidos" name="apellidos">
+                        <label for="apellidos">Apellidos</label>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-6">
+                    <!-- usuario -->
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="usuario" placeholder="usuario" name="usuario">
+                        <label for="usuario">Usuario</label>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <!-- contraseña -->
+                    <div class="form-floating">
+                        <input type="password" class="form-control" id="clave" name="clave" placeholder="Password">
+                        <label for="clave" id="lbl-clave">Contraseña</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-9">
+                    <!-- correo -->
+                    <div class="form-floating mb-3">
+                        <input type="email" class="form-control" id="correo" name="correo" placeholder="name@example.com">
+                        <label for="correo">Correo</label>
+                    </div>
+                </div>
+
+                <div class="col-3 switch">
+
+                    <label for="estado">Activo</label>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" name="estado" id="estado" type="checkbox" id="estado" checked>
+                    </div>
+                    <label>Inactivo</label>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-floating mb-4">
+                        <textarea class="form-control" placeholder="Dirección" name="direccion" id="direccion"></textarea>
+                        <label for="direccion">Dirección</label>
+                      </div>
+                </div>
+            </div>
+
+            <!--botones  -->
+            <button type="reset" id="cancelar" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-success" id="proceso">
+                <div class="hide">a</div>
+            </button>
+
+        </form>
+
+    </div>
+
+    <script src="../../resources/js/bootstrap.bundle.min.js"></script>
+    <script src="../../controllers/private/render.js"></script>
+    <script src="../../resources/js/sweetalert.min.js"></script>
+    <script type="module" src="../../controllers/private/usuarios.js"></script>
+</body>
+
+</html>

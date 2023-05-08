@@ -47,19 +47,19 @@ class UsuarioQuery
      * Método para cargar los datos de los usuarios administradores
      * retorna un arreglo con los datos recuperados
      */
-    public function cargarAdmins()
+    public function cargar($tipo)
     {
-        $admin = 1;
-        $sql = 'SELECT * FROM usuarios WHERE tipousuario = ?';
-        $param = array($admin);
+        $sql = 'SELECT * FROM usuarios WHERE tipousuario = ? ORDER BY idusuario ASC';
+        $param = array($tipo);
         return Database::all($sql, $param);
     }
+
 
     /**
      * Método para recuperar los datos según registro seleccionado
      * retorna un arreglo con los datos recuperados 
      */
-    public function registroAdmin()
+    public function registro()
     {
         $sql = 'SELECT * FROM usuarios WHERE idusuario = ?';
         $param = array(USUARIO->getId());

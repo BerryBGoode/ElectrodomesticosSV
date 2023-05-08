@@ -33,6 +33,29 @@ const toActualizar = (json) => {
     document.getElementById('direccion').value = json.direccion;
 }
 
+export const checkProceso = async (accion, url, urlid, proceso) => {
+    // para proceso a agregar o actualizar
+    // verificar sí es actualizar
+    if (urlid) {
+        document.getElementById('clave').style.visibility = 'hidden';
+        document.getElementById('lbl-clave').style.visibility = 'hidden';
+        contenedorswitch.style.visibility = 'hidden';
+        proceso.innerText = 'Actualizar';
+        // obtener los datos del registro
+        const DATO = new FormData;
+        DATO.append('idusuario', urlid);
+        const JSON = await request(USUARIO, accion, DATO);
+        if (JSON.status) {
+            toActualizar(JSON.data);
+        } else {
+            notificacionURL('error', JSON.excep, false, url)
+        }
+    } else {
+        contenedorswitch.style.visibility = 'hidden';
+        proceso.innerText = 'Agregar';
+    }
+}
+
 document.addEventListener('DOMContentLoaded', async (event) => {
     event.preventDefault();
     // verificar sí la página es de agregar
@@ -41,74 +64,69 @@ document.addEventListener('DOMContentLoaded', async (event) => {
     // sí el resultado de buscar ese texto no es -1 
     // es porque existe 
     if (location.href.indexOf('agregar') !== -1) {
-        // para proceso a agregar o actualizar
-        // verificar sí es actualizar
-        if (getUsuarioURL()) {
-            document.getElementById('clave').style.visibility = 'hidden';
-            document.getElementById('lbl-clave').style.visibility = 'hidden';
-            contenedorswitch.style.visibility = 'hidden';
-            PROCESO.innerText = 'Actualizar';
-            // obtener los datos del registro
-            const DATO = new FormData;
-            DATO.append('idusuario', getUsuarioURL());
-            const JSON = await request(USUARIO, 'registroAdmin', DATO);
-            if (JSON.status) {
-                toActualizar(JSON.data);
-            } else {
-                notificacionURL('error', JSON.excep, false, 'usuarios.html')
-            }
-        } else {
-            contenedorswitch.style.visibility = 'hidden';
-            PROCESO.innerText = 'Agregar';
-        }
+        checkProceso('registro', 'usuarios.html', getUsuarioURL(), PROCESO);
     } else {
-        cargarTabla();
+        // VERIFICAR SÍ EXISTE ESTA TABLA
+        // PORQUE SE EXPORTA ESTE MODULO SE EJECUTA EL CARGADO DEL DOM
+        if (TABLA) {
+            cargarTabla('cargarAdmins', COL, TABLA, 'agregarusuarios.html');            
+        }
     }
 })
+
+export const enviarDatos = async (crear, url) => {
+    document.getElementById('idusuario').value ? accion = 'actulizarUsuario' : accion = crear;
+    const DATOS = new FormData(FORM);
+    // verificar sí el switch está checkeado
+    const JSON = await request(USUARIO, accion, DATOS);
+    if (JSON.status) {
+        FORM.reset();
+        notificacionURL('success', JSON.msg, true, url);
+    } else {
+        notificacionURL('error', JSON.excep, false);
+    }
+}
 
 if (FORM) {
 
     FORM.addEventListener('submit', async (event) => {
         event.preventDefault();
-        document.getElementById('idusuario').value ? accion = 'actulizarUsuario' : accion = 'crear';
-        const DATOS = new FormData(FORM);
-        // verificar sí el switch está checkeado
-        const JSON = await request(USUARIO, accion, DATOS);
-        if (JSON.status) {
-            FORM.reset();
-            notificacionURL('success', JSON.msg, true, 'usuarios.html');
-        } else {
-            notificacionURL('error', JSON.excep, false);
-        }
+        enviarDatos('crearAdmin', 'usuarios.html');
     })
 }
+/**
+ * 
+ * @param {*} cargar acción a cargar
+ * @param {*} col columna para evaluar el switch del estado
+ * @param {*} tabla tabla a donde renderizar datos
+ * @param {*} view formulario de agregar a enviar
+ */
+export const cargarTabla = async (cargar, col, tabla, view) => {
 
-const cargarTabla = async (event) => {
-
-    TABLA.innerHTML = ``;
-    const JSON = await request(USUARIO, 'cargarAdmins');
+    tabla.innerHTML = ``;
+    const JSON = await request(USUARIO, cargar);
     if (JSON.status) {
 
         JSON.data.forEach(element => {
 
-            TABLA.innerHTML += `<tr>
+            tabla.innerHTML += `<tr>
                 <td>${element.nombreusuario}</td>
                 <td>${element.nombre}</td>
                 <td>${element.apellido}</td>
                 <td>${element.correo}</td>
                 <td class="tb-switch">
                     ${(element.estado === 1) ?
-                    COL.innerHTML = `<div class="form-check form-switch"> 
+                    col.innerHTML = `<div class="form-check form-switch"> 
                             <input class="form-check-input estado" name="estado" id="estado" type="checkbox" id="estado" checked> 
                         </div>`
                     :
-                    COL.innerHTML = `<div class="form-check form-switch"> 
+                    col.innerHTML = `<div class="form-check form-switch"> 
                             <input class="form-check-input estado" name="estado" id="estado" type="checkbox" id="estado"> 
                         </div>`
                 }
                 </td>
                 <td class="buttons-tb">
-                    <form action="agregarusuario.html" method="get" class="form-button">
+                    <form action="${view}" method="get" class="form-button">
                         <!-- boton para actualizar -->                        
                             <button type="submit" class="btn btn-secondary actualizar" data-bs-toggle="modal" data-bs-target="#Modal" value="${element.idusuario}">Actualizar</button>
                             <input type="number" name="usuarioid" class="hide" id="productoid" value="${element.idusuario}">                        
@@ -139,12 +157,12 @@ const cargarTabla = async (event) => {
                 // adjuntar valor del estado
                 DATOS.append('estado', estado);
                 const JSON = await request(USUARIO, 'actualizarEstado', DATOS);
-                
+
                 if (!JSON.status) {
                     notificacionURL('error', JSON.excep, false);
                 }
             });
-                        
+
         }
 
         const ELIMINAR = document.getElementsByClassName('eliminar');
@@ -155,13 +173,13 @@ const cargarTabla = async (event) => {
                 DATO.append('idusuario', ELIMINAR[index].value);
                 const JSON = await request(USUARIO, 'eliminar', DATO);
                 if (JSON.status) {
-                    cargarTabla();
+                    cargarTabla('cargarAdmins', COL, TABLA, 'agregarusuario.html');
                     notificacionURL('success', JSON.msg, true);
                 } else {
                     notificacionURL('error', JSON.excep, false);
                 }
             })
-            
+
         }
     } else {
         notificacionURL('error', JSON.excep, false);

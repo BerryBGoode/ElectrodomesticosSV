@@ -41,7 +41,7 @@ if (isset($_GET['action'])) {
     } else {
 
         switch ($_GET['action']) {
-            case 'crear':
+            case 'crearAdmin':
                 $_POST = Validate::form($_POST);
 
                 if (!USUARIO->setNombres($_POST['nombres'])) {
@@ -74,7 +74,7 @@ if (isset($_GET['action'])) {
 
             case 'cargarAdmins':
 
-                if ($res['data'] = $query->cargarAdmins()) {
+                if ($res['data'] = $query->cargar(1)) {
                     $res['status'] = 1;
                     $res['msg'] = count($res['data']);
                 } elseif (Database::getException()) {
@@ -85,11 +85,21 @@ if (isset($_GET['action'])) {
 
                 break;
 
-            case 'registroAdmin':
+            case 'cargarClientes':
+                if ($res['data'] = $query->cargar(2)) {
+                    $res['status'] = 1;
+                    $res['msg'] = count($res['data']);
+                } elseif (Database::getException()) {
+                    $res['excep'] = Database::getException();
+                } else {
+                    $res['excep'] = 'No se encontraron registros';
+                }
+                break;
+            case 'registro':
 
                 if (!USUARIO->setId($_POST['idusuario'])) {
                     $res['excep'] = 'Error al seleccionar registro';
-                } elseif ($res['data'] = $query->registroAdmin()) {
+                } elseif ($res['data'] = $query->registro()) {
                     $res['status'] = 1;
                 } elseif (Database::getException()) {
                     $res['excep'] = Database::getException();
