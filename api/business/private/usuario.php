@@ -81,6 +81,20 @@ if (isset($_GET['action'])) {
                     $res['excep'] = 'No se encontraron registros';
                 }
                 
+                break;
+
+            case 'registroAdmin':
+                
+                if (!USUARIO->setId($_POST['idusuario'])) {
+                    $res['excep'] = 'Error al seleccionar registro';
+                } elseif ($res['data'] = $query->registroAdmin()) {
+                    $res['status'] = 1;
+                } elseif (Database::getException()) {
+                    $res['excep'] = Database::getException();
+                } else {
+                    $res['excep'] = 'No se encontró registro';
+                }
+                
 
                 break;
             default:

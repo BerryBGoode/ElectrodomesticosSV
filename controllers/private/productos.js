@@ -44,7 +44,7 @@ const getProductoURL = () => {
 
 const toActualizar = async (json) => {
     contenedorswitch.style.visibility = 'hidden';
-    console.log(json);
+    
     cargarSelect(CATEGORIA, 'categorias', json.idcategoria);
     cargarSelect(MARCA, 'marcas', json.idmarca)
 

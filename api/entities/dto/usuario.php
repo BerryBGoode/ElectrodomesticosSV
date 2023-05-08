@@ -26,7 +26,6 @@ class Usuario
      * * estados:
      * * 1 = Activo
      * * 2 = Inactivo
-     * * 3 = Bloqueado
      */
     private $estado;
 

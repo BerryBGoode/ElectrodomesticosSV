@@ -12,10 +12,34 @@ let estado;
 let contenedorswitch = document.querySelector('.switch');
 
 
+const getUsuarioURL = () => {
+    const URL = new URLSearchParams(window.location.search);
+    const VALUE = URL.get('usuarioid');
+    return VALUE;
+}
+
 if (CANCELAR) {
     CANCELAR.addEventListener('click', () => {
         location.href = 'usuarios.html';
     })
+}
+
+const toActualizar = (json) => {
+    
+    document.getElementById('nombres').value = json.nombre;
+    document.getElementById('apellidos').value = json.apellido;
+    document.getElementById('usuario').value = json.nombreusuario;
+    document.getElementById('correo').value = json.correo;
+    document.getElementById('direccion').value = json.direccion;
+console.log(json)
+    if (json.estado === 1) {
+        
+        console.log('activo')
+    } else {
+        console.log('inactivo')
+        
+    }
+
 }
 
 document.addEventListener('DOMContentLoaded', async (event) => {
@@ -26,14 +50,33 @@ document.addEventListener('DOMContentLoaded', async (event) => {
     // sí el resultado de buscar ese texto no es -1 
     // es porque existe 
     if (location.href.indexOf('agregar') !== -1) {
-        // verificar el proceso de actualizar o eliminar
-    }else{
+        // para proceso a agregar o actualizar
+        // verificar sí es actualizar
+        if (getUsuarioURL()) {
+            document.getElementById('clave').style.visibility = 'hidden';
+            document.getElementById('lbl-clave').style.visibility = 'hidden';
+            contenedorswitch.style.visibility = 'hidden';
+            PROCESO.innerText = 'Actualizar';
+            // obtener los datos del registro
+            const DATO = new FormData;
+            DATO.append('idusuario', getUsuarioURL());
+            const JSON = await request(USUARIO, 'registroAdmin', DATO);
+            if (JSON.status) {
+                toActualizar(JSON.data);
+            } else {
+                notificacionURL('error', JSON.excep, false, 'usuarios.html')
+            }
+        } else {
+            contenedorswitch.style.visibility = 'hidden';
+            PROCESO.innerText = 'Agregar';
+        }
+    } else {
         cargarTabla();
     }
 })
 
 if (FORM) {
-    
+
     FORM.addEventListener('submit', async (event) => {
         event.preventDefault();
         document.getElementById('idusuario').value ? accion = 'actualizar' : accion = 'crear';
@@ -49,14 +92,14 @@ if (FORM) {
     })
 }
 
-const cargarTabla = async(event) => {
-    
+const cargarTabla = async (event) => {
+
     TABLA.innerHTML = ``;
     const JSON = await request(USUARIO, 'cargarAdmins');
     if (JSON.status) {
-        
+
         JSON.data.forEach(element => {
-            
+
             TABLA.innerHTML += `<tr>
                 <td>${element.nombreusuario}</td>
                 <td>${element.nombre}</td>
@@ -64,11 +107,11 @@ const cargarTabla = async(event) => {
                 <td>${element.correo}</td>
                 <td class="tb-switch">
                     ${(element.estado) ?
-                COL.innerHTML = `<div class="form-check form-switch"> 
+                    COL.innerHTML = `<div class="form-check form-switch"> 
                             <input class="form-check-input estado" name="estado" id="estado" type="checkbox" id="estado" checked> 
                         </div>`
-                :
-                COL.innerHTML = `<div class="form-check form-switch"> 
+                    :
+                    COL.innerHTML = `<div class="form-check form-switch"> 
                             <input class="form-check-input estado" name="estado" id="estado" type="checkbox" id="estado"> 
                         </div>`
                 }
@@ -85,6 +128,6 @@ const cargarTabla = async(event) => {
             </tr>`;
         });
     } else {
-        
+
     }
 }

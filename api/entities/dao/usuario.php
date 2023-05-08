@@ -54,6 +54,17 @@ class UsuarioQuery
         $param = array($admin);
         return Database::all($sql, $param);
     }
+
+    /**
+     * Método para recuperar los datos según registro seleccionado
+     * retorna un arreglo con los datos recuperados 
+     */
+    public function registroAdmin()
+    {
+        $sql = 'SELECT * FROM usuarios WHERE idusuario = ?';
+        $param = array(USUARIO->getId());
+        return Database::row($sql, $param);
+    }
 }
 // try {
 //     //code...
