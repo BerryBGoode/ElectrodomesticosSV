@@ -25,7 +25,7 @@ if (CANCELAR) {
 }
 
 const toActualizar = (json) => {
-    
+    document.getElementById('idusuario').value = json.idusuario;
     document.getElementById('nombres').value = json.nombre;
     document.getElementById('apellidos').value = json.apellido;
     document.getElementById('usuario').value = json.nombreusuario;
@@ -70,7 +70,7 @@ if (FORM) {
 
     FORM.addEventListener('submit', async (event) => {
         event.preventDefault();
-        document.getElementById('idusuario').value ? accion = 'actualizar' : accion = 'crear';
+        document.getElementById('idusuario').value ? accion = 'actulizarUsuario' : accion = 'crear';
         const DATOS = new FormData(FORM);
         // verificar sí el switch está checkeado
         const JSON = await request(USUARIO, accion, DATOS);

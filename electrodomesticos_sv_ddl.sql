@@ -81,3 +81,5 @@ FROM productos p
 INNER JOIN categorias c ON c.idcategoria = p.idcategoria
 INNER JOIN marcas m ON m.idmarca = p.idmarca
 ORDER BY p.idproducto ASC
+
+SELECT * FROM usuarios

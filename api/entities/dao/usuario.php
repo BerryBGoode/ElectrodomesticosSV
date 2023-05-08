@@ -32,13 +32,13 @@ class UsuarioQuery
     }
 
     // método para agregar usuario
-    public function storeAdmin()
+    public function storeAdmin($direccion)
     {
         $sql = 'INSERT INTO usuarios(nombreusuario, clave, nombre, apellido, correo, direccion, estado, tipousuario)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
         $params = array(
             USUARIO->getUsuario(), USUARIO->getClave(), USUARIO->getNombres(), USUARIO->getApellidos(),
-            USUARIO->getCorreo(), USUARIO->getDireccion(), USUARIO->getEstado(), USUARIO->getTipoUsuario()
+            USUARIO->getCorreo(), $direccion, USUARIO->getEstado(), USUARIO->getTipoUsuario()
         );
         return Database::storeProcedure($sql, $params);
     }
@@ -86,6 +86,24 @@ class UsuarioQuery
         $sql = 'DELETE FROM usuarios WHERE idusuario = ?';
         $param = array(USUARIO->getId());
         return Database::storeProcedure($sql, $param);
+    }
+
+    /**
+     * Método para actualizar datos del registro seleccionado
+     * retorna el resultado del proceso
+     */
+    public function actulizarUsuario($direccion)
+    {
+        $sql = 'UPDATE usuarios
+                SET nombreusuario = ?, nombre = ?, apellido = ?, correo = ?,
+                direccion = ?
+                WHERE idusuario = ?';
+        $params = array(
+            USUARIO->getUsuario(), USUARIO->getNombres(),
+            USUARIO->getApellidos(), USUARIO->getCorreo(),
+            $direccion, USUARIO->getId()
+        );
+        return Database::storeProcedure($sql, $params);
     }
 }
 // try {
