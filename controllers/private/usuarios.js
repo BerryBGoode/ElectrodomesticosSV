@@ -74,13 +74,19 @@ document.addEventListener('DOMContentLoaded', async (event) => {
     }
 })
 
-export const enviarDatos = async (crear, url) => {
+/**
+ * 
+ * @param {*} crear acción de crear a realizar
+ * @param {*} url vista a ser rediccionado cuando se agrege correctamente
+ * @param {*} datos formulario con los datos a registrar
+ */
+export const enviarDatos = async (crear, url, datos) => {
     document.getElementById('idusuario').value ? accion = 'actulizarUsuario' : accion = crear;
-    const DATOS = new FormData(FORM);
+    const DATOS = new FormData(datos);
     // verificar sí el switch está checkeado
     const JSON = await request(USUARIO, accion, DATOS);
     if (JSON.status) {
-        FORM.reset();
+        datos.reset();
         notificacionURL('success', JSON.msg, true, url);
     } else {
         notificacionURL('error', JSON.excep, false);
@@ -91,7 +97,7 @@ if (FORM) {
 
     FORM.addEventListener('submit', async (event) => {
         event.preventDefault();
-        enviarDatos('crearAdmin', 'usuarios.html');
+        enviarDatos('crearAdmin', 'usuarios.html', FORM);
     })
 }
 /**

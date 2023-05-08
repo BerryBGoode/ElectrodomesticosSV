@@ -31,17 +31,25 @@ class UsuarioQuery
         }
     }
 
-    // método para agregar usuario
-    public function storeAdmin($direccion)
+    /**
+     * Método para agregar usuario
+     * $dirección, agregar dirección si validar nula
+     * $tipousuario, tipo usuario a agregar
+     * 1 = admin
+     * 2 = cliente
+     * retorna el resultado del proceso
+     */
+    public function guardar($direccion, $tipousuario)
     {
         $sql = 'INSERT INTO usuarios(nombreusuario, clave, nombre, apellido, correo, direccion, estado, tipousuario)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
         $params = array(
             USUARIO->getUsuario(), USUARIO->getClave(), USUARIO->getNombres(), USUARIO->getApellidos(),
-            USUARIO->getCorreo(), $direccion, USUARIO->getEstado(), USUARIO->getTipoUsuario()
+            USUARIO->getCorreo(), $direccion, USUARIO->getEstado(), $tipousuario
         );
         return Database::storeProcedure($sql, $params);
     }
+
 
     /**
      * Método para cargar los datos de los usuarios administradores

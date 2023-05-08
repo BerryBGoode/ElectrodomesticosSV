@@ -60,9 +60,7 @@ if (isset($_GET['action'])) {
                     $res['excep'] = 'Estado incorrecto';
                     // enviar tipo usuario admin
                     // no es tabla independiente, es campo
-                } elseif (!USUARIO->setTipoUsuario(1)) {
-                    $res['excep'] = 'Tipo de usuario invalido';
-                } elseif ($query->storeAdmin($_POST['direccion']) &&  !Database::getException()) {
+                } elseif ($query->guardar($_POST['direccion'], 1) &&  !Database::getException()) {
                     $res['status'] = 1;
                     $res['msg'] = 'Registro guardado';
                 } elseif (Database::getException()) {
@@ -72,6 +70,34 @@ if (isset($_GET['action'])) {
                 }
                 break;
 
+                case 'crearCliente':
+                    $_POST = Validate::form($_POST);
+    
+                    if (!USUARIO->setNombres($_POST['nombres'])) {
+    
+                        $res['excep'] = 'Nombre incorrecto';
+                    } elseif (!USUARIO->setApellidos(($_POST['apellidos']))) {
+                        $res['excep'] = 'Apellido incorrecto';
+                    } elseif (!USUARIO->setUsuario($_POST['usuario'])) {
+                        $res['excep'] = 'Usuario incorrecto';
+                    } elseif (!USUARIO->setClave($_POST['clave'])) {
+                        $res['excep'] = 'Clave incorrecta';
+                    } elseif (!USUARIO->setCorreo($_POST['correo'])) {
+                        $res['excep'] = 'Formato de correo incorrecto';
+                        // el usuario ingresado siempre será activo
+                    } elseif (!USUARIO->setEstado(1)) {
+                        $res['excep'] = 'Estado incorrecto';
+                        // enviar tipo usuario admin
+                        // no es tabla independiente, es campo
+                    } elseif ($query->guardar($_POST['direccion'], 2) &&  !Database::getException()) {
+                        $res['status'] = 1;
+                        $res['msg'] = 'Registro guardado';
+                    } elseif (Database::getException()) {
+                        $res['excep'] = Database::getException();
+                    } else {
+                        $res['excep'] = 'Usuario o correo ya está registrado, utilizar otros datos';
+                    }
+                    break;
             case 'cargarAdmins':
 
                 if ($res['data'] = $query->cargar(1)) {
