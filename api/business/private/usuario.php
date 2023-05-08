@@ -95,6 +95,20 @@ if (isset($_GET['action'])) {
                     $res['excep'] = 'No se encontró registro';
                 }
                 
+                break;
+            
+            case 'actualizarEstado':
+                
+                if (!USUARIO->setId($_POST['idusuario'])) {
+                    $res['excep'] = 'Error al seleccionar registro';
+                } elseif (!USUARIO->setEstado($_POST['estado'])) {
+                    $res['excep'] = 'Error al obtener estado';
+                } elseif ($query->actualizarEstado()) {
+                    $res['status'] = 1;
+                } else {
+                    $res['excep'] = Database::getException();
+                }
+                
 
                 break;
             default:

@@ -31,15 +31,6 @@ const toActualizar = (json) => {
     document.getElementById('usuario').value = json.nombreusuario;
     document.getElementById('correo').value = json.correo;
     document.getElementById('direccion').value = json.direccion;
-console.log(json)
-    if (json.estado === 1) {
-        
-        console.log('activo')
-    } else {
-        console.log('inactivo')
-        
-    }
-
 }
 
 document.addEventListener('DOMContentLoaded', async (event) => {
@@ -106,7 +97,7 @@ const cargarTabla = async (event) => {
                 <td>${element.apellido}</td>
                 <td>${element.correo}</td>
                 <td class="tb-switch">
-                    ${(element.estado) ?
+                    ${(element.estado === 1) ?
                     COL.innerHTML = `<div class="form-check form-switch"> 
                             <input class="form-check-input estado" name="estado" id="estado" type="checkbox" id="estado" checked> 
                         </div>`
@@ -127,7 +118,35 @@ const cargarTabla = async (event) => {
                 </td>
             </tr>`;
         });
-    } else {
 
+        const ACTUALIZAR = document.getElementsByClassName('actualizar');
+
+        // obtener todos los switches de la tabla
+        const ESTADO = document.getElementsByClassName('estado');
+        for (let index = 0; index < ESTADO.length; index++) {
+            ESTADO[index].addEventListener('change', async (event) => {
+                event.preventDefault();
+                // instancia de la clase FormData
+                const DATOS = new FormData;
+                // adjuntar usuario a actualizar
+                DATOS.append('idusuario', ACTUALIZAR[index].value);
+                // verificar valor del switch
+                if (ESTADO[index].checked) {
+                    estado = 1;
+                } else {
+                    estado = 2;
+                }
+                // adjuntar valor del estado
+                DATOS.append('estado', estado);
+                const JSON = await request(USUARIO, 'actualizarEstado', DATOS);
+                
+                if (!JSON.status) {
+                    notificacionURL('error', JSON.excep, false);
+                }
+            });
+            
+        }
+    } else {
+        notificacionURL('error', JSON.excep, false);
     }
 }

@@ -65,6 +65,17 @@ class UsuarioQuery
         $param = array(USUARIO->getId());
         return Database::row($sql, $param);
     }
+
+    /**
+     * Método para actualizar el estado de un usuario
+     * retorna el resultado del proceso
+     */
+    public function actualizarEstado()
+    {
+        $sql = 'UPDATE usuarios SET estado = ? WHERE idusuario = ?';
+        $params = array(USUARIO->getEstado(), USUARIO->getId());
+        return Database::storeProcedure($sql, $params);
+    }
 }
 // try {
 //     //code...
