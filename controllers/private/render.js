@@ -26,13 +26,13 @@ if (NAV) {
                     <a class="nav-link active" aria-current="page" href="inicio.html">Inicio</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="facturas.html">Facturas</a>
+                    <a class="nav-link active" aria-current="page" href="usuarios.html">Usuarios</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="clientes.html">Clientes</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="usuarios.html">Usuarios</a>
+                    <a class="nav-link active" aria-current="page" href="facturas.html">Facturas</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="comentarios.html">Comentarios</a>

@@ -5,7 +5,7 @@ require_once('../../entities/dao/usuario.php');
 require_once('../../entities/dto/usuario.php');
 
 // arreglo con los resultados
-$res = array('status'=> 0, 'session' => 0, 'msg' => null, 'excep' => null, 'data' => null);
+$res = array('status' => 0, 'session' => 0, 'msg' => null, 'excep' => null, 'data' => null);
 
 // verificar sí existe una acción
 if (isset($_GET['action'])) {
@@ -25,33 +25,57 @@ if (isset($_GET['action'])) {
                     $res['excep'] = 'Usuario no registrado';
                 } elseif ($query->validateClaveAdmin($_POST['clave'])) {
                     $res['status'] = 1;
-                    $res['msg'] = 'Bienvenido '.$_POST['usuario'];
+                    $res['msg'] = 'Bienvenido ' . $_POST['usuario'];
                     $_SESSION['idusuario'] = USUARIO->getId();
                     $_SESSION['usuario'] = $_POST['usuario'];
-                }else{
+                } else {
                     $res['excep'] = 'Usuario o contraseña incorrecta';
                 }
-                
+
                 break;
-            
+
             default:
                 $res['excep'] = 'Acción fuera de sesión no encontrada';
                 break;
         }
     } else {
-        
+
         switch ($_GET['action']) {
-            case 'value':
-                # code...
+            case 'crear':
+                $_POST = Validate::form($_POST);
+
+                if (!USUARIO->setNombres($_POST['nombres'])) {
+
+                    $res['excep'] = 'Nombre incorrecto';
+                } elseif (!USUARIO->setApellidos(($_POST['apellidos']))) {
+                    $res['excep'] = 'Apellido incorrecto';
+                } elseif (!USUARIO->setUsuario($_POST['usuario'])) {
+                    $res['excep'] = 'Usuario incorrecto';
+                } elseif (!USUARIO->setClave($_POST['clave'])) {
+                    $res['excep'] = 'Clave incorrecta';
+                } elseif (!USUARIO->setCorreo($_POST['correo'])) {
+                    $res['excep'] = 'Formato de correo incorrecto';
+                    // el usuario ingresado siempre será activo
+                } elseif (!USUARIO->setEstado(1)) {
+                    $res['excep'] = 'Estado incorrecto';
+                    // enviar tipo usuario admin
+                    // no es tabla independiente, es campo
+                } elseif (!USUARIO->setTipoUsuario(1)) {
+                    $res['excep'] = 'Tipo de usuario invalido';
+                } elseif ($query->storeAdmin()) {
+                    $res['status'] = 1;
+                    $res['msg'] = 'Registro guardado';
+                } else {
+                    $res['excep'] = Database::getException();
+                }
                 break;
-            
+
             default:
-                $res['excep'] ='Acción dentro de sesión no encontrada';
+                $res['excep'] = 'Acción dentro de sesión no encontrada';
                 break;
         }
-    }  
-
-}else {
+    }
+} else {
     $res['excep'] = 'Acción no registrada';
 }
 header('content-type: application/json; charset=utf-8');

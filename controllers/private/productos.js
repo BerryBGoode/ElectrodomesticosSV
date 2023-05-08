@@ -10,12 +10,20 @@ const PROCESO = document.getElementById('proceso');
 const TABLA = document.getElementById('tbody-producto');
 const COL = document.querySelectorAll('.tb-switch');
 const PATH = '../../api/images/productos/';
-
+const CANCELAR = document.getElementById('cancelar');
 
 let accion;
 let estado;
 let contenedorswitch = document.querySelector('.switch');
 let imagenformulario = document.querySelector('.imagen-producto');
+
+if (CANCELAR) {
+    CANCELAR.addEventListener('click', () => {
+        location.href = 'productos.html';
+    })
+    
+}
+
 
 // se encierrar en un if para verificar sí se encontró ese elemento
 if (SWITCH) {

@@ -42,6 +42,7 @@ class UsuarioQuery
         );
         return Database::storeProcedure($sql, $params);
     }
+
 }
 // try {
 //     //code...
