@@ -62,16 +62,18 @@ if (isset($_GET['action'])) {
                     // no es tabla independiente, es campo
                 } elseif (!USUARIO->setTipoUsuario(1)) {
                     $res['excep'] = 'Tipo de usuario invalido';
-                } elseif ($query->storeAdmin()) {
+                } elseif ($query->storeAdmin() &&  !Database::getException()) {
                     $res['status'] = 1;
                     $res['msg'] = 'Registro guardado';
-                } else {
+                } elseif (Database::getException()) {
                     $res['excep'] = Database::getException();
+                } else {
+                    $res['excep'] = 'Usuario o correo ya está registrado, utilizar otros datos';
                 }
                 break;
 
             case 'cargarAdmins':
-                
+
                 if ($res['data'] = $query->cargarAdmins()) {
                     $res['status'] = 1;
                     $res['msg'] = count($res['data']);
@@ -80,11 +82,11 @@ if (isset($_GET['action'])) {
                 } else {
                     $res['excep'] = 'No se encontraron registros';
                 }
-                
+
                 break;
 
             case 'registroAdmin':
-                
+
                 if (!USUARIO->setId($_POST['idusuario'])) {
                     $res['excep'] = 'Error al seleccionar registro';
                 } elseif ($res['data'] = $query->registroAdmin()) {
@@ -94,11 +96,11 @@ if (isset($_GET['action'])) {
                 } else {
                     $res['excep'] = 'No se encontró registro';
                 }
-                
+
                 break;
-            
+
             case 'actualizarEstado':
-                
+
                 if (!USUARIO->setId($_POST['idusuario'])) {
                     $res['excep'] = 'Error al seleccionar registro';
                 } elseif (!USUARIO->setEstado($_POST['estado'])) {
@@ -108,7 +110,18 @@ if (isset($_GET['action'])) {
                 } else {
                     $res['excep'] = Database::getException();
                 }
-                
+
+                break;
+            case 'eliminar':
+
+                if (!USUARIO->setId($_POST['idusuario'])) {
+                    $res['excep'] = 'Error al obtener registro';
+                } elseif ($query->eliminarUsuario()) {
+                    $res['status'] = 1;
+                    $res['msg'] = 'Registro eliminado';
+                } else {
+                    $res['excep'] = Database::getException();
+                }
 
                 break;
             default:

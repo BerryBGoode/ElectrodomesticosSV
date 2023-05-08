@@ -144,6 +144,23 @@ const cargarTabla = async (event) => {
                     notificacionURL('error', JSON.excep, false);
                 }
             });
+                        
+        }
+
+        const ELIMINAR = document.getElementsByClassName('eliminar');
+        for (let index = 0; index < ELIMINAR.length; index++) {
+            ELIMINAR[index].addEventListener('click', async (event) => {
+                event.preventDefault();
+                const DATO = new FormData;
+                DATO.append('idusuario', ELIMINAR[index].value);
+                const JSON = await request(USUARIO, 'eliminar', DATO);
+                if (JSON.status) {
+                    cargarTabla();
+                    notificacionURL('success', JSON.msg, true);
+                } else {
+                    notificacionURL('error', JSON.excep, false);
+                }
+            })
             
         }
     } else {

@@ -76,6 +76,17 @@ class UsuarioQuery
         $params = array(USUARIO->getEstado(), USUARIO->getId());
         return Database::storeProcedure($sql, $params);
     }
+
+    /**
+     * Método para eliminar registro seleccionado
+     * retorna el resultado del proceso
+     */
+    public function eliminarUsuario()
+    {
+        $sql = 'DELETE FROM usuarios WHERE idusuario = ?';
+        $param = array(USUARIO->getId());
+        return Database::storeProcedure($sql, $param);
+    }
 }
 // try {
 //     //code...
