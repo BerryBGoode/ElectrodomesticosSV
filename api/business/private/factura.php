@@ -91,6 +91,18 @@ if (!isset($_GET['action'])) {
                 }
 
                 break;
+
+            case 'registro':
+                
+                if (!FACTURA->setId($_POST['idfactura'])) {
+                    $res['excep'] = 'Error al obtener registro seleecionado';
+                } elseif ($res['data'] = $query->registro()) {
+                    $res['status'] = 1;
+                } else {
+                    $res['excep'] = 'Registro no encontrado';
+                }                
+
+                break;
             default:
                 $res['excep'] = 'Acción no registrada';
                 break;

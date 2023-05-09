@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', async (event) => {
         // VERIFICAR SÍ EXISTE ESTA TABLA
         // PORQUE SE EXPORTA ESTE MODULO SE EJECUTA EL CARGADO DEL DOM
         if (TABLA) {
-            cargarTabla('cargarAdmins', COL, TABLA, 'agregarusuarios.html');
+            cargarTabla('cargarAdmins', COL, TABLA, 'agregarusuario.html');
         }
     }
 })

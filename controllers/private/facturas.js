@@ -69,6 +69,7 @@ const cargarTabla = async () => {
     TABLA.innerHTML = ``;
     // hacer petición
     const JSON = await request(FACTURA, 'cargar');
+    console.log(JSON)
     if (JSON.status) {
 
         JSON.data.forEach(element => {
@@ -104,8 +105,27 @@ const cargarTabla = async () => {
                 </td>
             </tr>`;
         });
-
+        // obtener todos los botones en la tabla
         const ACTUALIZAR = document.getElementsByClassName('actualizar');
+        // recorrer los botones de actualizar
+        for(let i= 0; i < ACTUALIZAR.length; i++){
+            ACTUALIZAR[i].addEventListener('click', async (event) =>{
+                event.preventDefault();
+                const DATO = new FormData;
+                DATO.append('idfactura', ACTUALIZAR[i].value);
+                const JSON = await request(FACTURA, 'registro', DATO);
+                if (JSON.status) {
+                    FORM.reset();
+                    document.getElementById('idfactura').value = JSON.data.idfactura;
+                    cargarSelect(USUARIO, 'usuarios', JSON.data.idcliente);
+                    document.getElementById('nombres').value = JSON.data.nombre;
+                    document.getElementById('apellidos').value = JSON.data.apellido;
+                    document.getElementById('fecha').value = JSON.data.fecha;
+                } else {
+                    notificacionURL('error', JSON.excep, false);
+                }
+            })
+        }
         // switch para poder modificar estado
         const SWITCH = document.getElementsByName('estado');
         // recorrer todos los input-switch encontrados    

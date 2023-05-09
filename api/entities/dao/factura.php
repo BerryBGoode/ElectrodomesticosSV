@@ -63,4 +63,18 @@ class FacturaQuery
         $param = array(FACTURA->getId());
         return Database::storeProcedure($sql, $param);
     }
+
+    /**
+     * Método para obtener los datos del registro seleccionado
+     * retorna un arreglo con los datos recuperados de la consulta
+     */
+    public function registro()
+    {
+        $sql = 'SELECT f.idfactura, f.idcliente, u.nombre, u.apellido, u.correo, f.fecha, f.estado
+                FROM facturas f
+                INNER JOIN usuarios u ON u.idusuario = f.idcliente
+                WHERE f.idfactura = ?';
+        $param = array(FACTURA->getId());
+        return Database::row($sql, $param);
+    }
 }
