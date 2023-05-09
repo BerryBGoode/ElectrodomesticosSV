@@ -1,6 +1,6 @@
 import { request, notificacionURL, notificacionAccion, cargarSelect } from '../controller.js';
 
-const USUARIO = 'business/private/usuario.php';
+export const USUARIO = 'business/private/usuario.php';
 const CANCELAR = document.getElementById('cancelar');
 const PROCESO = document.getElementById('proceso');
 const FORM = document.getElementById('form-usuario');

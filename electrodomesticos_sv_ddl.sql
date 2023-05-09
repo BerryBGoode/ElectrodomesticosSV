@@ -83,3 +83,7 @@ INNER JOIN marcas m ON m.idmarca = p.idmarca
 ORDER BY p.idproducto ASC
 
 SELECT * FROM usuarios
+
+SELECT f.idfactura, f.idcliente, u.nombre, u.apellido, u.correo, f.fecha, f.estado
+FROM facturas f
+INNER JOIN usuarios u ON u.idusuario = f.idcliente

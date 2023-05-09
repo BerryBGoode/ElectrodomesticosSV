@@ -113,7 +113,7 @@ let id, value;
 /**
  * Método para cargar select's en productos
  * filename donde ira a evaluar la acción
- * select tabla a cargar también tiene que ser el id del select
+ * select tabla a cargar también tiene que ser el id del select y nombre del input
  * selected si se seleccionará uno (para cargar el valor ingresado en ese registro)
  * idselect sí se quieren cargar id's
  */

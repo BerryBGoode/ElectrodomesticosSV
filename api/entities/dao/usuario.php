@@ -62,6 +62,17 @@ class UsuarioQuery
         return Database::all($sql, $param);
     }
 
+    /**
+     * Método para cargar el correo de los clientes
+     * retorna un arreglo con los datos recuperados
+     */
+    public function getCorreo()
+    {
+        $cliente  = 2;
+        $sql = 'SELECT idusuario, correo FROM usuarios WHERE tipousuario = ?';
+        $param = array($cliente);
+        return Database::all($sql, $param);
+    }
 
     /**
      * Método para recuperar los datos según registro seleccionado

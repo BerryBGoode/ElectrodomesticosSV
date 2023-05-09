@@ -121,6 +121,16 @@ if (isset($_GET['action'])) {
                     $res['excep'] = 'No se encontraron registros';
                 }
                 break;
+            
+            case 'cargar':
+                if ($res['data'] = $query->getCorreo()) {
+                    $res['status'] = 1;
+                } elseif (Database::getException()) {
+                    $res['excep']  = Database::getException();
+                } else {
+                    $res['excep'] = 'No existen clientes registrados';
+                }
+                break;
             case 'registro':
 
                 if (!USUARIO->setId($_POST['idusuario'])) {
