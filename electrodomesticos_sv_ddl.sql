@@ -88,3 +88,41 @@ SELECT f.idfactura, f.idcliente, u.nombre, u.apellido, u.correo, f.fecha, f.esta
 FROM facturas f
 INNER JOIN usuarios u ON u.idusuario = f.idcliente
 
+CREATE OR REPLACE FUNCTION FUN_descontarExistencia() 
+RETURNS TRIGGER 
+LANGUAGE PLPGSQL
+AS
+$$
+DECLARE 
+	_cantidad_ integer;
+BEGIN
+	SELECT cantidad FROM pedidos ORDER BY idpedido DESC LIMIT 1 INTO _cantidad_;
+	UPDATE productos SET existencias = existencias - _cantidad_;
+	RETURN NEW;
+END
+$$;
+SELECT * FROM pedidos
+CREATE OR REPLACE TRIGGER TGG_descontarExistencia AFTER INSERT ON pedidos
+	FOR EACH ROW
+	EXECUTE PROCEDURE FUN_descontarExistencia()
+	
+	
+CREATE OR REPLACE FUNCTION FUN_agregarExistencia() RETURNS TRIGGER AS $$
+BEGIN
+	UPDATE productos
+	SET existencias = existencias + (OLD.cantidad - NEW.cantidad)
+	WHERE idproducto = OLD.idproducto;
+	RETURN NEW;
+END;
+$$ LANGUAGE plpgsql
+
+CREATE OR REPLACE TRIGGER TGG_agregarExistencia
+AFTER UPDATE ON pedidos
+FOR EACH ROW
+EXECUTE FUNCTION FUN_agregarExistencia();
+
+
+select * from PRODUCTOS
+
+INSERT INTO pedidos(fecha, idproducto, idfactura, cantidad, estado)
+                    VALUES ('2023-05-04', 34, 1, 1,1)

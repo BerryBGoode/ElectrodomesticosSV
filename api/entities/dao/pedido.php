@@ -6,13 +6,17 @@ require_once '../../helpers/database.php';
 class PedidoQuery
 {
     /**
-     * Método para cargar los productos
-     * retorna un arreglo con los datos recuperados
+     * Método para guarda datos recibidos del front
+     * retorna las tuplas insertadas
      */
-    public function cargaProducto(){
-        $sql = 'SELECT * FROM productos';
-        return Database::all($sql);
+    public function guardarPedido()
+    {
+        $sql = 'INSERT INTO pedidos(fecha, idproducto, idfactura, cantidad, estado)
+                    VALUES (?, ?, ?, ?, ?)';
+        $params = array(
+            PEDIDO->getFecha(), PEDIDO->getProducto(), PEDIDO->getFactura(),
+            PEDIDO->getCantidad(), PEDIDO->getEstado()
+        );
+        return Database::storeProcedure($sql, $params);
     }
-    
 }
-?>
