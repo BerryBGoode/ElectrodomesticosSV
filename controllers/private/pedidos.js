@@ -111,10 +111,7 @@ const cargarTabla = async () => {
                     }
                 </td>
                 <td class="buttons-tb">
-                    <form action="agregarproducto.html" method="get" class="form-button">
-                        <!-- boton para actualizar -->                        
-                        <button type="submit" class="btn btn-secondary actualizar" data-bs-toggle="modal" data-bs-target="#Modal" value="${element.idpedido}">Actualizar</button>                                           
-                    </form>
+                        <button type="submit" class="btn btn-secondary actualizar" data-bs-toggle="modal" data-bs-target="#Modal" value="${element.idpedido}">Actualizar</button>
                         <!-- boton para eliminar -->
                         <button class="btn btn-danger eliminar" value="${element.idpedido}">Eliminar</button>
                 </td>

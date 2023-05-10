@@ -68,6 +68,52 @@ if (!isset($_GET['action'])) {
 
 
                 break;
+            
+            case 'actualizarEstado':
+                
+                if (!PEDIDO->setId($_POST['idpedido'])) {
+                    $res['excep'] = 'Error al obtener pedido';
+                } elseif (!PEDIDO->setEstado($_POST['estado'])) {
+                    $res['excep'] = 'Error al obtener nuevo estado';
+                } elseif ($query->actualizarEstdo()) {
+                    $res['status'] = 1;
+                } else {
+                    $res['excep'] = Database::getException();
+                }
+                
+                break;
+
+            case 'registro':
+                
+                if (!PEDIDO->setId($_POST['idpedido'])) {
+                    $res['excep'] = 'Error al obtener pedido';
+                } elseif ($res['data'] = $query->registro()) {
+                    $res['status'] =1;
+                } else {
+                    $res['excep'] = Database::getException();
+                }                
+
+                break;
+
+            case 'actualizar':
+                
+                if (!PEDIDO->setId($_POST['idpedido'])) {
+                        $res['excep'] = 'Error al obtener registro';
+                } elseif (!PEDIDO->setFecha($_POST['fecha'])) { 
+                    $res['excep'] = 'Fecha incorrecto, revisar formato';
+                } elseif (!PEDIDO->setProducto($_POST['productos'])) { 
+                    $res['excep'] = 'Producto seleccionado incorrecto';
+                } elseif (!PEDIDO->setCantidad($_POST['cantidad'])) {
+                    $res['excep'] = 'Cantidad incorrecto';
+                } elseif ($query->actualizar()) {
+                    $res['status'] = 1;
+                    $res['excep'] = 'Registro modificado';
+                } else {
+                    $res['excep'] = Database::getException();
+                }
+                
+
+                break;
             default:
                 # code...
                 break;
