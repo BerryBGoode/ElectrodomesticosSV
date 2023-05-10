@@ -31,7 +31,7 @@ if (!isset($_GET['action'])) {
                 $_POST = Validate::form($_POST);
 
                 $disponible = 1;
-                
+
                 if (!PEDIDO->setFecha($_POST['fecha'])) {
                     $res['excep'] = 'Fecha incorrecta, revisar formato';
                 } elseif (!PEDIDO->setProducto($_POST['productos'])) {
@@ -52,6 +52,22 @@ if (!isset($_GET['action'])) {
 
                 break;
 
+            case 'cargar':
+
+                if (!PEDIDO->setFactura($_POST['idfactura'])) {
+                    $res['excep'] = 'Error al obtener factura';
+                }
+                elseif ($res['data'] = $query->cargar()) {
+                    $res['status']  = 1;
+                    $res['msg'] = count($res['data']);
+                } elseif (Database::getException()) {
+                    $res['excep'] = Database::getException();
+                } else {
+                    $res['excep'] = 'No existen pedidos en de esta factura';
+                }
+
+
+                break;
             default:
                 # code...
                 break;

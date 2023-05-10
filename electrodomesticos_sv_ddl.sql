@@ -126,3 +126,7 @@ select * from PRODUCTOS
 
 INSERT INTO pedidos(fecha, idproducto, idfactura, cantidad, estado)
                     VALUES ('2023-05-04', 34, 1, 1,1)
+					
+SELECT o.idpedido, o.fecha, p.idproducto, p.nombre, p.precio, o.cantidad, (o.cantidad * p.precio) as Subtotal, o.estado
+FROM pedidos o
+INNER JOIN productos p ON p.idproducto = o.idproducto
