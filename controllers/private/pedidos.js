@@ -63,7 +63,7 @@ FORM.addEventListener('submit', async (event) => {
         // verificar sí el input para id esta lleno para identificar la acción
         (document.getElementById('idpedido').value) ? accion = 'actualizar' : accion = 'guardar';
         // obtener los datos
-        const DATOS = new FormData(FORM);
+        const DATOS = new FormData(FORM);        
         DATOS.append('idfactura', getFacturaURL());
         const JSON = await request(PEDIDO, accion, DATOS);
         if (JSON.status) {
@@ -98,17 +98,17 @@ const cargarTabla = async () => {
                 <td>${element.cantidad}</td>
                 <td>${element.subtotal}</td>
                 <td class="tb-switch">
-                    ${(element.estado === 1)  ?
-                    
+                    ${(element.estado === 1) ?
+
                     COL.innerHTML = `<div class="form-check form-switch"> 
                                         <input class="form-check-input estado" name="estado" id="estado" type="checkbox" id="estado" checked> 
                                     </div>`
                     :
                     COL.innerHTML = `<div class="form-check form-switch"> 
                                         <input class="form-check-input estado" name="estado" id="estado" type="checkbox" id="estado"> 
-                                    </div>`                    
-                    
-                    }
+                                    </div>`
+
+                }
                 </td>
                 <td class="buttons-tb">
                         <button type="submit" class="btn btn-secondary actualizar" data-bs-toggle="modal" data-bs-target="#Modal" value="${element.idpedido}">Actualizar</button>
@@ -118,7 +118,9 @@ const cargarTabla = async () => {
             </tr>`;
 
             // agregar subtotales al objeto
-            SUBTOTALES.push(element.subtotal);
+            if (element.estado === 1) {                
+                SUBTOTALES.push(element.subtotal);
+            }
         });
         // asignar y reiniciar una var para tener el total
         // y una pa
@@ -130,8 +132,36 @@ const cargarTabla = async () => {
 
         }
         // agregar a html el total.de longitud de 5 valores 
-        document.getElementById('total').innerText = '$ '+total.toLocaleString(5);
+        document.getElementById('total').innerText = '$ ' + total.toLocaleString(6);
 
+
+        // obtener los botones para actualizar
+        const ACTUALIZAR = document.getElementsByClassName('actualizar')
+        // recorrer cada uno de estos botones
+        for (let i = 0; i < ACTUALIZAR.length; i++) {
+            // crear evento al boton que se recorre
+            ACTUALIZAR[i].addEventListener('click', async (event) => {
+                event.preventDefault();
+                const ID = new FormData;
+                ID.append('idpedido', ACTUALIZAR[i].value);
+                const JSON = await request(PEDIDO, 'registro', ID);
+                if (JSON.status) {
+                    // reinciar los valores del formulario
+                    FORM.reset();
+                    // cargar los valores
+                    cargarSelect(PRODUCTO, 'productos', JSON.data.idproducto);
+                    // habilitar                    
+                    document.getElementById('cantidad').readOnly = false;
+                    
+                    document.getElementById('cantidad').value = JSON.data.cantidad;
+                    document.getElementById('fecha').value = JSON.data.fecha;
+                    document.getElementById('proceso').innerText = `Actualizar`;
+                    document.getElementById('idpedido').value = JSON.data.idpedido;
+                } else {
+                    notificacionURL('error', JSON.excep, false);
+                }
+            })
+        }
 
     } else {
         notificacionURL('error', JSON.excep, false);

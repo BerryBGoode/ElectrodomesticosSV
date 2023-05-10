@@ -96,9 +96,11 @@ if (!isset($_GET['action'])) {
                 break;
 
             case 'actualizar':
+                $_POST = Validate::form($_POST);
                 
+
                 if (!PEDIDO->setId($_POST['idpedido'])) {
-                        $res['excep'] = 'Error al obtener registro';
+                    $res['excep'] = 'Error al obtener registro';
                 } elseif (!PEDIDO->setFecha($_POST['fecha'])) { 
                     $res['excep'] = 'Fecha incorrecto, revisar formato';
                 } elseif (!PEDIDO->setProducto($_POST['productos'])) { 
@@ -107,7 +109,7 @@ if (!isset($_GET['action'])) {
                     $res['excep'] = 'Cantidad incorrecto';
                 } elseif ($query->actualizar()) {
                     $res['status'] = 1;
-                    $res['excep'] = 'Registro modificado';
+                    $res['msg'] = 'Registro modificado';
                 } else {
                     $res['excep'] = Database::getException();
                 }
