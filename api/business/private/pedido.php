@@ -71,6 +71,7 @@ if (!isset($_GET['action'])) {
             
             case 'actualizarEstado':
                 
+                
                 if (!PEDIDO->setId($_POST['idpedido'])) {
                     $res['excep'] = 'Error al obtener pedido';
                 } elseif (!PEDIDO->setEstado($_POST['estado'])) {

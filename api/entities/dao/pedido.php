@@ -29,7 +29,8 @@ class PedidoQuery
         $sql = 'SELECT o.idpedido, o.fecha, p.idproducto, p.nombre, p.precio, o.cantidad, (o.cantidad * p.precio) as Subtotal, o.estado
                 FROM pedidos o
                 INNER JOIN productos p ON p.idproducto = o.idproducto
-                WHERE o.idfactura = ?';
+                WHERE o.idfactura = ?
+                ORDER BY o.idpedido ASC';
         $param = array(PEDIDO->getFactura());
         return Database::all($sql, $param);
     }

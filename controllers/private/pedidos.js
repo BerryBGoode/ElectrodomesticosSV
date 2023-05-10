@@ -63,7 +63,7 @@ FORM.addEventListener('submit', async (event) => {
         // verificar sí el input para id esta lleno para identificar la acción
         (document.getElementById('idpedido').value) ? accion = 'actualizar' : accion = 'guardar';
         // obtener los datos
-        const DATOS = new FormData(FORM);        
+        const DATOS = new FormData(FORM);
         DATOS.append('idfactura', getFacturaURL());
         const JSON = await request(PEDIDO, accion, DATOS);
         if (JSON.status) {
@@ -107,7 +107,6 @@ const cargarTabla = async () => {
                     COL.innerHTML = `<div class="form-check form-switch"> 
                                         <input class="form-check-input estado" name="estado" id="estado" type="checkbox" id="estado"> 
                                     </div>`
-
                 }
                 </td>
                 <td class="buttons-tb">
@@ -118,7 +117,7 @@ const cargarTabla = async () => {
             </tr>`;
 
             // agregar subtotales al objeto
-            if (element.estado === 1) {                
+            if (element.estado === 1) {
                 SUBTOTALES.push(element.subtotal);
             }
         });
@@ -133,8 +132,9 @@ const cargarTabla = async () => {
         }
         // agregar a html el total.de longitud de 5 valores 
         document.getElementById('total').innerText = '$ ' + total.toLocaleString(6);
-
-
+        document.getElementById('total').innerHTML = `<input type="number" class="hide" id="input-total" value="${total}">
+            $ ${total.toLocaleString(5)}    
+        `;
         // obtener los botones para actualizar
         const ACTUALIZAR = document.getElementsByClassName('actualizar')
         // recorrer cada uno de estos botones
@@ -152,13 +152,61 @@ const cargarTabla = async () => {
                     cargarSelect(PRODUCTO, 'productos', JSON.data.idproducto);
                     // habilitar                    
                     document.getElementById('cantidad').readOnly = false;
-                    
+
                     document.getElementById('cantidad').value = JSON.data.cantidad;
                     document.getElementById('fecha').value = JSON.data.fecha;
                     document.getElementById('proceso').innerText = `Actualizar`;
                     document.getElementById('idpedido').value = JSON.data.idpedido;
                 } else {
                     notificacionURL('error', JSON.excep, false);
+                }
+            })
+        }
+
+        // obtener todos los switches de la tabla
+        const ESTADO = document.getElementsByClassName('estado');
+        // recorrer los input encontrados
+        for (let i = 0; i < ESTADO.length; i++) {
+            // crear evento change para modificar estado
+            ESTADO[i].addEventListener('change', async (event) => {
+                event.preventDefault();
+                const ID = new FormData;
+                // verifica sí el switch está checkeado
+                (ESTADO[i].checked) ? estado = 1 : estado = 2;
+                // adjuntar el id del pedido con el nombre del var 'idpedido'
+                ID.append('idpedido', ACTUALIZAR[i].value);
+                // adjuntar el estado del pedido con el nombre de var 'estado'
+                ID.append('estado', estado);
+                const JSON = await request(PEDIDO, 'actualizarEstado', ID);
+                if (!JSON.status) {
+                    notificacionURL('error', JSON.excep, false);
+                } else {
+                    // verificar sí está checkeado
+                    if (ESTADO[i].checked) {
+                        // sumar el valor del subtotal en la posición del switch modificado
+                        // total += SUBTOTALES[i]
+                        
+                        // for (const UNIT of SUBTOTALES) {
+
+                        //     console.log(UNIT)
+                        //     // al valor anterior sumarle el número
+                        //     total += parseFloat(UNIT + ' index: ' + index);
+                
+                        // }
+                        
+                        document.getElementById('total').innerText = '$ ' + total.toLocaleString(6);                        
+                        console.log('sumar')
+                    } else {
+                        console.log('restar')
+                        // for (const UNIT of SUBTOTALES) {
+                        //     console.log(UNIT)
+                        //     // al valor anterior sumarle el número
+                        //     total -= parseFloat(UNIT + ' index: ' + index);
+                
+                        // }
+                        // total -= SUBTOTALES[i]
+                        document.getElementById('total').innerText = '$ ' + total.toLocaleString(6);
+                    }
                 }
             })
         }
