@@ -103,6 +103,23 @@ if (!isset($_GET['action'])) {
                 }                
 
                 break;
+
+            case 'actualizar':
+                $_POST = Validate::form($_POST);
+
+                if (!FACTURA->setId($_POST['idfactura'])) {
+                    $res['excep'] = 'Error al seleccionar registro';
+                }elseif (!FACTURA->setCliente($_POST['usuarios'])) {
+                    $res['excep'] = 'Error al seleccionar cliente';
+                }elseif (!FACTURA->setFecha($_POST['fecha'])) {
+                    $res['excep'] = 'Error con el formato de fecha';
+                }elseif ($query->actualizar()) {
+                    $res['status'] = 1;
+                    $res['msg'] = 'Registro modificado';
+                } else {
+                    $res['excep'] = Database::getException();
+                }
+                break;
             default:
                 $res['excep'] = 'Acción no registrada';
                 break;

@@ -38,7 +38,8 @@ class FacturaQuery
     {
         $sql = 'SELECT f.idfactura, f.idcliente, u.nombre, u.apellido, u.correo, f.fecha, f.estado
                 FROM facturas f
-                INNER JOIN usuarios u ON u.idusuario = f.idcliente';
+                INNER JOIN usuarios u ON u.idusuario = f.idcliente
+                ORDER BY f.idfactura ASC';
         return Database::all($sql);
     }
 
@@ -76,5 +77,16 @@ class FacturaQuery
                 WHERE f.idfactura = ?';
         $param = array(FACTURA->getId());
         return Database::row($sql, $param);
+    }
+
+    /**
+     * Método para actualizar registro seleccionado
+     * retorna el número de registro modificados
+     */
+    public function actualizar()
+    {
+        $sql = 'UPDATE facturas SET idcliente = ?, fecha = ? WHERE idfactura = ?';
+        $params = array(FACTURA->getCliente(), FACTURA->getFecha(), FACTURA->getId());
+        return Database::storeProcedure($sql, $params);
     }
 }

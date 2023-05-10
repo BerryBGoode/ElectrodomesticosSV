@@ -16,6 +16,10 @@ const COL = document.querySelectorAll('.tb-switch');
 
 let accion, estado;
 
+document.getElementById('btn-agregar').addEventListener('click', ()=>{
+    document.getElementById('proceso').innerText = `Agregar`;
+})
+
 document.getElementById('btn-agregar').addEventListener('click', async () => {
     cargarSelect(USUARIO, 'usuarios')
 });
@@ -26,10 +30,11 @@ FORM.addEventListener('submit', async (event) => {
     // validar campos vacios
     if (document.getElementById('apellidos').value && document.getElementById('nombres').value) {
 
+        (document.getElementById('idfactura').value) ? accion = 'actualizar' : accion = 'crear'
         // obtener datos del formulario
         const DATOS = new FormData(FORM);
         // hacer petición
-        const JSON = await request(FACTURA, 'crear', DATOS);
+        const JSON = await request(FACTURA, accion, DATOS);
         if (JSON.status) {
             FORM.reset();
             MODAL.hide();
@@ -69,7 +74,6 @@ const cargarTabla = async () => {
     TABLA.innerHTML = ``;
     // hacer petición
     const JSON = await request(FACTURA, 'cargar');
-    console.log(JSON)
     if (JSON.status) {
 
         JSON.data.forEach(element => {
@@ -116,6 +120,7 @@ const cargarTabla = async () => {
                 const JSON = await request(FACTURA, 'registro', DATO);
                 if (JSON.status) {
                     FORM.reset();
+                    document.getElementById('proceso').innerText = `Actualizar`;
                     document.getElementById('idfactura').value = JSON.data.idfactura;
                     cargarSelect(USUARIO, 'usuarios', JSON.data.idcliente);
                     document.getElementById('nombres').value = JSON.data.nombre;

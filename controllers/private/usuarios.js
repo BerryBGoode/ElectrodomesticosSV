@@ -1,7 +1,7 @@
 import { request, notificacionURL, notificacionAccion, cargarSelect } from '../controller.js';
 
 export const USUARIO = 'business/private/usuario.php';
-const CANCELAR = document.getElementById('cancelar');
+
 const PROCESO = document.getElementById('proceso');
 const FORM = document.getElementById('form-usuario');
 const SWITCH = document.getElementById('estado');
@@ -18,11 +18,7 @@ const getUsuarioURL = () => {
     return VALUE;
 }
 
-if (CANCELAR) {
-    CANCELAR.addEventListener('click', () => {
-        location.href = 'usuarios.html';
-    })
-}
+
 
 const toActualizar = (json) => {
     document.getElementById('idusuario').value = json.idusuario;
