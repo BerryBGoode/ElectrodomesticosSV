@@ -2,7 +2,7 @@ import { request, notificacionURL, notificacionAccion, cargarSelect } from '../c
 
 const CATEGORIA = 'business/private/categoria.php';
 const MARCA = 'business/private/marca.php';
-const PRODUCTO = 'business/private/producto.php';
+export const PRODUCTO = 'business/private/producto.php';
 const SWITCH = document.getElementById('estado');
 const FORM = document.getElementById('form-producto');
 const SEARCH = document.getElementById('buscador');
@@ -10,19 +10,11 @@ const PROCESO = document.getElementById('proceso');
 const TABLA = document.getElementById('tbody-producto');
 const COL = document.querySelectorAll('.tb-switch');
 const PATH = '../../api/images/productos/';
-const CANCELAR = document.getElementById('cancelar');
 
 let accion;
 let estado;
 let contenedorswitch = document.querySelector('.switch');
 let imagenformulario = document.querySelector('.imagen-producto');
-
-if (CANCELAR) {
-    CANCELAR.addEventListener('click', () => {
-        location.href = 'productos.html';
-    })
-    
-}
 
 
 // se encierrar en un if para verificar sí se encontró ese elemento

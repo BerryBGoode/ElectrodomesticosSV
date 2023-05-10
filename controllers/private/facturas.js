@@ -96,7 +96,7 @@ const cargarTabla = async () => {
                 }
                 </td>
                 <td>
-                    <form action="pedidos.html" method="get">
+                    <form action="pedido.html" method="get">
                         <input type="number" name="facturaid" class="hide" id="facturaid" value="${element.idfactura}">
                         <button type="submit" class="btn btn-secondary">Ver</button>
                     </form>
