@@ -182,6 +182,7 @@ const cargarTabla = async () => {
                     notificacionURL('error', JSON.excep, false);
                 } else {
                     // verificar sí está checkeado
+                    // para sumar o restar total
                     if (ESTADO[i].checked) {
                         // sumar el valor del subtotal en la posición del switch modificado
                         // total += SUBTOTALES[i]
@@ -211,6 +212,29 @@ const cargarTabla = async () => {
             })
         }
 
+        // obtener los botones
+        const ELIMINAR = document.getElementsByClassName('eliminar');
+        // recorrer todos los botones
+        for(let i = 0; i < ELIMINAR.length; i++){
+            // crear evento
+            ELIMINAR[i].addEventListener('click', async (event) => {
+                event.preventDefault();
+                // verificar la acción
+                accion = await notificacionAccion('Desea eliminar este pedido?');
+                if (accion) {
+                    const ID = new FormData;
+                    ID.append('idpedido', ELIMINAR[i].value);
+                    const JSON = await request(PEDIDO, 'eliminar', ID);
+                    console.log(JSON);
+                    if (JSON.status) {
+                        cargarTabla();
+                        notificacionURL('success', JSON.msg, true);
+                    }else{
+                        notificacionURL('error', JSON.excep, false);
+                    }                
+                }
+            })
+        }
     } else {
         notificacionURL('error', JSON.excep, false);
     }

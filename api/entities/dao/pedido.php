@@ -71,4 +71,36 @@ class PedidoQuery
         );
         return Database::storeProcedure($sql, $params);
     }
+
+    /**
+     * Método para eliminar pedido
+     * retorna la cantidad de registros eliminados
+     */
+    public function eliminar(){
+        $sql = 'DELETE FROM pedidos WHERE idpedido = ?';
+        $param = array(PEDIDO->getId());
+        return Database::storeProcedure($sql, $param);
+    }
+
+    /**
+     * Método para obtener existencias del producto a eliminar
+     * del pedido eliminado
+     * retorna un arreglo con la cantidad de productos del pedido
+     * a eliminar
+     */
+    public function getCantidad(){
+        $sql = 'SELECT idproducto, cantidad FROM pedidos WHERE idpedido = ?';
+        $param = array(PEDIDO->getId());
+        return Database::row($sql, $param);
+    }
+
+    /**
+     * Método para actualizar producto (sumar existencias)
+     * retorna un arreglo 
+     */
+    public function agregarExistencias(){
+        $sql = 'UPDATE productos SET existencias = existencias + ? WHERE idproducto = ?';
+        $params = array(PEDIDO->getCantidad(), PEDIDO->getProducto());
+        return Database::storeProcedure($sql, $params);
+    }
 }

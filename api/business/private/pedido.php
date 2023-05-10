@@ -56,8 +56,7 @@ if (!isset($_GET['action'])) {
 
                 if (!PEDIDO->setFactura($_POST['idfactura'])) {
                     $res['excep'] = 'Error al obtener factura';
-                }
-                elseif ($res['data'] = $query->cargar()) {
+                } elseif ($res['data'] = $query->cargar()) {
                     $res['status']  = 1;
                     $res['msg'] = count($res['data']);
                 } elseif (Database::getException()) {
@@ -68,10 +67,10 @@ if (!isset($_GET['action'])) {
 
 
                 break;
-            
+
             case 'actualizarEstado':
-                
-                
+
+
                 if (!PEDIDO->setId($_POST['idpedido'])) {
                     $res['excep'] = 'Error al obtener pedido';
                 } elseif (!PEDIDO->setEstado($_POST['estado'])) {
@@ -81,30 +80,30 @@ if (!isset($_GET['action'])) {
                 } else {
                     $res['excep'] = Database::getException();
                 }
-                
+
                 break;
 
             case 'registro':
-                
+
                 if (!PEDIDO->setId($_POST['idpedido'])) {
                     $res['excep'] = 'Error al obtener pedido';
                 } elseif ($res['data'] = $query->registro()) {
-                    $res['status'] =1;
+                    $res['status'] = 1;
                 } else {
                     $res['excep'] = Database::getException();
-                }                
+                }
 
                 break;
 
             case 'actualizar':
                 $_POST = Validate::form($_POST);
-                
+
 
                 if (!PEDIDO->setId($_POST['idpedido'])) {
                     $res['excep'] = 'Error al obtener registro';
-                } elseif (!PEDIDO->setFecha($_POST['fecha'])) { 
+                } elseif (!PEDIDO->setFecha($_POST['fecha'])) {
                     $res['excep'] = 'Fecha incorrecto, revisar formato';
-                } elseif (!PEDIDO->setProducto($_POST['productos'])) { 
+                } elseif (!PEDIDO->setProducto($_POST['productos'])) {
                     $res['excep'] = 'Producto seleccionado incorrecto';
                 } elseif (!PEDIDO->setCantidad($_POST['cantidad'])) {
                     $res['excep'] = 'Cantidad incorrecto';
@@ -114,11 +113,40 @@ if (!isset($_GET['action'])) {
                 } else {
                     $res['excep'] = Database::getException();
                 }
-                
+
+                break;
+
+            case 'eliminar':
+
+                // enviar datos                
+                if (!PEDIDO->setId($_POST['idpedido'])) {
+                    $res['excep'] = 'Error al obtener registro';
+                } elseif ($producto = $query->getCantidad()) {
+                    // producto es igual al valor que recupera la consulta
+                    // (cantidad y producto)
+                    if (!PEDIDO->setCantidad($producto['cantidad'])) {
+                        $res['excep'] = 'Error al obtener la cantidad del pedido a eliminar';
+                    } elseif (!PEDIDO->setProducto($producto['idproducto'])) {
+                        $res['excep'] = 'Error al obtener producto del pedido';
+                    } elseif ($query->agregarExistencias()) {
+                        
+                        if ($query->eliminar()) {
+                            $res['status'] = 1;
+                            $res['msg'] = 'Registro eliminado';
+                        }
+
+                    } else {
+                        $res['excep'] =  Database::getException();
+                    }
+                } else {
+
+                    $res['excep'] = Database::getException();
+                }
+
 
                 break;
             default:
-                # code...
+                $res['excep'] = 'Acción no encontrada';
                 break;
         }
     }
