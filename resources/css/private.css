@@ -67,3 +67,6 @@
     display: flex;
     gap: .5%;
 }
+#comentario{
+    height: 20%;
+}

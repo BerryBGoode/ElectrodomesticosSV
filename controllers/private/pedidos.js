@@ -236,6 +236,6 @@ const cargarTabla = async () => {
             })
         }
     } else {
-        notificacionURL('error', JSON.excep, false);
+        notificacionURL('info', JSON.excep, false);
     }
 }
