@@ -111,7 +111,26 @@ if (!isset($_GET['action'])) {
                     $res['excep'] = 'Registro no encontrado';
                 }
                 
+                break;
 
+            case 'actualizar':
+                $_POST = Validate::form($_POST);
+
+                if (!COMENTARIO->setId($_POST['idcomentario'])) {
+                    $res['excep'] = 'Error al obtener registro';
+                } elseif (!COMENTARIO->setPedido($_POST['pedidos'])) {
+                    $res['excep'] = 'Error al cargar pedido';
+                } elseif (!COMENTARIO->setComentario($_POST['comentario'])) {
+                    $res['excep'] = 'Comentario incorrecto';
+                } elseif ($query->actualizar()) {
+                    $res['status'] = 1;
+                    $res['msg'] = 'Registro modificado';
+                } elseif (Database::getException()) {
+                    $res['excep'] = Database::getException();
+                } else {
+                    $res['excep'] = 'Error al modificar registro';
+                }
+                
                 break;
             default:
                 $res['excep'] = 'Acción no encontrada';

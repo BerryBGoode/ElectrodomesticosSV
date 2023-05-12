@@ -138,3 +138,21 @@ INNER JOIN productos p ON p.idproducto = o.idproducto
 ALTER TABLE comentarios ADD column estado boolean not null default false
 
 SELECT idfactura FROM facturas WHERE idcliente = 29
+
+SELECT c.fecha, u.correo, p.nombre, c.comentario, c.estado
+FROM comentarios c
+INNER JOIN pedidos o ON o.idpedido = c.idpedido
+INNER JOIN productos p ON p.idproducto = o.idproducto
+INNER JOIN facturas f ON f.idfactura = o.idfactura
+INNER JOIN usuarios u ON u.idusuario = f.idcliente
+
+SELECT c.idcomentario, c.fecha, o.idpedido ,u.correo, p.nombre, c.comentario, c.estado
+                FROM comentarios c
+                INNER JOIN pedidos o ON o.idpedido = c.idpedido
+				
+			
+                INNER JOIN productos p ON p.idproducto = o.idproducto
+                INNER JOIN facturas f ON f.idfactura = o.idfactura
+                INNER JOIN usuarios u ON u.idusuario = f.idcliente
+				WHERE c.idcomentario = 1
+                ORDER BY c.idcomentario ASC           

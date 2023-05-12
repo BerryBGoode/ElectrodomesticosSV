@@ -75,7 +75,8 @@ class ComentarioQuery
      * Método para obtener el registro seleccionado
      * retorna un arreglo con los datos obtenidos según la consulta '$sql'
      */
-    public function registro(){
+    public function registro()
+    {
         $sql = 'SELECT c.idcomentario, c.fecha, o.idpedido ,u.correo, u.idusuario, p.nombre, p.idproducto, c.comentario, c.estado
                 FROM comentarios c
                 INNER JOIN pedidos o ON o.idpedido = c.idpedido
@@ -85,12 +86,23 @@ class ComentarioQuery
                 WHERE c.idcomentario = ?
                 ORDER BY c.idcomentario ASC';
         $param = array(COMENTARIO->getId());
-        return Database::row($sql, $param);        
+        return Database::row($sql, $param);
+    }
+
+    /**
+     * Método para actualizar el registro seleccionado
+     * retorna la cantidad de registros modificados
+     */
+    public function actualizar()
+    {
+        $sql = 'UPDATE comentarios SET idpedido = ?, comentario = ? 
+                WHERE idcomentario = ?';
+        $params = array(COMENTARIO->getPedido(), COMENTARIO->getComentario(), COMENTARIO->getId());
+        return Database::storeProcedure($sql, $params);
     }
 
     /**
      * Método para actualizar el registro seleccionado de la tabla
      * retorna la cantidad de registro modificados
      */
-    
 }

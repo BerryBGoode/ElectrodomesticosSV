@@ -59,7 +59,7 @@ const cargarPedidos = async (seleccionado = null) => {
                     // definir valor para el usuario del registro a seleccionar
                     value = Object.values(element)[1];
                     (id !== seleccionado) ?
-                    pedido += `<option value="${id}">${id}</option>` : pedido += `<option value="${id}" selected>${id}</option>`
+                        pedido += `<option value="${id}">${id}</option>` : pedido += `<option value="${id}" selected>${id}</option>`
                 });
                 // agregar las opciones
                 document.getElementById('pedidos').innerHTML = pedido;
@@ -146,7 +146,7 @@ const cargarTabla = async () => {
                     // cargar select
                     cargarSelect(USUARIO, 'usuarios', JSON.data.idusuario);
                     // asignar valor para carga pedidos
-                    document.getElementById('usuarios').value = JSON.data.idusuario;                
+                    document.getElementById('usuarios').value = JSON.data.idusuario;
                     // cargar select
                     cargarSelect(PRODUCTO, 'productos', JSON.data.idproducto)
                     // asignar valor
@@ -159,6 +159,8 @@ const cargarTabla = async () => {
                     document.getElementById('fecha').value = JSON.data.fecha;
                     // cargar comentario
                     document.getElementById('comentario').value = JSON.data.comentario;
+                    // cambiar el texto del boton
+                    document.getElementById('proceso').innerText = `Actualizar`;
                 } else {
                     notificacionURL('error', JSON.excep, false);
                 }
