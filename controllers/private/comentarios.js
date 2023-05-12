@@ -1,5 +1,5 @@
 // importar modulos 
-import { request, cargarSelect, notificacionAccion, notificacionURL, MODAL } from "../controller.js";
+import { request, cargarSelect, notificacionAccion, notificacionURL } from "../controller.js";
 import { USUARIO } from './usuarios.js'
 
 const PRODUCTO = 'business/private/producto.php';
@@ -8,6 +8,7 @@ const FORM = document.getElementById('form-comentario')
 const COMENTARIO = 'business/private/comentario.php';
 const TABLA = document.getElementById('tbody-comentario');
 const COL = document.querySelectorAll('.tb-switch');
+const MODAL = new bootstrap.Modal(document.getElementById('Modal'));
 
 let accion, estado, id, value;
 
