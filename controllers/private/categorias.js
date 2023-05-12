@@ -120,7 +120,7 @@ const buscador = async event => {
         // obtener los valores del input y convertir a minusculas
         let search = document.getElementById('input-buscar').value.toLowerCase();
         // sí el input esta vacío
-        if (search === '') {
+        if (search === '' || search === ' ') {
             // reiniciar datos de la tabla
             TABLA.innerHTML = ``;
             // cargar tabla

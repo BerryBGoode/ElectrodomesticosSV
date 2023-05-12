@@ -150,10 +150,11 @@ const buscador = async evt => {
     } else {
         TBMARCA.innerHTML = ``;
         let search = document.getElementById('input-buscar').value.toLowerCase();
-        if (search === '') {
+        if (search === '' || search === ' ') {
             TBMARCA.innerHTML = ``;
             cargarTabla();
         } else {
+            TBMARCA.innerHTML = ``;
             for (let marcas of JSON.data) {
                 let marca = marcas.marca.toLowerCase();
                 if (marca.indexOf(search) !== -1) {

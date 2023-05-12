@@ -205,7 +205,7 @@ const buscador = async event => {
     } else {
         TABLA.innerHTML = ``;
         let search = document.getElementById('input-buscar').value.toLowerCase();
-        if (search === '') {
+        if (search === '' || search === ' ') {
             TABLA.innerHTML = ``;
             cargarTabla();
         } else {
@@ -303,7 +303,7 @@ const buscador = async event => {
                         notificacionURL('error', JSON.excep, false);
                     }
                 });
-            }ß
+            }
         }
     }
 }
