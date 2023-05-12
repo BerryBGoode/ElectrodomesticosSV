@@ -36,7 +36,7 @@ const getProductoURL = () => {
 
 const toActualizar = async (json) => {
     contenedorswitch.style.visibility = 'hidden';
-    
+
     cargarSelect(CATEGORIA, 'categorias', json.idcategoria);
     cargarSelect(MARCA, 'marcas', json.idmarca)
 
@@ -45,9 +45,9 @@ const toActualizar = async (json) => {
     document.getElementById('existencias').value = json.existencias;
     document.getElementById('descripcion').value = json.descripcion;
     document.getElementById('idproducto').value = json.idproducto;
-    
+
     // imagenformulario.innerHTML = `<img src="${PATH + json.imagen}" alt="" width="50px" height="50px">`;
-    
+
 }
 
 document.addEventListener('DOMContentLoaded', async (event) => {
@@ -55,12 +55,12 @@ document.addEventListener('DOMContentLoaded', async (event) => {
 
     // verificar la página, sí es agregarproducto.html
     if (location.href.indexOf('agregar') !== -1) {
-        
+
         // verificar sí el proceso para carga los selects
         // verificar proceso por medio de url
-        if (getProductoURL()) {            
+        if (getProductoURL()) {
             PROCESO.innerText = `Actualizar`;
-            const DATO = new FormData;            
+            const DATO = new FormData;
             DATO.append('idproducto', getProductoURL());
             const JSON = await request(PRODUCTO, 'registro', DATO);
             if (JSON.status) {
@@ -114,11 +114,11 @@ const cargarTabla = async () => {
                 <td>${element.marca}</td>
                 <td class="tb-switch">
                     ${(element.estado) ?
-                COL.innerHTML = `<div class="form-check form-switch"> 
+                    COL.innerHTML = `<div class="form-check form-switch"> 
                             <input class="form-check-input estado" name="estado" id="estado" type="checkbox" id="estado" checked> 
                         </div>`
-                :
-                COL.innerHTML = `<div class="form-check form-switch"> 
+                    :
+                    COL.innerHTML = `<div class="form-check form-switch"> 
                             <input class="form-check-input estado" name="estado" id="estado" type="checkbox" id="estado"> 
                         </div>`
                 }
@@ -195,3 +195,117 @@ const cargarTabla = async () => {
         notificacionURL('info', JSON.excep, false);
     }
 }
+
+const buscador = async event => {
+    event.preventDefault();
+    TABLA.innerHTML = '';
+    const JSON = await request(PRODUCTO, 'cargar');
+    if (!JSON.status) {
+        notificacionURL('error', JSON.excep, false);
+    } else {
+        TABLA.innerHTML = ``;
+        let search = document.getElementById('input-buscar').value.toLowerCase();
+        if (search === '') {
+            TABLA.innerHTML = ``;
+            cargarTabla();
+        } else {
+            TABLA.innerHTML = ``;
+            for (let productos of JSON.data) {
+                let nombre = productos.nombre.toLowerCase();
+                let marca = productos.marca.toLowerCase();
+                let precio = productos.precio;
+                let categoria = productos.categoria.toLowerCase();
+                if (nombre.indexOf(search) !== -1 || marca.indexOf(search) !== -1
+                    || precio.indexOf(search) !== -1 || categoria.indexOf(search) !== -1) {
+                    TABLA.innerHTML += `<tr>
+                    <td>
+                        <img src="${PATH + productos.imagen}" alt="${productos.nombre}" width="75px" height="75px">
+                        ${productos.nombre}
+                    </td>
+                    <td>${productos.precio}</td>
+                    <td>${productos.existencias}</td>
+                    <td>${productos.categoria}</td>
+                    <td>${productos.marca}</td>
+                    <td class="tb-switch">
+                        ${(productos.estado) ?
+                            COL.innerHTML = `<div class="form-check form-switch"> 
+                                <input class="form-check-input estado" name="estado" id="estado" type="checkbox" id="estado" checked> 
+                            </div>`
+                            :
+                            COL.innerHTML = `<div class="form-check form-switch"> 
+                                <input class="form-check-input estado" name="estado" id="estado" type="checkbox" id="estado"> 
+                            </div>`
+                        }
+                    </td>
+                    <td class="buttons-tb">
+                        <form action="agregarproducto.html" method="get" class="form-button">
+                            <!-- boton para actualizar -->                        
+                                <button type="submit" class="btn btn-secondary actualizar" data-bs-toggle="modal" data-bs-target="#Modal" value="${productos.idproducto}">Actualizar</button>
+                                <input type="number" name="productoid" class="hide" id="productoid" value="${productos.idproducto}">                        
+                        </form>
+                            <!-- boton para eliminar -->
+                        <button class="btn btn-danger eliminar" value="${productos.idproducto}">Eliminar</button>
+                    </td>
+                </tr>`;
+                }
+            }
+            const ACTUALIZAR = document.getElementsByClassName('actualizar');
+            // for (let i = 0; i < ACTUALIZAR.length; i++) {
+            //     ACTUALIZAR[i].addEventListener('click', () => {
+            //         location.href = '';
+            //         location.href.search = 'agregarproducto.html?' + ACTUALIZAR[i].value;
+            //     })
+
+            // }
+
+            const ELIMINAR = document.getElementsByClassName('eliminar');
+            for (let i = 0; i < ELIMINAR.length; i++) {
+                ELIMINAR[i].addEventListener('click', async (event) => {
+                    accion = await notificacionAccion('Desea eliminar este producto \n Revisar cuantas clientes ha pedido este producto');
+                    if (accion) {
+                        event.preventDefault();
+                        const DATO = new FormData;
+                        DATO.append('idproducto', ELIMINAR[i].value);
+                        const JSON = await request(PRODUCTO, 'eliminar', DATO);
+                        if (JSON.status) {
+                            cargarTabla();
+                            notificacionURL('success', JSON.msg, true);
+                        } else {
+                            notificacionURL('error', JSON.excep, false);
+                        }
+                    }
+                });
+            }
+
+            // obtener todos los switch de la tabla
+            const ESTADO = document.getElementsByClassName('estado');
+            // recorrer todos switch para y a cada uno crearle un evento
+            for (let i = 0; i < ESTADO.length; i++) {
+                ESTADO[i].addEventListener('change', async (event) => {
+                    event.preventDefault();
+                    // evaluar sí el valor del input es true
+                    // para cambiar el valor al nuevo estado                
+                    const DATOS = new FormData;
+                    // adjuntar el id del producto
+                    DATOS.append('idproducto', ACTUALIZAR[i].value);
+                    // adjuntar nuevo estado
+                    if (ESTADO[i].checked) {
+                        // estado true
+                        estado = true;
+                    } else {
+                        // estado false
+                        estado = false;
+                    }
+                    DATOS.append('estado', estado);
+                    const JSON = await request(PRODUCTO, 'actualizarEstado', DATOS);
+                    if (!JSON.status) {
+                        // sí hay error en la petición informar al usuario
+                        notificacionURL('error', JSON.excep, false);
+                    }
+                });
+            }ß
+        }
+    }
+}
+
+SEARCH.addEventListener('keyup', async event => buscador(event));
