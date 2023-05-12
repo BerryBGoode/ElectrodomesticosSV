@@ -102,7 +102,14 @@ class ComentarioQuery
     }
 
     /**
-     * Método para actualizar el registro seleccionado de la tabla
-     * retorna la cantidad de registro modificados
+     * Método para eliminar el registro seleccionado de la tabla
+     * retorna la cantidad de registro eliminados
      */
+    public function eliminar()
+    {
+        $sql = 'DELETE FROM comentarios WHERE idcomentario = ?';
+        $param = array(COMENTARIO->getId());
+        return Database::storeProcedure($sql, $param);
+    }
 }
+?>

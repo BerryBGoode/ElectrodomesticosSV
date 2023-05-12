@@ -195,7 +195,31 @@ const cargarTabla = async () => {
             })
         }
 
-
+        // obtener los botones para eliminar
+        const ELIMINAR = document.getElementsByClassName('eliminar');
+        // recorrer los botones encontrados
+        for(let i =0; i < ELIMINAR.length; i++){
+            // crear evento 'click' a cada boton
+            ELIMINAR[i].addEventListener('click', async (event) => {
+                event.preventDefault();
+                // preguntar sí se decea eliminar
+                accion = await notificacionAccion('Desea eliminar este registro? ');
+                if (accion) {
+                    // asignar espacio para enviar datos                
+                    const ID = new FormData;
+                    // adjuntar a ese espacio el id del comentario
+                    ID.append('idcomentario', ELIMINAR[i].value)
+                    // hacer petición a comentario.php de business
+                    const JSON = await request(COMENTARIO, 'eliminar', ID);
+                    if (JSON.status) {
+                        cargarTabla();
+                        notificacionURL('success', JSON.msg, true);
+                    } else {
+                        notificacionURL('error', JSON.excep, false);
+                    }                
+                }
+            })
+        }
 
     } else {
         notificacionURL('info', JSON.excep, false);

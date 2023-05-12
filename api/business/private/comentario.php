@@ -132,6 +132,20 @@ if (!isset($_GET['action'])) {
                 }
                 
                 break;
+
+            case 'eliminar':
+                
+                if (!COMENTARIO->setId($_POST['idcomentario'])) {
+                    $res['excep'] = 'Error al obtener registro';
+                } elseif ($query->eliminar()) {
+                    $res['status'] = 1;
+                    $res['msg'] = 'Registro eliminado';
+                } else {
+                    $res['excep'] = Database::getException();
+                }
+                
+
+                break;
             default:
                 $res['excep'] = 'Acción no encontrada';
                 break;
