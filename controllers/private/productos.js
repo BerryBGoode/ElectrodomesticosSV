@@ -309,3 +309,4 @@ const buscador = async event => {
 }
 
 SEARCH.addEventListener('keyup', async event => buscador(event));
+SEARCH.addEventListener('submit', async event => buscador(event));

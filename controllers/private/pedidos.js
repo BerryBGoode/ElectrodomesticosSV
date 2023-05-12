@@ -13,6 +13,9 @@ const MODAL = new bootstrap.Modal(document.getElementById('Modal'));
 const TABLA = document.getElementById('tbody-pedido');
 // objeto para guardar los subtotales
 const SUBTOTALES = [];
+// formulario para buscar
+const BUSCADOR = document.getElementById('buscador');
+
 // obtener cada columna de la tabla, para ir agregando los switch del estado
 const COL = document.querySelectorAll('tb-switch')
 let accion, estado;
@@ -122,7 +125,7 @@ const cargarTabla = async () => {
             }
         });
         // asignar y reiniciar una var para tener el total
-        // y una pa
+        // y una para el indice
         let total = 0, index = 0;
         // crear una variante del array con los SUBTOTALES
         for (const UNIT of SUBTOTALES) {
@@ -186,16 +189,16 @@ const cargarTabla = async () => {
                     if (ESTADO[i].checked) {
                         // sumar el valor del subtotal en la posición del switch modificado
                         // total += SUBTOTALES[i]
-                        
+
                         // for (const UNIT of SUBTOTALES) {
 
                         //     console.log(UNIT)
                         //     // al valor anterior sumarle el número
                         //     total += parseFloat(UNIT + ' index: ' + index);
-                
+
                         // }
-                        
-                        document.getElementById('total').innerText = '$ ' + total.toLocaleString(6);                        
+
+                        document.getElementById('total').innerText = '$ ' + total.toLocaleString(6);
                         console.log('sumar')
                     } else {
                         console.log('restar')
@@ -203,7 +206,7 @@ const cargarTabla = async () => {
                         //     console.log(UNIT)
                         //     // al valor anterior sumarle el número
                         //     total -= parseFloat(UNIT + ' index: ' + index);
-                
+
                         // }
                         // total -= SUBTOTALES[i]
                         document.getElementById('total').innerText = '$ ' + total.toLocaleString(6);
@@ -215,7 +218,7 @@ const cargarTabla = async () => {
         // obtener los botones
         const ELIMINAR = document.getElementsByClassName('eliminar');
         // recorrer todos los botones
-        for(let i = 0; i < ELIMINAR.length; i++){
+        for (let i = 0; i < ELIMINAR.length; i++) {
             // crear evento
             ELIMINAR[i].addEventListener('click', async (event) => {
                 event.preventDefault();
@@ -229,9 +232,9 @@ const cargarTabla = async () => {
                     if (JSON.status) {
                         cargarTabla();
                         notificacionURL('success', JSON.msg, true);
-                    }else{
+                    } else {
                         notificacionURL('error', JSON.excep, false);
-                    }                
+                    }
                 }
             })
         }
@@ -239,3 +242,177 @@ const cargarTabla = async () => {
         notificacionURL('info', JSON.excep, false);
     }
 }
+
+const buscador = async event => {
+    event.preventDefault();
+    TABLA.innerHTML = ``;
+    const ID = new FormData;
+    ID.append('idfactura', getFacturaURL())
+    const JSON = await request(PEDIDO, 'cargar', ID);
+    if (!JSON) {
+        notificacionURL('error', JSON.excep, false);
+    } else {
+        TABLA.innerHTML = ``;
+        let buscador = document.getElementById('input-buscar').value.toLowerCase();
+        if (buscador === '' || buscador === ' ') {
+            TABLA.innerHTML = ``;
+            cargarTabla();
+        } else {
+            TABLA.innerHTML = ``;
+            for (let pedidos of JSON.data) {
+                let fecha = pedidos.fecha;
+                let producto = pedidos.nombre.toLowerCase();
+                let precio = pedidos.precio;
+                let subtotal = pedidos.subtotal;
+                let cantidad = pedidos.cantidad;
+                if (fecha.indexOf(buscador) !== -1 || producto.indexOf(buscador) !== -1 ||
+                    precio.indexOf(buscador) !== -1 || subtotal.indexOf(buscador) !== -1 ||
+                    cantidad === buscador) {
+                    TABLA.innerHTML += `<tr>
+                        <td>${pedidos.idpedido}</td>
+                        <td>${pedidos.fecha}</td>
+                        <td class="hide">${pedidos.idproducto}</td>
+                        <td>${pedidos.nombre}</td>
+                        <td>${pedidos.precio}</td>
+                        <td>${pedidos.cantidad}</td>
+                        <td>${pedidos.subtotal}</td>
+                        <td class="tb-switch">
+                            ${(pedidos.estado === 1) ?
+
+                            COL.innerHTML = `<div class="form-check form-switch"> 
+                                                <input class="form-check-input estado" name="estado" id="estado" type="checkbox" id="estado" checked> 
+                                            </div>`
+                            :
+                            COL.innerHTML = `<div class="form-check form-switch"> 
+                                                <input class="form-check-input estado" name="estado" id="estado" type="checkbox" id="estado"> 
+                                            </div>`
+                        }
+                        </td>
+                        <td class="buttons-tb">
+                                <button type="submit" class="btn btn-secondary actualizar" data-bs-toggle="modal" data-bs-target="#Modal" value="${pedidos.idpedido}">Actualizar</button>
+                                <!-- boton para eliminar -->
+                                <button class="btn btn-danger eliminar" value="${pedidos.idpedido}">Eliminar</button>
+                        </td>
+                    </tr>`;
+                }
+            }
+            // obtener los botones para actualizar
+            const ACTUALIZAR = document.getElementsByClassName('actualizar')
+            // recorrer cada uno de estos botones
+            for (let i = 0; i < ACTUALIZAR.length; i++) {
+                // crear evento al boton que se recorre
+                ACTUALIZAR[i].addEventListener('click', async (event) => {
+                    event.preventDefault();
+                    const ID = new FormData;
+                    ID.append('idpedido', ACTUALIZAR[i].value);
+                    const JSON = await request(PEDIDO, 'registro', ID);
+                    if (JSON.status) {
+                        // reinciar los valores del formulario
+                        FORM.reset();
+                        // cargar los valores
+                        cargarSelect(PRODUCTO, 'productos', JSON.data.idproducto);
+                        // habilitar                    
+                        document.getElementById('cantidad').readOnly = false;
+
+                        document.getElementById('cantidad').value = JSON.data.cantidad;
+                        document.getElementById('fecha').value = JSON.data.fecha;
+                        document.getElementById('proceso').innerText = `Actualizar`;
+                        document.getElementById('idpedido').value = JSON.data.idpedido;
+                    } else {
+                        notificacionURL('error', JSON.excep, false);
+                    }
+                })
+            }
+
+            // asignar y reiniciar una var para tener el total
+            // y una para el indice
+            let total = 0, index = 0;
+            // crear una variante del array con los SUBTOTALES
+            for (const UNIT of SUBTOTALES) {
+                // al valor anterior sumarle el número
+                total += parseFloat(UNIT + ' index: ' + index);
+
+            }
+            // agregar a html el total.de longitud de 5 valores 
+            document.getElementById('total').innerText = '$ ' + total.toLocaleString(6);
+            document.getElementById('total').innerHTML = `<input type="number" class="hide" id="input-total" value="${total}">
+            $ ${total.toLocaleString(5)}`;
+
+            // obtener todos los switches de la tabla
+            const ESTADO = document.getElementsByClassName('estado');
+            // recorrer los input encontrados
+            for (let i = 0; i < ESTADO.length; i++) {
+                // crear evento change para modificar estado
+                ESTADO[i].addEventListener('change', async (event) => {
+                    event.preventDefault();
+                    const ID = new FormData;
+                    // verifica sí el switch está checkeado
+                    (ESTADO[i].checked) ? estado = 1 : estado = 2;
+                    // adjuntar el id del pedido con el nombre del var 'idpedido'
+                    ID.append('idpedido', ACTUALIZAR[i].value);
+                    // adjuntar el estado del pedido con el nombre de var 'estado'
+                    ID.append('estado', estado);
+                    const JSON = await request(PEDIDO, 'actualizarEstado', ID);
+                    if (!JSON.status) {
+                        notificacionURL('error', JSON.excep, false);
+                    } else {
+                        // verificar sí está checkeado
+                        // para sumar o restar total
+                        if (ESTADO[i].checked) {
+                            // sumar el valor del subtotal en la posición del switch modificado
+                            // total += SUBTOTALES[i]
+
+                            // for (const UNIT of SUBTOTALES) {
+
+                            //     console.log(UNIT)
+                            //     // al valor anterior sumarle el número
+                            //     total += parseFloat(UNIT + ' index: ' + index);
+
+                            // }
+
+                            document.getElementById('total').innerText = '$ ' + total.toLocaleString(6);
+                            console.log('sumar')
+                        } else {
+                            console.log('restar')
+                            // for (const UNIT of SUBTOTALES) {
+                            //     console.log(UNIT)
+                            //     // al valor anterior sumarle el número
+                            //     total -= parseFloat(UNIT + ' index: ' + index);
+
+                            // }
+                            // total -= SUBTOTALES[i]
+                            document.getElementById('total').innerText = '$ ' + total.toLocaleString(6);
+                        }
+                    }
+                })
+            }
+
+            // obtener los botones
+            const ELIMINAR = document.getElementsByClassName('eliminar');
+            // recorrer todos los botones
+            for (let i = 0; i < ELIMINAR.length; i++) {
+                // crear evento
+                ELIMINAR[i].addEventListener('click', async (event) => {
+                    event.preventDefault();
+                    // verificar la acción
+                    accion = await notificacionAccion('Desea eliminar este pedido?');
+                    if (accion) {
+                        const ID = new FormData;
+                        ID.append('idpedido', ELIMINAR[i].value);
+                        const JSON = await request(PEDIDO, 'eliminar', ID);
+                        console.log(JSON);
+                        if (JSON.status) {
+                            cargarTabla();
+                            notificacionURL('success', JSON.msg, true);
+                        } else {
+                            notificacionURL('error', JSON.excep, false);
+                        }
+                    }
+                })
+            }
+        }
+    }
+}
+
+BUSCADOR.addEventListener('keyup', async event => buscador(event));
+BUSCADOR.addEventListener('submit', async event => buscador(event));
