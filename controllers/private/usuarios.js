@@ -196,104 +196,107 @@ export const cargarTabla = async (cargar, col, tabla, view) => {
 }
 
 const buscador = async event => {
-    event.preventDefault();
-    const JSON = await request(USUARIO, 'cargarAdmins');
-    if (!JSON.status) {
-        notificacionURL('error', JSON.excep, false);
-    } else {
-        TABLA.innerHTML = ``;
-        let search = document.getElementById('input-buscar').value.toLowerCase();
-        if (search === '' || search === ' ') {
-            TABLA.innerHTML = ``;
-            cargarTabla('cargarAdmins', COL, TABLA, 'agregarusuario.html');
+    if (TABLA === document.getElementById('tbody-usuario') && TABLA) {
+        event.preventDefault();
+        const JSON = await request(USUARIO, 'cargarAdmins');
+        if (!JSON.status) {
+            notificacionURL('error', JSON.excep, false);
         } else {
             TABLA.innerHTML = ``;
-            for (let admins of JSON.data) {
-                let usuario = admins.nombreusuario.toLowerCase();
-                let nombres = admins.nombre.toLowerCase();
-                let apellidos = admins.apellido.toLowerCase();
-                let correo = admins.correo.toLowerCase();
-                if (usuario.indexOf(search) !== -1 || nombres.indexOf(search) !== -1
-                    || apellidos.indexOf(search) !== -1 || correo.indexOf(search) !== -1) {
-                    TABLA.innerHTML += `<tr>
-                        <td>${admins.nombreusuario}</td>
-                        <td>${admins.nombre}</td>
-                        <td>${admins.apellido}</td>
-                        <td>${admins.correo}</td>
-                        <td class="tb-switch">
-                            ${(admins.estado === 1) ?
-                            COL.innerHTML = `<div class="form-check form-switch"> 
-                                    <input class="form-check-input estado" name="estado" id="estado" type="checkbox" id="estado" checked> 
-                                </div>`
-                            :
-                            COL.innerHTML = `<div class="form-check form-switch"> 
-                                    <input class="form-check-input estado" name="estado" id="estado" type="checkbox" id="estado"> 
-                                </div>`
-                        }
-                        </td>
-                        <td class="buttons-tb">
-                            <form action="agregarusuario.html" method="get" class="form-button">
-                                <!-- boton para actualizar -->                        
-                                    <button type="submit" class="btn btn-secondary actualizar" data-bs-toggle="modal" data-bs-target="#Modal" value="${admins.idusuario}">Actualizar</button>
-                                    <input type="number" name="usuarioid" class="hide" id="productoid" value="${admins.idusuario}">                        
-                            </form>
-                                <!-- boton para eliminar -->
-                            <button class="btn btn-danger eliminar" value="${admins.idusuario}">Eliminar</button>
-                        </td>
-                    </tr>`;
+            let search = document.getElementById('input-buscar').value.toLowerCase();
+            if (search === '' || search === ' ') {
+                TABLA.innerHTML = ``;
+                cargarTabla('cargarAdmins', COL, TABLA, 'agregarusuario.html');
+            } else {
+                TABLA.innerHTML = ``;
+                for (let admins of JSON.data) {
+                    let usuario = admins.nombreusuario.toLowerCase();
+                    let nombres = admins.nombre.toLowerCase();
+                    let apellidos = admins.apellido.toLowerCase();
+                    let correo = admins.correo.toLowerCase();
+                    if (usuario.indexOf(search) !== -1 || nombres.indexOf(search) !== -1
+                        || apellidos.indexOf(search) !== -1 || correo.indexOf(search) !== -1) {
+                        TABLA.innerHTML += `<tr>
+                            <td>${admins.nombreusuario}</td>
+                            <td>${admins.nombre}</td>
+                            <td>${admins.apellido}</td>
+                            <td>${admins.correo}</td>
+                            <td class="tb-switch">
+                                ${(admins.estado === 1) ?
+                                COL.innerHTML = `<div class="form-check form-switch"> 
+                                        <input class="form-check-input estado" name="estado" id="estado" type="checkbox" id="estado" checked> 
+                                    </div>`
+                                :
+                                COL.innerHTML = `<div class="form-check form-switch"> 
+                                        <input class="form-check-input estado" name="estado" id="estado" type="checkbox" id="estado"> 
+                                    </div>`
+                            }
+                            </td>
+                            <td class="buttons-tb">
+                                <form action="agregarusuario.html" method="get" class="form-button">
+                                    <!-- boton para actualizar -->                        
+                                        <button type="submit" class="btn btn-secondary actualizar" data-bs-toggle="modal" data-bs-target="#Modal" value="${admins.idusuario}">Actualizar</button>
+                                        <input type="number" name="usuarioid" class="hide" id="productoid" value="${admins.idusuario}">                        
+                                </form>
+                                    <!-- boton para eliminar -->
+                                <button class="btn btn-danger eliminar" value="${admins.idusuario}">Eliminar</button>
+                            </td>
+                        </tr>`;
+                    }
                 }
-            }
-            const ACTUALIZAR = document.getElementsByClassName('actualizar');
+                const ACTUALIZAR = document.getElementsByClassName('actualizar');
 
-            // obtener todos los switches de la tabla
-            const ESTADO = document.getElementsByClassName('estado');
-            for (let index = 0; index < ESTADO.length; index++) {
-                ESTADO[index].addEventListener('change', async (event) => {
-                    event.preventDefault();
-                    // instancia de la clase FormData
-                    const DATOS = new FormData;
-                    // adjuntar usuario a actualizar
-                    DATOS.append('idusuario', ACTUALIZAR[index].value);
-                    // verificar valor del switch
-                    if (ESTADO[index].checked) {
-                        estado = 1;
-                    } else {
-                        estado = 2;
-                    }
-                    // adjuntar valor del estado
-                    DATOS.append('estado', estado);
-                    const JSON = await request(USUARIO, 'actualizarEstado', DATOS);
-
-                    if (!JSON.status) {
-                        notificacionURL('error', JSON.excep, false);
-                    }
-                });
-
-            }
-
-            const ELIMINAR = document.getElementsByClassName('eliminar');
-            for (let index = 0; index < ELIMINAR.length; index++) {
-                ELIMINAR[index].addEventListener('click', async (event) => {
-                    event.preventDefault();
-                    // verificar sí viene de clientes
-                    accion = await notificacionAccion('Desea eliminar este usuario o cliente,probablemente \neste tenga pedidos registradas');
-
-                    if (accion) {
-                        const DATO = new FormData;
-                        DATO.append('idusuario', ELIMINAR[index].value);
-                        const JSON = await request(USUARIO, 'eliminar', DATO);
-                        if (JSON.status) {
-                            cargarTabla('cargarAdmins', COL, TABLA, 'agregarusuario.html');
-                            notificacionURL('success', JSON.msg, true);
+                // obtener todos los switches de la tabla
+                const ESTADO = document.getElementsByClassName('estado');
+                for (let index = 0; index < ESTADO.length; index++) {
+                    ESTADO[index].addEventListener('change', async (event) => {
+                        event.preventDefault();
+                        // instancia de la clase FormData
+                        const DATOS = new FormData;
+                        // adjuntar usuario a actualizar
+                        DATOS.append('idusuario', ACTUALIZAR[index].value);
+                        // verificar valor del switch
+                        if (ESTADO[index].checked) {
+                            estado = 1;
                         } else {
+                            estado = 2;
+                        }
+                        // adjuntar valor del estado
+                        DATOS.append('estado', estado);
+                        const JSON = await request(USUARIO, 'actualizarEstado', DATOS);
+
+                        if (!JSON.status) {
                             notificacionURL('error', JSON.excep, false);
                         }
-                    }
-                })
+                    });
 
+                }
+
+                const ELIMINAR = document.getElementsByClassName('eliminar');
+                for (let index = 0; index < ELIMINAR.length; index++) {
+                    ELIMINAR[index].addEventListener('click', async (event) => {
+                        event.preventDefault();
+                        // verificar sí viene de clientes
+                        accion = await notificacionAccion('Desea eliminar este usuario o cliente,probablemente \neste tenga pedidos registradas');
+
+                        if (accion) {
+                            const DATO = new FormData;
+                            DATO.append('idusuario', ELIMINAR[index].value);
+                            const JSON = await request(USUARIO, 'eliminar', DATO);
+                            if (JSON.status) {
+                                cargarTabla('cargarAdmins', COL, TABLA, 'agregarusuario.html');
+                                notificacionURL('success', JSON.msg, true);
+                            } else {
+                                notificacionURL('error', JSON.excep, false);
+                            }
+                        }
+                    })
+
+                }
             }
         }
     }
 }
 
-SEARCH.addEventListener('keyup', async event => buscador(event))
+SEARCH.addEventListener('keyup', async event => buscador(event));
+SEARCH.addEventListener('submit', async event => buscador(event));

@@ -188,7 +188,7 @@ if (isset($_GET['action'])) {
                     // el usuario ingresado siempre será activo
                 } elseif ($query->actulizarUsuario($_POST['direccion']) &&  !Database::getException()) {
                     $res['status'] = 1;
-                    $res['msg'] = 'Registro guardado';
+                    $res['msg'] = 'Registro modificado';
                 } elseif (Database::getException()) {
                     $res['excep'] = Database::getException();
                 } else {
