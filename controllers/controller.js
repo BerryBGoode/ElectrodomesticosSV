@@ -3,6 +3,9 @@
  */
 export const API = 'http://localhost/ElectrodomesticosSV/api/';
 
+//inicializados de MODAL de bootstrap
+export const MODAL = new bootstrap.Modal(document.getElementById('Modal'));
+
 export const notificacionURL = (type, msg, time, url = null) => {
     //obj con las opciones del mensaje
     let options = {

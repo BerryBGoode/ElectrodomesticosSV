@@ -70,3 +70,12 @@
 #comentario{
     height: 20%;
 }
+
+/*esta clase agrega '...'
+si es mucho text en la col*/
+.col-grap{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 12vw;
+}

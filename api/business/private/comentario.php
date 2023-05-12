@@ -29,26 +29,19 @@ if (!isset($_GET['action'])) {
             case 'guardar':
                 
                 $_POST = Validate::form($_POST);
+                // settear datos
 
-                // verificar sí tiene factura el cliente seleccionado
-                if ($factura = $query->validarCliente($_POST['usuarios'])) {
-                    // verificar el pedido según factura obtenida
-                    if (!COMENTARIO->setPedido($query->validatePedido($factura, $_POST['productos']))) {
-                        $res['excep'] = 'Error al buscar pedido';
-                    } elseif (!COMENTARIO->setEstado($_POST['estado'])) {
-                        $res['excep'] = 'Estado incorrecto';
-                    } elseif (!COMENTARIO->setComentario($_POST['comentario'])) {
-                        $res['excep'] = 'Error al enviar comentario';
-                    } elseif ($query->guardar()) {
-                        $res['status'] = 1;
-                        $res['msg'] = 'Registro guardado';
-                    } else {
-                        $res['excep'] = Database::getException();
-                    }
-                    
-                } else {
-                    $res['excep'] = 'No tiene facturas ingresadas'; 
+                if (!COMENTARIO->setPedido($_POST['pedidos'])) {
+                    # code...
+                }elseif (!COMENTARIO->setEstado(true)) {
+                }elseif (!COMENTARIO->setComentario($_POST['comentario'])) {
+                }elseif ($query->guardar()) {
+                    $res['status'] = 1;
+                    $res['msg']  = 'Registro guardado';
+                }  else {
+                    $res['excep'] = Database::getException();
                 }
+                
                 break;
         
             case 'cargarPedidos':
@@ -62,6 +55,7 @@ if (!isset($_GET['action'])) {
                         // y el valor de la factura por la que está pasando
                         if($res['data'] = $query->validatePedido($factura, $_POST['productos'])){
                             $res['status'] = 1;
+                            $res['excep'] = null;
                         }elseif (Database::getException()) {
                             $res['excep'] = Database::getException();
                         }else {
@@ -76,6 +70,34 @@ if (!isset($_GET['action'])) {
                 
                 break;
 
+            case 'cargar':
+                
+                if ($res['data'] = $query->cargar()) {
+                    $res['status'] = 1;
+                    $res['msg'] = count($res['data']);
+                } elseif (Database::getException()) {
+                    $res['excep'] = Database::getException();
+                } else {                    
+                    $res['excep'] = 'No existen registros';
+                }
+                
+                break;
+
+            case 'actualizarEstado':
+                
+                
+                if (!COMENTARIO->setId($_POST['idcomentario'])) {
+                    $res['exce'] = 'Error al obtener registro';
+                } elseif (!COMENTARIO->setEstado($_POST['estado'])) {
+                    $res['excep'] = 'Error al obtener nuevo estado';
+                } elseif ($query->actualizarEstado()) {
+                    $res['status'] = 1;
+                } else {
+                    $res['excep'] = Database::getException();
+                }
+                
+
+                break;
             default:
                 $res['excep'] = 'Acción no encontrada';
                 break;

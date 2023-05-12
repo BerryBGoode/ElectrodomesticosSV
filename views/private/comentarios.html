@@ -29,7 +29,7 @@
                 <thead>
                     <tr>
                         <th>Fecha</th>
-                        <th class="hide"></th>
+                        <th class="hide">Pedido</th>
                         <th>Cliente</th>
                         <th>Producto</th>
                         <th>Comentario</th>
@@ -37,7 +37,7 @@
                         <th>Acciones</th>
                     </tr>
                 </thead>
-                <tbody id="tbody-pedido"></tbody>
+                <tbody id="tbody-comentario"></tbody>
             </table>
         </div>
     </div>
@@ -78,7 +78,13 @@
                                 aria-label="Floating label select example" required>
 
                             </select>
-                            <label for="pedidos">Pedidos</label>
+                            <label for="pedidos">Pedidos</label>                            
+                        </div>
+
+                        <!-- fecha pedido -->
+                        <div class="form-floating mb-3">
+                            <input type="date" name="fecha" class="form-select" id="fecha" disabled>
+                            <label for="fecha">Fecha</label>                            
                         </div>
 
                         <!-- comentario -->

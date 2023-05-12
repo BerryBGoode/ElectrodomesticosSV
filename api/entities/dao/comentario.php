@@ -12,7 +12,7 @@ class ComentarioQuery
      */
     public function validarCliente($cliente)
     {
-        
+
         $sql = 'SELECT idfactura FROM facturas WHERE idcliente = ?';
         $param = array($cliente);
         return Database::all($sql, $param);
@@ -26,9 +26,9 @@ class ComentarioQuery
     {
 
         // verificar en que factura se consumi el producto seleccionado                        
-        $sql = 'SELECT idpedido FROM pedidos WHERE idfactura = ? AND idproducto = ?';
+        $sql = 'SELECT * FROM pedidos WHERE idfactura = ? AND idproducto = ?';
         $params = array($factura, $producto);
-        return Database::row($sql, $params);
+        return Database::all($sql, $params);
     }
 
 
@@ -41,5 +41,33 @@ class ComentarioQuery
         $sql = 'INSERT INTO comentarios(comentario, idpedido, estado) VALUES (?, ?, ?)';
         $params = array(COMENTARIO->getComentario(), COMENTARIO->getPedido(), COMENTARIO->getEstado());
         return Database::storeProcedure($sql, $params);
+    }
+
+
+    /**
+     * Método para cargar los datos en la tabla de la vista de comentarios
+     * retorna un arreglo con los datos recuperados de la consulta
+     */
+    public function cargar()
+    {
+        $sql = 'SELECT c.idcomentario, c.fecha, o.idpedido ,u.correo, p.nombre, c.comentario, c.estado
+                FROM comentarios c
+                INNER JOIN pedidos o ON o.idpedido = c.idpedido
+                INNER JOIN productos p ON p.idproducto = o.idproducto
+                INNER JOIN facturas f ON f.idfactura = o.idfactura
+                INNER JOIN usuarios u ON u.idusuario = f.idcliente
+                ORDER BY c.idcomentario ASC';
+        return Database::all($sql);
+    }
+
+    /**
+     * Método para actualizar estado de un comentario
+     * retorna los registros modificados
+     */
+    public function actualizarEstado()
+    {
+        $sql = 'UPDATE comentarios SET estado = ? WHERE idcomentario = ?';
+        $param = array(COMENTARIO->getEstado(), COMENTARIO->getId());
+        return Database::storeProcedure($sql, $param);
     }
 }
