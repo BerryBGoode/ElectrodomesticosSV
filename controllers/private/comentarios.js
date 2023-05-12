@@ -37,12 +37,13 @@ FORM.addEventListener('submit', async (event) => {
     }
 })
 
-const cargarPedidos = async (seleccionado) => {
+const cargarPedidos = async (seleccionado = null) => {
     if (document.getElementById('usuarios').value >= 1 && document.getElementById('productos').value >= 1) {
         const ID = new FormData;
+        let pedido = '';// list para cargar a pedidos
+
         ID.append('usuarios', document.getElementById('usuarios').value);
         ID.append('productos', document.getElementById('productos').value);
-        let pedido = '';// list para cargar a pedidos
         const JSON = await request(COMENTARIO, 'cargarPedidos', ID);
 
         if (JSON.status) {
@@ -57,9 +58,8 @@ const cargarPedidos = async (seleccionado) => {
                     id = Object.values(element)[0];
                     // definir valor para el usuario del registro a seleccionar
                     value = Object.values(element)[1];
-                    //  verificar sí el id del valor ingresado anterior
                     (id !== seleccionado) ?
-                        pedido += `<option value="${id}">${id}</option>` : pedido += `<option value="${id}" selected>${id}</option>`;
+                    pedido += `<option value="${id}">${id}</option>` : pedido += `<option value="${id}" selected>${id}</option>`
                 });
                 // agregar las opciones
                 document.getElementById('pedidos').innerHTML = pedido;
@@ -130,13 +130,48 @@ const cargarTabla = async () => {
         });
         // obtener todos los botones para actualizar
         const ACTUALIZAR = document.getElementsByClassName('actualizar');
+        // recorrer cada boton encontrado
+        for (let i = 0; i < ACTUALIZAR.length; i++) {
+            // crear evento click
+            ACTUALIZAR[i].addEventListener('click', async (event) => {
+                event.preventDefault();
+                const ID = new FormData;
+                ID.append('idcomentario', ACTUALIZAR[i].value);
+                const JSON = await request(COMENTARIO, 'registro', ID);
+                console.log(JSON)
+                if (JSON.status) {
+                    FORM.reset();
+                    // cargar los inputs con los valores del registro
+                    document.getElementById('idcomentario').value = JSON.data.idcomentario;
+                    // cargar select
+                    cargarSelect(USUARIO, 'usuarios', JSON.data.idusuario);
+                    // asignar valor para carga pedidos
+                    document.getElementById('usuarios').value = JSON.data.idusuario;                
+                    // cargar select
+                    cargarSelect(PRODUCTO, 'productos', JSON.data.idproducto)
+                    // asignar valor
+                    document.getElementById('productos').value = JSON.data.idproducto;
+                    // asignar que se puede más q solo leer
+                    document.getElementById('pedidos').readOnly = false;
+                    // cargar pedidos y enviarle el pedido seleccionado en el registr
+                    cargarPedidos(JSON.data.idpedido);
+                    // cargar fecha
+                    document.getElementById('fecha').value = JSON.data.fecha;
+                    // cargar comentario
+                    document.getElementById('comentario').value = JSON.data.comentario;
+                } else {
+                    notificacionURL('error', JSON.excep, false);
+                }
+            })
+        }
+
 
         // obtener switch
         const ESTADO = document.querySelectorAll('.estado');
         // recorrer los switches encontrados
-        for(let i = 0; i < ESTADO.length; i++){
+        for (let i = 0; i < ESTADO.length; i++) {
             // crear evento change
-            ESTADO[i].addEventListener('change', async (event) =>{
+            ESTADO[i].addEventListener('change', async (event) => {
                 event.preventDefault();
                 // instanciar clase para enviar datos
                 const ID = new FormData;
@@ -157,6 +192,8 @@ const cargarTabla = async () => {
                 }
             })
         }
+
+
 
     } else {
         notificacionURL('info', JSON.excep, false);

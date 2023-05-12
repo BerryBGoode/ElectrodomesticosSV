@@ -98,6 +98,21 @@ if (!isset($_GET['action'])) {
                 
 
                 break;
+
+            case 'registro':
+                
+                if (!COMENTARIO->setId($_POST['idcomentario'])) {
+                    $res['excep'] = 'Error al obtener registro';
+                } elseif ($res['data'] = $query->registro()) {
+                    $res['status'] = 1;                    
+                } elseif (Database::getException()) {
+                    $res['excep'] = Database::getException();
+                } else {
+                    $res['excep'] = 'Registro no encontrado';
+                }
+                
+
+                break;
             default:
                 $res['excep'] = 'Acción no encontrada';
                 break;
