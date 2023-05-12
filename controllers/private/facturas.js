@@ -12,11 +12,12 @@ const FORM = document.getElementById('form-factura');
 const TABLA = document.getElementById('tbody-factura');
 // columa con switch para cambiar estado
 const COL = document.querySelectorAll('.tb-switch');
-
+// formulario para buscar
+const SEARCH = document.getElementById('buscador');
 
 let accion, estado;
 
-document.getElementById('btn-agregar').addEventListener('click', ()=>{
+document.getElementById('btn-agregar').addEventListener('click', () => {
     document.getElementById('proceso').innerText = `Agregar`;
 })
 
@@ -112,8 +113,8 @@ const cargarTabla = async () => {
         // obtener todos los botones en la tabla
         const ACTUALIZAR = document.getElementsByClassName('actualizar');
         // recorrer los botones de actualizar
-        for(let i= 0; i < ACTUALIZAR.length; i++){
-            ACTUALIZAR[i].addEventListener('click', async (event) =>{
+        for (let i = 0; i < ACTUALIZAR.length; i++) {
+            ACTUALIZAR[i].addEventListener('click', async (event) => {
                 event.preventDefault();
                 const DATO = new FormData;
                 DATO.append('idfactura', ACTUALIZAR[i].value);
@@ -180,3 +181,126 @@ document.addEventListener('DOMContentLoaded', () => {
     cargarTabla();
 })
 
+const buscador = async event => {
+    event.preventDefault();
+    TABLA.innerHTML = ``;
+    const JSON = await request(FACTURA, 'cargar');
+    if (!JSON.status) {
+        notificacionURL('error', JSON.excep, false)
+    } else {
+        TABLA.innerHTML = ``;
+        let buscador = document.getElementById('input-buscar').value.toLowerCase();
+        if (buscador === '' || buscador === ' ') {
+            TABLA.innerHTML = ``;
+            cargarTabla();
+        } else {
+            TABLA.innerHTML = ``;
+            for (let facturas of JSON.data) {
+                let nombres = facturas.nombre.toLowerCase();
+                let apellidos = facturas.apellido.toLowerCase();
+                let correo = facturas.correo.toLowerCase();
+                let fecha = facturas.fecha;
+                let factura = facturas.idfactura;
+                if (nombres.indexOf(buscador) !== -1 || apellidos.indexOf(buscador) !== -1 ||
+                    correo.indexOf(buscador) !== -1 || fecha.indexOf(buscador) !== -1 ||
+                    factura === buscador) {
+                    TABLA.innerHTML += `<tr>
+                        <td>${facturas.idfactura}</td>
+                        <td class="hide">${facturas.idcliente}</td>
+                        <td>${facturas.nombre}</td>
+                        <td>${facturas.apellido}</td>
+                        <td>${facturas.correo}</td>
+                        <td>${facturas.fecha}</td>
+                        <td class="tb-switch">
+                            ${(facturas.estado == 1) ?
+                            COL.innerHTML = `<div class="form-check form-switch"> 
+                                    <input class="form-check-input estado" name="estado" id="estado" type="checkbox" id="estado" checked> 
+                                </div>`
+                            :
+                            COL.innerHTML = `<div class="form-check form-switch"> 
+                                    <input class="form-check-input estado" name="estado" id="estado" type="checkbox" id="estado"> 
+                                </div>`
+                        }
+                        </td>
+                        <td>
+                            <form action="pedido.html" method="get">
+                                <input type="number" name="facturaid" class="hide" id="facturaid" value="${facturas.idfactura}">
+                                <button type="submit" class="btn btn-secondary">Ver</button>
+                            </form>
+                        </td>
+                        <td>
+                            <!-- boton para actualizar -->                     
+                            <button type="submit" class="btn btn-secondary actualizar" data-bs-toggle="modal" data-bs-target="#Modal" value="${facturas.idfactura}">Actualizar</button>                            
+                            <!-- boton para eliminar -->
+                            <button class="btn btn-danger eliminar" value="${facturas.idfactura}">Eliminar</button>
+                        </td>
+                    </tr>`;
+                }
+            }
+            // obtener todos los botones en la tabla
+            const ACTUALIZAR = document.getElementsByClassName('actualizar');
+            // recorrer los botones de actualizar
+            for (let i = 0; i < ACTUALIZAR.length; i++) {
+                ACTUALIZAR[i].addEventListener('click', async (event) => {
+                    event.preventDefault();
+                    const DATO = new FormData;
+                    DATO.append('idfactura', ACTUALIZAR[i].value);
+                    const JSON = await request(FACTURA, 'registro', DATO);
+                    if (JSON.status) {
+                        FORM.reset();
+                        document.getElementById('proceso').innerText = `Actualizar`;
+                        document.getElementById('idfactura').value = JSON.data.idfactura;
+                        cargarSelect(USUARIO, 'usuarios', JSON.data.idcliente);
+                        document.getElementById('nombres').value = JSON.data.nombre;
+                        document.getElementById('apellidos').value = JSON.data.apellido;
+                        document.getElementById('fecha').value = JSON.data.fecha;
+                    } else {
+                        notificacionURL('error', JSON.excep, false);
+                    }
+                })
+            }
+            // switch para poder modificar estado
+            const SWITCH = document.getElementsByName('estado');
+            // recorrer todos los input-switch encontrados    
+            for (let i = 0; i < SWITCH.length; i++) {
+                // crear el evento change a cada uno
+                SWITCH[i].addEventListener('change', async (event) => {
+                    event.preventDefault();
+                    const DATO = new FormData;
+                    if (SWITCH[i].checked) {
+                        estado = 1;
+                    } else {
+                        estado = 2;
+                    }
+                    DATO.append('estado', estado);
+                    DATO.append('idfactura', ACTUALIZAR[i].value);
+                    const JSON = await request(FACTURA, 'actualizarEstado', DATO);
+                    if (!JSON.status) {
+                        notificacionURL('error', JSON.excep, false);
+                    }
+                })
+            }
+            // obtener botones para eliminar
+            const ELIMINAR = document.getElementsByClassName('eliminar');
+            for (let i = 0; i < ELIMINAR.length; i++) {
+                ELIMINAR[i].addEventListener('click', async (event) => {
+                    event.preventDefault();
+                    accion = await notificacionAccion('Desea eliminar esta factura? \n Revisar cuantos pedidos tiene esta factura');
+                    if (accion) {
+                        const DATO = new FormData;
+                        DATO.append('idfactura', ELIMINAR[i].value);
+                        const JSON = await request(FACTURA, 'eliminar', DATO);
+                        if (JSON.status) {
+                            cargarTabla();
+                            notificacionURL('success', JSON.msg, true);
+                        } else {
+                            notificacionURL('error', JSON.excep, false);
+                        }
+                    }
+                })
+            }
+        }
+    }
+}
+
+SEARCH.addEventListener('keyup', async event => buscador(event));
