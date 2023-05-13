@@ -249,7 +249,7 @@ class Validate
     }
 
     /**
-     * Método para validar la acción deborrar el archivo del servidor
+     * Método para validar la acción de borrar el archivo del servidor
      * $path es el directorio de archivo y $filename el nombre del archivo
      */
     public static function destroyFile($path, $filename)

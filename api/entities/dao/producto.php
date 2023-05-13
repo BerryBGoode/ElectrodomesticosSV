@@ -73,19 +73,30 @@ class ProductoQuery
     }
 
     /**
+     * Método para recuperar la imagen de un registro 
+     * (este método solo se usuará cuando se sube una imagen nueva)
+     * retorna en una arreglo el dato recuperado
+     */
+    public function getImgByProducto($id)
+    {
+        $sql  = 'SELECT imagen FROM productos WHERE idproducto = ?';
+        $param = array($id);
+        $value = Database::row($sql, $param);        
+        return $value;
+    }
+
+    /**
      * Método para actualizar datos segú registro seleccionado
      * retorna la cantidad de registros modificados
      */
-    public function actualizar($img = null)
+    public function actualizar($img)
     {
         // verificar la imagen, para así quitar la actual y agregar la nueva
-        // (PRODUCTO->getImg() == $img) ? Validate::destroyFile(PRODUCTO->getPath(), $img) : PRODUCTO->setImg($img);
-        $a = array(
-            PRODUCTO->getProducto(), PRODUCTO->getPrecio(), PRODUCTO->getExistencias(),
-            PRODUCTO->getImg(), PRODUCTO->getCategoria(), PRODUCTO->getMarca(),
-            PRODUCTO->getDescripcion(), PRODUCTO->getId()
-        );
-        print_r(json_encode($a));
+        // (PRODUCTO->getImg() == $img) ? Validate::destroyFile(PRODUCTO->getPath(), $img) : PRODUCTO->setImg($img);        
+        // borrar imagen para agregar nueva
+        // print_r($img);
+        // print(PRODUCTO->getPath());
+        Validate::destroyFile(PRODUCTO->getPath(), $img);
         $sql = 'UPDATE productos 
                 SET nombre = ?, precio = ?, existencias = ?, imagen = ?, 
                 idcategoria = ?, idmarca = ?, descripcion = ? 

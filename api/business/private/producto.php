@@ -156,11 +156,11 @@ if (!isset($_GET['action'])) {
                 } elseif (!PRODUCTO->setImg($_FILES['image'])) {
                     $res['excep'] = Validate::getErrorFile();
                 }   // si se ha seleccionado una imagen nueva
-                elseif ($query->actualizar($producto['imagen']) && !Database::getException()) {
+                elseif ($query->actualizar($query->getImgByProducto(PRODUCTO->getId())) && !Database::getException()) {
                     $res['status'] = 1;
 
                     if (Validate::storeFile($_FILES['image'], PRODUCTO->getPath(), PRODUCTO->getImg())) {
-                        $res['msg'] = 'Registro modificado';
+                        $res['msg'] = 'Registro modificado nueva imagen';
                     } else {
                         $res['msg'] = 'Registro modificado sin imagen';
                     }
