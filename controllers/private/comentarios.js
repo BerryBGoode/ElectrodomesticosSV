@@ -9,6 +9,7 @@ const COMENTARIO = 'business/private/comentario.php';
 const TABLA = document.getElementById('tbody-comentario');
 const COL = document.querySelectorAll('.tb-switch');
 const MODAL = new bootstrap.Modal(document.getElementById('Modal'));
+const BUSCADOR = document.getElementById('buscador');
 
 let accion, estado, id, value;
 
@@ -105,7 +106,7 @@ const cargarTabla = async () => {
 
         JSON.data.forEach(element => {
             TABLA.innerHTML += `<tr>
-                <td>${element.fecha}</td>
+                <td class="col-grap fecha">${element.fecha}</td>
                 <td class="hide">${element.idpedido}</td>
                 <td>${element.correo}</td>
                 <td>${element.nombre}</td>
@@ -168,6 +169,150 @@ const cargarTabla = async () => {
             })
         }
 
+        // obtener switch
+        const ESTADO = document.querySelectorAll('.estado');
+        // recorrer los switches encontrados
+        for (let i = 0; i < ESTADO.length; i++) {
+            // crear evento change
+            ESTADO[i].addEventListener('change', async (event) => {
+                event.preventDefault();
+                // instanciar clase para enviar datos
+                const ID = new FormData;
+                // adjuntar el id del comentario a actualizar
+                // este boton se puede sustituir por eliminar
+                // lo importante que el boton tenga en el valor 
+                // el id del registro
+                ID.append('idcomentario', ACTUALIZAR[i].value);
+                // verificar sí estar checkeado para asignar valor
+                (ESTADO[i].checked) ? estado = true : estado = false;
+                // adjuntar el valor del estado
+                ID.append('estado', estado);
+                // hacer petición
+                const JSON = await request(COMENTARIO, 'actualizarEstado', ID);
+                if (!JSON.status) {
+                    // error en el proceso
+                    notificacionURL('error', JSON.excep, false);
+                }
+            })
+        }
+
+        // obtener los botones para eliminar
+        const ELIMINAR = document.getElementsByClassName('eliminar');
+        // recorrer los botones encontrados
+        for (let i = 0; i < ELIMINAR.length; i++) {
+            // crear evento 'click' a cada boton
+            ELIMINAR[i].addEventListener('click', async (event) => {
+                event.preventDefault();
+                // preguntar sí se decea eliminar
+                accion = await notificacionAccion('Desea eliminar este registro? ');
+                if (accion) {
+                    // asignar espacio para enviar datos                
+                    const ID = new FormData;
+                    // adjuntar a ese espacio el id del comentario
+                    ID.append('idcomentario', ELIMINAR[i].value)
+                    // hacer petición a comentario.php de business
+                    const JSON = await request(COMENTARIO, 'eliminar', ID);
+                    if (JSON.status) {
+                        cargarTabla();
+                        notificacionURL('success', JSON.msg, true);
+                    } else {
+                        notificacionURL('error', JSON.excep, false);
+                    }
+                }
+            })
+        }
+
+    } else {
+        notificacionURL('info', JSON.excep, false);
+    }
+}
+
+const buscador = async event => {
+    TABLA.innerHTML = ``;
+    event.preventDefault();
+    const JSON = await request(COMENTARIO, 'cargar');
+    if (!JSON.status) {
+        notificacionURL('error', JSON.excep, false);
+    } else {
+        TABLA.innerHTML = ``;
+        // obtener lo q sea a escrito en el input, y el valor q tiene convertirlo a minuscula
+        let buscador = document.getElementById('input-buscar').value.toLowerCase();
+        // recorrer los datos recorridos de la consulta general para cargar la tabla
+        for (let comentarios of JSON.data) {
+            // al arreglo q está recorriendo
+            // obtener cada dato, (los que se están declarando con el 'let')
+            // por estos se hará la busqueda
+            let comentario = comentarios.comentario.toLowerCase();
+            let producto = comentarios.nombre.toLowerCase();
+            let cliente = comentarios.correo.toLowerCase();
+            let fecha = comentarios.fecha;
+            // verificar sí en el valor obtenido se encuentra lo q ha escrito el usuario
+            if (comentario.indexOf(buscador) !== -1 || producto.indexOf(buscador) !== -1 ||
+                cliente.indexOf(buscador) !== -1 || fecha.indexOf(buscador) !== -1) {
+                TABLA.innerHTML += `<tr>
+                    <td class="col-grap fecha">${comentarios.fecha}</td>
+                    <td class="hide">${comentarios.idpedido}</td>
+                    <td>${comentarios.correo}</td>
+                    <td>${comentarios.nombre}</td>
+                    <td class="col-grap">${comentarios.comentario}</td>
+                    <td class="tb-switch">
+                    ${(comentarios.estado) ?
+                        COL.innerHTML = `<div class="form-check form-switch"> 
+                                            <input class="form-check-input estado" name="estado" id="estado" type="checkbox" id="estado" checked> 
+                                        </div>`
+                        :
+                        COL.innerHTML = `<div class="form-check form-switch"> 
+                                            <input class="form-check-input estado" name="estado" id="estado" type="checkbox" id="estado"> 
+                                        </div>`
+                    }                
+                    </td>
+                    <td class="buttons-tb">
+                        <!-- boton para actualizar -->                     
+                        <button type="submit" class="btn btn-secondary actualizar" data-bs-toggle="modal" data-bs-target="#Modal" value="${comentarios.idcomentario}">Actualizar</button>                            
+                        <!-- boton para eliminar -->
+                        <button class="btn btn-danger eliminar" value="${comentarios.idcomentario}">Eliminar</button>
+                    </td>
+                </tr>`;
+            }
+        }
+        // obtener todos los botones para actualizar
+        const ACTUALIZAR = document.getElementsByClassName('actualizar');
+        // recorrer cada boton encontrado
+        for (let i = 0; i < ACTUALIZAR.length; i++) {
+            // crear evento click
+            ACTUALIZAR[i].addEventListener('click', async (event) => {
+                event.preventDefault();
+                const ID = new FormData;
+                ID.append('idcomentario', ACTUALIZAR[i].value);
+                const JSON = await request(COMENTARIO, 'registro', ID);
+                console.log(JSON)
+                if (JSON.status) {
+                    FORM.reset();
+                    // cargar los inputs con los valores del registro
+                    document.getElementById('idcomentario').value = JSON.data.idcomentario;
+                    // cargar select
+                    cargarSelect(USUARIO, 'usuarios', JSON.data.idusuario);
+                    // asignar valor para carga pedidos
+                    document.getElementById('usuarios').value = JSON.data.idusuario;
+                    // cargar select
+                    cargarSelect(PRODUCTO, 'productos', JSON.data.idproducto)
+                    // asignar valor
+                    document.getElementById('productos').value = JSON.data.idproducto;
+                    // asignar que se puede más q solo leer
+                    document.getElementById('pedidos').readOnly = false;
+                    // cargar pedidos y enviarle el pedido seleccionado en el registr
+                    cargarPedidos(JSON.data.idpedido);
+                    // cargar fecha
+                    document.getElementById('fecha').value = JSON.data.fecha;
+                    // cargar comentario
+                    document.getElementById('comentario').value = JSON.data.comentario;
+                    // cambiar el texto del boton
+                    document.getElementById('proceso').innerText = `Actualizar`;
+                } else {
+                    notificacionURL('error', JSON.excep, false);
+                }
+            })
+        }
 
         // obtener switch
         const ESTADO = document.querySelectorAll('.estado');
@@ -199,7 +344,7 @@ const cargarTabla = async () => {
         // obtener los botones para eliminar
         const ELIMINAR = document.getElementsByClassName('eliminar');
         // recorrer los botones encontrados
-        for(let i =0; i < ELIMINAR.length; i++){
+        for (let i = 0; i < ELIMINAR.length; i++) {
             // crear evento 'click' a cada boton
             ELIMINAR[i].addEventListener('click', async (event) => {
                 event.preventDefault();
@@ -217,12 +362,12 @@ const cargarTabla = async () => {
                         notificacionURL('success', JSON.msg, true);
                     } else {
                         notificacionURL('error', JSON.excep, false);
-                    }                
+                    }
                 }
             })
         }
-
-    } else {
-        notificacionURL('info', JSON.excep, false);
     }
 }
+
+BUSCADOR.addEventListener('keyup', async event => buscador(event));
+BUSCADOR.addEventListener('submit', async event => buscador(event));

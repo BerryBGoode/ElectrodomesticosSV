@@ -1,4 +1,4 @@
-body{background-color: rgb(47, 47, 47); }
+/* body{background-color: rgb(47, 47, 47); } */
 /* uso general */
 .hide{
     display: none;
@@ -78,4 +78,7 @@ si es mucho text en la col*/
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 12vw;
+}
+.fecha{
+    max-width: 5vw;
 }

@@ -94,7 +94,7 @@ const cargarTabla = async () => {
 
             TABLA.innerHTML += `<tr>
                 <td>${element.idpedido}</td>
-                <td>${element.fecha}</td>
+                <td class="col-grap fecha">${element.fecha}</td>
                 <td class="hide">${element.idproducto}</td>
                 <td>${element.nombre}</td>
                 <td>${element.precio}</td>
@@ -270,7 +270,7 @@ const buscador = async event => {
                     cantidad === buscador) {
                     TABLA.innerHTML += `<tr>
                         <td>${pedidos.idpedido}</td>
-                        <td>${pedidos.fecha}</td>
+                        <td class="col-grap fecha">${pedidos.fecha}</td>
                         <td class="hide">${pedidos.idproducto}</td>
                         <td>${pedidos.nombre}</td>
                         <td>${pedidos.precio}</td>
