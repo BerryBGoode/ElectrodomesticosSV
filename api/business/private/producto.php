@@ -124,7 +124,7 @@ if (!isset($_GET['action'])) {
                 $_POST = Validate::form($_POST);
 
                 // print_r($_POST);
-                print_r($_FILES['image']);
+                // print_r($_FILES['image']);
 
                 if (!PRODUCTO->setId($_POST['idproducto'])) {
                     $res['excep'] = 'Error al obtener registro';
@@ -147,7 +147,7 @@ if (!isset($_GET['action'])) {
                 } elseif (!is_uploaded_file($_FILES['image']['tmp_name'])) {
 
                     // sino se subio la imagen asignar valor ya guardado en el registro                    
-                    if ($query->actualizar($producto['imagen']) && !Database::getException()) {
+                    if ($query->actualizarSinImg() && !Database::getException()) {
                         $res['status'] = 1;
                         $res['msg'] = 'Registro modificado';
                     } else {

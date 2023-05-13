@@ -90,11 +90,27 @@ class ProductoQuery
                 SET nombre = ?, precio = ?, existencias = ?, imagen = ?, 
                 idcategoria = ?, idmarca = ?, descripcion = ? 
                 WHERE idproducto = ?';
-        
+
         $params = array(
             PRODUCTO->getProducto(), PRODUCTO->getPrecio(), PRODUCTO->getExistencias(),
             PRODUCTO->getImg(), PRODUCTO->getCategoria(), PRODUCTO->getMarca(),
             PRODUCTO->getDescripcion(), PRODUCTO->getId()
+        );
+        return Database::storeProcedure($sql, $params);
+    }
+    /**
+     * Método para actualizar registro sin imagen
+     * retorna la cantidad de registros modificados
+     */
+    public function actualizarSinImg()
+    {
+        $sql = 'UPDATE productos SET nombre = ?, precio = ?, existencias =  ?,
+                idcategoria = ?, idmarca = ?, descripcion = ?
+                WHERE idproducto = ?';
+        $params = array(
+            PRODUCTO->getProducto(), PRODUCTO->getPrecio(), PRODUCTO->getExistencias(),
+            PRODUCTO->getCategoria(), PRODUCTO->getMarca(), PRODUCTO->getDescripcion(),
+            PRODUCTO->getId()
         );
         return Database::storeProcedure($sql, $params);
     }
