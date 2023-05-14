@@ -122,37 +122,41 @@ FOR EACH ROW
 EXECUTE FUNCTION FUN_agregarExistencia();
 
 
-select * from PRODUCTOS
 
-INSERT INTO pedidos(fecha, idproducto, idfactura, cantidad, estado)
-                    VALUES ('2023-05-04', 34, 1, 2, 1)
-
-UPDATE pedidos SET fecha = '2023-05-04', idproducto = 34, cantidad = 4 WHERE idpedido = 22
-                    VALUES (, 34, 1, 2, 1)
-	
 	ALTER TABLE productos DROP CONSTRAINT chk_existencia
-SELECT o.idpedido, o.fecha, p.idproducto, p.nombre, p.precio, o.cantidad, (o.cantidad * p.precio) as Subtotal, o.estado
-FROM pedidos o
-INNER JOIN productos p ON p.idproducto = o.idproducto
+	ALTER TABLE comentarios ADD column estado boolean not null default false
+	
+	
+-- select * from PRODUCTOS
 
-ALTER TABLE comentarios ADD column estado boolean not null default false
+-- INSERT INTO pedidos(fecha, idproducto, idfactura, cantidad, estado)
+--                     VALUES ('2023-05-04', 34, 1, 2, 1)
 
-SELECT idfactura FROM facturas WHERE idcliente = 29
+-- UPDATE pedidos SET fecha = '2023-05-04', idproducto = 34, cantidad = 4 WHERE idpedido = 22
+--                     VALUES (, 34, 1, 2, 1)
+		
+-- SELECT o.idpedido, o.fecha, p.idproducto, p.nombre, p.precio, o.cantidad, (o.cantidad * p.precio) as Subtotal, o.estado
+-- FROM pedidos o
+-- INNER JOIN productos p ON p.idproducto = o.idproducto
+-- SELECT idfactura FROM facturas WHERE idcliente = 29
 
-SELECT c.fecha, u.correo, p.nombre, c.comentario, c.estado
-FROM comentarios c
-INNER JOIN pedidos o ON o.idpedido = c.idpedido
-INNER JOIN productos p ON p.idproducto = o.idproducto
-INNER JOIN facturas f ON f.idfactura = o.idfactura
-INNER JOIN usuarios u ON u.idusuario = f.idcliente
+-- SELECT c.fecha, u.correo, p.nombre, c.comentario, c.estado
+-- FROM comentarios c
+-- INNER JOIN pedidos o ON o.idpedido = c.idpedido
+-- INNER JOIN productos p ON p.idproducto = o.idproducto
+-- INNER JOIN facturas f ON f.idfactura = o.idfactura
+-- INNER JOIN usuarios u ON u.idusuario = f.idcliente
 
-SELECT c.idcomentario, c.fecha, o.idpedido ,u.correo, p.nombre, c.comentario, c.estado
-                FROM comentarios c
-                INNER JOIN pedidos o ON o.idpedido = c.idpedido
+-- SELECT c.idcomentario, c.fecha, o.idpedido ,u.correo, p.nombre, c.comentario, c.estado
+--                 FROM comentarios c
+--                 INNER JOIN pedidos o ON o.idpedido = c.idpedido
 				
-			
-                INNER JOIN productos p ON p.idproducto = o.idproducto
-                INNER JOIN facturas f ON f.idfactura = o.idfactura
-                INNER JOIN usuarios u ON u.idusuario = f.idcliente
-				WHERE c.idcomentario = 1
-                ORDER BY c.idcomentario ASC           
+-- UPDATE comentarios SET idpedido = 40, comentario = 'Me encata Laravel por las migraciones'
+--                 WHERE idcomentario = 2
+--                 INNER JOIN productos p ON p.idproducto = o.idproducto
+--                 INNER JOIN facturas f ON f.idfactura = o.idfactura
+--                 INNER JOIN usuarios u ON u.idusuario = f.idcliente
+-- 				WHERE c.idcomentario = 1
+--                 ORDER BY c.idcomentario ASC           
+				
+					

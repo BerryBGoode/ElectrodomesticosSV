@@ -34,6 +34,45 @@ if (isset($_GET['action'])) {
 
                 break;
 
+            case 'verificar-usuarios':
+
+                if (!$query->verificarUsuarios()) {
+                    $res['status'] = 1;
+                    $res['msg'] = 'No se han encontrado usuarios, procederas a crear uno';
+                }
+
+                break;
+
+            case 'primer-usuario':
+
+                $_POST = Validate::form($_POST);
+
+                if (!USUARIO->setNombres($_POST['nombres'])) {
+
+                    $res['excep'] = 'Nombre incorrecto';
+                } elseif (!USUARIO->setApellidos(($_POST['apellidos']))) {
+                    $res['excep'] = 'Apellido incorrecto';
+                } elseif (!USUARIO->setUsuario($_POST['usuario'])) {
+                    $res['excep'] = 'Usuario incorrecto';
+                } elseif (!USUARIO->setClave($_POST['clave'])) {
+                    $res['excep'] = 'Clave incorrecta';
+                } elseif (!USUARIO->setCorreo($_POST['correo'])) {
+                    $res['excep'] = 'Formato de correo incorrecto';
+                    // el usuario ingresado siempre será activo
+                } elseif (!USUARIO->setEstado(1)) {
+                    $res['excep'] = 'Estado incorrecto';
+                    // enviar tipo usuario admin
+                    // no es tabla independiente, es campo
+                } elseif ($query->guardar(null, 1)) {
+                    $res['status'] = 1;
+                    $res['msg'] = 'Usuario creado, acontinuación pasará a inciar sesión con la cuenta registrada';
+                } elseif (Database::getException()) {
+                    $res['excep'] = Database::getException();
+                } else {
+                    $res['excep'] = 'Usuario o correo ya está registrado, utilizar otros datos';
+                }
+
+                break;
             default:
                 $res['excep'] = 'Acción fuera de sesión no encontrada';
                 break;
@@ -70,34 +109,34 @@ if (isset($_GET['action'])) {
                 }
                 break;
 
-                case 'crearCliente':
-                    $_POST = Validate::form($_POST);
-    
-                    if (!USUARIO->setNombres($_POST['nombres'])) {
-    
-                        $res['excep'] = 'Nombre incorrecto';
-                    } elseif (!USUARIO->setApellidos(($_POST['apellidos']))) {
-                        $res['excep'] = 'Apellido incorrecto';
-                    } elseif (!USUARIO->setUsuario($_POST['usuario'])) {
-                        $res['excep'] = 'Usuario incorrecto';
-                    } elseif (!USUARIO->setClave($_POST['clave'])) {
-                        $res['excep'] = 'Clave incorrecta';
-                    } elseif (!USUARIO->setCorreo($_POST['correo'])) {
-                        $res['excep'] = 'Formato de correo incorrecto';
-                        // el usuario ingresado siempre será activo
-                    } elseif (!USUARIO->setEstado(1)) {
-                        $res['excep'] = 'Estado incorrecto';
-                        // enviar tipo usuario admin
-                        // no es tabla independiente, es campo
-                    } elseif ($query->guardar($_POST['direccion'], 2) &&  !Database::getException()) {
-                        $res['status'] = 1;
-                        $res['msg'] = 'Registro guardado';
-                    } elseif (Database::getException()) {
-                        $res['excep'] = Database::getException();
-                    } else {
-                        $res['excep'] = 'Usuario o correo ya está registrado, utilizar otros datos';
-                    }
-                    break;
+            case 'crearCliente':
+                $_POST = Validate::form($_POST);
+
+                if (!USUARIO->setNombres($_POST['nombres'])) {
+
+                    $res['excep'] = 'Nombre incorrecto';
+                } elseif (!USUARIO->setApellidos(($_POST['apellidos']))) {
+                    $res['excep'] = 'Apellido incorrecto';
+                } elseif (!USUARIO->setUsuario($_POST['usuario'])) {
+                    $res['excep'] = 'Usuario incorrecto';
+                } elseif (!USUARIO->setClave($_POST['clave'])) {
+                    $res['excep'] = 'Clave incorrecta';
+                } elseif (!USUARIO->setCorreo($_POST['correo'])) {
+                    $res['excep'] = 'Formato de correo incorrecto';
+                    // el usuario ingresado siempre será activo
+                } elseif (!USUARIO->setEstado(1)) {
+                    $res['excep'] = 'Estado incorrecto';
+                    // enviar tipo usuario admin
+                    // no es tabla independiente, es campo
+                } elseif ($query->guardar($_POST['direccion'], 2) &&  !Database::getException()) {
+                    $res['status'] = 1;
+                    $res['msg'] = 'Registro guardado';
+                } elseif (Database::getException()) {
+                    $res['excep'] = Database::getException();
+                } else {
+                    $res['excep'] = 'Usuario o correo ya está registrado, utilizar otros datos';
+                }
+                break;
             case 'cargarAdmins':
 
                 if ($res['data'] = $query->cargar(1)) {
@@ -121,7 +160,7 @@ if (isset($_GET['action'])) {
                     $res['excep'] = 'No se encontraron registros';
                 }
                 break;
-            
+
             case 'cargar':
                 if ($res['data'] = $query->getCorreo()) {
                     $res['status'] = 1;
@@ -194,6 +233,19 @@ if (isset($_GET['action'])) {
                 } else {
                     $res['excep'] = 'Usuario o correo ya está registrado, utilizar otros datos';
                 }
+
+                break;
+
+            case 'cerrar-sesion':
+
+                // veríficar sí se pudo eliminar sesión
+                if (session_destroy()) {
+                    $res['status'] = 1;
+                    $res['msg'] = 'Sesión cerrada';
+                } else {
+                    $res['excep'] = 'Error al cerrar sesión';
+                }
+
 
                 break;
             default:

@@ -4,19 +4,41 @@ import { notificacionURL, request } from "../controller.js";
 const USUARIO = 'business/private/usuario.php';
 // formulario login
 const FORM = document.getElementById('login');
-
+const PRIMERUSUARIO = document.getElementById('primer-usuario');
 // evento para loggear
-FORM.addEventListener('submit', async (evt) =>{
-    evt.preventDefault();
-    const DATA = new FormData(FORM);
-    const JSON = await request(USUARIO, 'login', DATA);
-    if (JSON.status) {
-        notificacionURL('success',JSON.msg, false, 'inicio.html');
-        console.log(JSON)
-        console.log(JSON.msg)
-    } else {
-        console.log(JSON)
-        console.log(JSON.excep)
-        notificacionURL('error', JSON.excep, false);
-    }
-})
+if (FORM) {
+    FORM.addEventListener('submit', async (evt) => {
+        evt.preventDefault();
+        const DATA = new FormData(FORM);
+        const JSON = await request(USUARIO, 'login', DATA);
+        if (JSON.status) {
+            notificacionURL('success', JSON.msg, false, 'inicio.html');            
+        } else {            
+            notificacionURL('error', JSON.excep, false);
+        }
+    })
+}
+if (PRIMERUSUARIO) {
+
+    PRIMERUSUARIO.addEventListener('submit', async event => {
+        event.preventDefault();
+        const DATOS = new FormData(PRIMERUSUARIO);
+        const JSON = await request(USUARIO, 'primer-usuario', DATOS);
+        if (JSON.status) {
+            notificacionURL('info', JSON.msg, false, '../private/');
+        } else {
+            notificacionURL('error', JSON.excep, false);
+        }
+    })
+}
+// verificar sí esta en el archivo para crear primer usuario
+if (location.href.indexOf('primerusuario.html') < 0) {
+    // login
+    document.addEventListener('DOMContentLoaded', async event => {
+        event.preventDefault();
+        const JSON = await request(USUARIO, 'verificar-usuarios');
+        if (JSON.status) {
+            notificacionURL('info', JSON.msg, false, 'primerusuario.html');
+        }
+    })
+}

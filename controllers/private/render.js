@@ -20,6 +20,9 @@ if (NAV) {
                         <li><a class="dropdown-item" href="productos.html">Productos</a></li>
                         <li><a class="dropdown-item" href="categorias.html">Categorias</a></li>
                         <li><a class="dropdown-item" href="marcas.html">Marcas</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Cuenta</a></li>
+                        <li><a class="dropdown-item" id="cerrar-sesion">Cerrar Sesión</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">

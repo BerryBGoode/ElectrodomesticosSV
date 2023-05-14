@@ -81,7 +81,7 @@ class ProductoQuery
     {
         $sql  = 'SELECT imagen FROM productos WHERE idproducto = ?';
         $param = array($id);
-        $value = Database::row($sql, $param);        
+        $value = Database::row($sql, $param);
         return $value;
     }
 

@@ -215,8 +215,10 @@ const buscador = async event => {
                 let marca = productos.marca.toLowerCase();
                 let precio = productos.precio;
                 let categoria = productos.categoria.toLowerCase();
+                let existencias  = productos.existencias;
                 if (nombre.indexOf(search) !== -1 || marca.indexOf(search) !== -1
-                    || precio.indexOf(search) !== -1 || categoria.indexOf(search) !== -1) {
+                    || precio.indexOf(search) !== -1 || categoria.indexOf(search) !== -1 ||
+                    existencias === search) {
                     TABLA.innerHTML += `<tr>
                     <td>
                         <img src="${PATH + productos.imagen}" alt="${productos.nombre}" width="75px" height="75px">

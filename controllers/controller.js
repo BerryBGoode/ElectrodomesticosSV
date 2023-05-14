@@ -155,3 +155,23 @@ export const cargarSelect = async(filename, select, selected = null, idselect = 
     //agregar las opciones
     document.getElementById(select).innerHTML = list;
 }
+
+/**
+ * Método para cerrar sesión desde la cuenta de administrador
+ * evento click
+ */
+if (document.getElementById('cerrar-sesion')) {
+    
+    document.getElementById('cerrar-sesion').addEventListener('click', async event => {
+        event.preventDefault();
+        let accion = await notificacionAccion('Desea cerrar sesión?');
+        if (accion) {
+            const JSON = await request('business/private/usuario.php', 'cerrar-sesion');
+            if (JSON.status) {
+                notificacionURL('success', JSON.msg, true, 'index.html');
+            } else {
+                 notificacionURL('error', JSON.excep, false);
+            }
+        }
+    })
+}

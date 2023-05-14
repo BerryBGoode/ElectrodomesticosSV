@@ -39,7 +39,7 @@ class UsuarioQuery
      * 2 = cliente
      * retorna el resultado del proceso
      */
-    public function guardar($direccion, $tipousuario)
+    public function guardar($direccion = null, $tipousuario)
     {
         $sql = 'INSERT INTO usuarios(nombreusuario, clave, nombre, apellido, correo, direccion, estado, tipousuario)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
@@ -123,6 +123,18 @@ class UsuarioQuery
             $direccion, USUARIO->getId()
         );
         return Database::storeProcedure($sql, $params);
+    }
+
+    
+    /**
+     * Método para verificar sí existen usuarios
+     * sí existen retorna true sino false
+     */
+    public function verificarUsuarios()
+    {
+        $sql = 'SELECT * FROM usuarios WHERE tipousuario = ?';
+        $param = array(1);
+        return Database::all($sql, $param);
     }
 }
 // try {

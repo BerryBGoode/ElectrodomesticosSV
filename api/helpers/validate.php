@@ -258,6 +258,8 @@ class Validate
             //eliminar un archivo (unlink) pasandole la dirección de archivo y el nombre                       
             if (@unlink($path . $filename)) {
                 return true;
+            } else {
+                return false;
             }
         } catch (\Throwable $th) {
             //si ocurre un problema mandar en el mensaje de error lo que sucedio
