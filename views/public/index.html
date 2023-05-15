@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.84.0">
+    <title>Electromesticos SV</title>
+
+
+    <link rel="shortcut icon" href="../../resources/img/logos/logo.png" type="image/x-icon">
+    <!-- Bootstrap core CSS -->
+    <link href="../../resources/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <link href="../../resources/css/carousel.rtl.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../resources/css/public.css">
+</head>
+
+<body>
+
+    <header>
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+            <div class="container-fluid">
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+                    aria-controls="navbarCollapse" aria-expanded="false" aria-label="a">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse row-reverse" id="navbarCollapse">
+                    <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">Productos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">Destcados</a>
+                        </li>
+                        <li class="nav-item">                        
+                            <!-- verificar sí se ha iniciado sesión y según eso inicar sesión o cuenta -->
+                            <a class="nav-link active" id="estado-cuenta"></a>
+                        </li>
+                    </ul>
+                    <form class="d-flex" method="get" id="buscador">
+                        <input class="form-control me-2" id="input-buscar" type="search" placeholder="Buscar"
+                            aria-label="Buscar">
+                        <button class="btn btn-outline-secondary" type="submit">Buscar</button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+
+        <div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active"
+                    aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            </div>
+            <div class="carousel-inner">
+
+                <div class="carousel-item active">
+
+                    <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
+                        <rect width="100%" height="100%" fill="#777" />
+                    </svg>
+
+
+                    <div class="container">
+                        <div class="carousel-caption">
+                            <h1>Nuestros productos</h1>
+                            <p>Nos caracterizamos por ofrecerte los mejores productos a los mejores precios.</p>
+                            <p><a class="btn btn-lg btn-dark" href="#">Ver productos</a></p>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="carousel-item">
+                    <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
+                        <rect width="100%" height="100%" fill="#777" />
+                    </svg>
+
+                    <div class="container">
+                        <div class="carousel-caption">
+                            <h1>Cuenta</h1>
+                            <p>Crea tú cuenta para que interactues de con nosotros</p>
+                            <p><a class="btn btn-lg btn-dark" href="#">Crear cuenta</a></p>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="carousel-item">
+                    <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
+                        <rect width="100%" height="100%" fill="#777" />
+                    </svg>
+
+                    <div class="container">
+                        <div class="carousel-caption">
+                            <h1>Nuestros destacas</h1>
+                            <p>Te mostramos la opción viable</p>
+                            <p><a class="btn btn-lg btn-dark" href="#">Ver destacados</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Siguiente</span>
+            </button>
+            <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Anterior</span>
+            </button>
+        </div>
+
+
+
+        <div class="container marketing">
+
+            <div class="row">
+
+                <div class="col-lg-4">
+                    <h2>Misión</h2>
+                    <p>Adaptarnos a las necesidades de nuestros clientes, para ofrecer los que nuestros clintes buscan,
+                        para tener más clientes objetivos</p>
+                </div>
+
+                <div class="col-lg-4">
+                    <h2>Visión</h2>
+                    <p>Convertirnos en tú opción viable al comprar productos electronicos para tú espacio</p>
+                </div>
+
+                <div class="col-lg-4">
+
+                    <h2>Valores</h2>
+                    <ul class="valores">
+                        <li>Respeto</li>
+                        <li>Compromiso</li>
+                        <li>Empatía</li>
+                        <li>Honestidad</li>
+                    </ul>
+                </div>
+
+
+            </div>
+
+            <hr class="featurette-divider">
+
+            <div class="container-parallax">
+                <div class="content-parallax">
+                    <span>
+                        Nos especialisamos en lo que buscas
+                    </span>
+                    <p><a class="btn btn-lg btn-dark" href="#">Ver</a></p>
+                </div>
+            </div>
+
+            <hr class="featurette-divider">
+
+            <div class="row featurette">
+                <div class="col-md-7">
+                    <h2 class="featurette-heading">Nuestros Productos</span>
+                    </h2>
+                    <p class="lead">Nos caracterizamos en ser una empresa que constantemente actualiza sus productos,
+                        según el cambio del momento</p>
+                </div>
+                <div class="col-md-5">
+                    <!-- <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500"
+                        height="500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 500x500"
+                        preserveAspectRatio="xMidYMid slice" focusable="false">
+                        <rect width="100%" height="100%" fill="#eee" /><text x="50%" y="50%" fill="#aaa"
+                            dy=".3em">500x500</text> 
+                        </svg> -->
+                    <img src="../../resources/img/productos/productos1.jpeg" alt="productos" width="100%" height="100%">
+
+                </div>
+            </div>
+
+            <hr class="featurette-divider">
+
+            <div class="row featurette">
+                <div class="col-md-7 order-md-2">
+                    <h2 class="featurette-heading">Nuestros Precios</h2>
+                    <p class="lead">Te ofrecemos de tus marcas confiables, en precios alcanzables en la actualidad</p>
+                </div>
+                <div class="col-md-5 order-md-1">
+                    <!-- <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500"
+                        height="500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 500x500"
+                        preserveAspectRatio="xMidYMid slice" focusable="false">
+                        <rect width="100%" height="100%" fill="#eee" /><text x="50%" y="50%" fill="#aaa"
+                            dy=".3em">500x500</text>
+                    </svg> -->
+                    <img src="../../resources/img/productos/productos3.png" alt="productos" width="100%" height="100%">
+                </div>
+            </div>
+
+            <hr class="featurette-divider">
+
+            <div class="row featurette container-nosotros">
+                <div class="col-md-7 nosotros">
+                    <h2 class="featurette-heading">Nosotros</h2>
+                    <p class="lead">Nos caracterizamos en ofrecerte una gran productos según su marca y precio</p>
+                </div>
+            </div>
+
+
+            <!-- /END THE FEATURETTES -->
+
+        </div>
+
+
+        <hr class="featurette-divider">
+
+        <!-- FOOTER -->
+        <footer class="container">
+            <p>ElectrodomesticosSV &copy; 2017–2021 Company, Inc. &middot;
+        </footer>
+    </main>
+
+
+    <script src="../../resources/js/bootstrap.bundle.min.js"></script>
+
+
+</body>
+
+</html>

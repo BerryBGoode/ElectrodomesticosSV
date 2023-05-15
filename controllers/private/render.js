@@ -42,8 +42,8 @@ if (NAV) {
                 </li>
             </ul>
             <form class="d-flex" method="get" id="buscador">
-                <input class="form-control me-2" id="input-buscar" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-secondary" type="submit">Search</button>
+                <input class="form-control me-2" id="input-buscar" type="search" placeholder="Buscar" aria-label="Buscar">
+                <button class="btn btn-outline-secondary" type="submit">Buscar</button>
             </form>
         </div>
     </div>
