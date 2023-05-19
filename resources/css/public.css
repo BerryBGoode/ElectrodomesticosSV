@@ -1,4 +1,6 @@
 body{overflow-x: hidden;}
+.hide{display: none;}
+.view{overflow: hidden;}
 
 .container-parallax{
     background-image: url('../img/productos/productos2.png');
@@ -31,3 +33,33 @@ footer{text-align: center;}
 .ver-articulo{display: flex; gap: 5%; flex-wrap: wrap; margin-top: 5vh;}
 .detalle-producto{display: flex; flex-direction: column;}
 .descripcion-producto{margin-top: 2.5vh;}
+.contador{cursor: pointer;}
+.view{overflow: hidden;}
+.login{
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+.form{
+    height: 100%;
+    width: 45%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 5%;
+    justify-content: center;
+}
+.buttons{
+    display: flex;
+    gap: 3%;
+    flex-direction: column;
+}
+.btn-login{margin: 4% 0;}
+.ver-producto{
+    margin-top: 5%;
+}
+.articulo{
+    padding: .3%;
+}

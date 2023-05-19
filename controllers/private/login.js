@@ -6,6 +6,7 @@ const USUARIO = 'business/private/usuario.php';
 const FORM = document.getElementById('login');
 const PRIMERUSUARIO = document.getElementById('primer-usuario');
 // evento para loggear
+// editifica que existe ese elemeto
 if (FORM) {
     FORM.addEventListener('submit', async (evt) => {
         evt.preventDefault();
