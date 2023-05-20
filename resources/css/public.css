@@ -24,9 +24,16 @@ footer{text-align: center;}
 .productos-container{
     display: flex;    
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: space-evenly;
+    /* display: flex;
+    row-gap: -7%;
+    column-gap: .5%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center; */
 }
-.producto{flex: 0 0 48%; height: 48%;}
+.lista-productos{display: flex;}
+.producto{flex: 0 0 48%; margin-bottom: 5%; height: 100%;}
 .articulo{height: 100vh;background-color: #f8f9fa!important}
 .hr-articulo{margin: 0;}
 #img-articulo{width: 50%; height: 55vh;}
@@ -57,9 +64,19 @@ footer{text-align: center;}
     flex-direction: column;
 }
 .btn-login{margin: 4% 0;}
-.ver-producto{
-    margin-top: 5%;
+.ver-producto{margin-top: 5%;}
+.articulo{padding: .3%;}
+.toast{z-index: 11;}
+.toast{
+    position: fixed;
+    top: 10%;
+    right: 1%;
 }
-.articulo{
-    padding: .3%;
+.toast-body{display: flex; justify-content: space-between;}
+.card-body{
+    flex: 1 1 auto;
+    display: flex;
+    padding: 1rem 1rem;
+    flex-direction: column;
+    justify-content: flex-end;
 }
