@@ -26,7 +26,9 @@
         <div class="articulo">
             <div class="container ver-producto">
                 <div class="ver-articulo">
-                    <img src="../../resources/img/productos/productos2.png" width="100%" height="100%" alt="nombrearticulo" id="img-articulo">
+                    <div id="contenedor-img-articulo">
+
+                    </div>
                     <div class="detalle-producto">
                         <h3 id="nombre">nombre</h3>
                         <span id="categoria">categoria</span>
@@ -65,15 +67,33 @@
                 <div class="descripcion-producto">
                     <span id="desc">
                         desc
-                    </span> 
+                    </span>
                 </div>
             </div>
         </div>
 
         <hr class="hr-articulo">
 
+        <div class="container mt-10">
+            <form id="comentario-form" method="post">
+                <div class="form-floating">
+                    <textarea class="form-control" id="comentario" name="comentario"></textarea>
+                    <label for="comentario">Comentario</label>
+                </div>
+                <button type="button" class="btn btn-secondary btn-lg">Publicar</button>
+            </form>
+        </div>
+
+        <hr class="hr-articulo">
         <div class="container comentarios">
-            comentarios
+            <div class="titulo-comentarios">
+                <span class="bold">
+                    Comentarios
+                </span>
+            </div>
+            <div id="comentarios-producto">
+
+            </div>
         </div>
 
         <!-- /END THE FEATURETTES -->

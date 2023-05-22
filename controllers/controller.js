@@ -120,7 +120,7 @@ let id, value;
  * selected si se seleccionará uno (para cargar el valor ingresado en ese registro)
  * idselect sí se quieren cargar id's
  */
-export const cargarSelect = async(filename, select, selected = null, idselect = false) => {
+export const cargarSelect = async (filename, select, selected = null, idselect = false) => {
     //definir instancia de la clase FormData
     const DATA = new FormData;
     //agregar dato al post
@@ -161,7 +161,7 @@ export const cargarSelect = async(filename, select, selected = null, idselect = 
  * evento click
  */
 if (document.getElementById('cerrar-sesion')) {
-    
+
     document.getElementById('cerrar-sesion').addEventListener('click', async event => {
         event.preventDefault();
         let accion = await notificacionAccion('Desea cerrar sesión?');
@@ -170,8 +170,19 @@ if (document.getElementById('cerrar-sesion')) {
             if (JSON.status) {
                 notificacionURL('success', JSON.msg, true, 'index.html');
             } else {
-                 notificacionURL('error', JSON.excep, false);
+                notificacionURL('error', JSON.excep, false);
             }
         }
     })
+}
+
+/**
+ * Método para obtener parametro de la url
+ */
+export const getUrl = parametro => {
+    // instanciar clase para obtener parametros de busqueda del la url
+    const URL = new URLSearchParams(window.location.search);
+    // obtener el valor del parametro especificado
+    const ID = URL.get(parametro);
+    return ID;
 }

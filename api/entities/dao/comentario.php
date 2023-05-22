@@ -111,5 +111,21 @@ class ComentarioQuery
         $param = array(COMENTARIO->getId());
         return Database::storeProcedure($sql, $param);
     }
+
+    /**
+     * Método para cargar los comentarios de un producto
+     * retorna un arreglo con los datos recuperados de la consulta
+     */
+    public function cargarComentariosProducto($producto)
+    {
+        $sql = 'SELECT c.idcomentario, c.comentario, c.fecha, u.nombreusuario  
+                FROM comentarios c
+                INNER JOIN pedidos o ON o.idpedido = c.idpedido
+                INNER JOIN productos p ON p.idproducto = o.idproducto
+                INNER JOIN facturas f ON f.idfactura = o.idfactura
+                INNER JOIN usuarios u ON u.idusuario = f.idcliente
+                WHERE c.estado = ? AND u.estado = ?';
+        $params = array(true, 1);
+        return Database::all($sql, $params);
+    }
 }
-?>
