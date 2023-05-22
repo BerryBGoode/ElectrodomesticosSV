@@ -19,6 +19,17 @@ class UsuarioQuery
             return true;
         }
     }
+    // método para verificar sí el usuario admin en el login existe
+    public function validateUsuario($usuario)
+    {
+        $sql = 'SELECT idusuario FROM usuarios WHERE nombreusuario = ? AND estado = ?';
+        $param = array($usuario, 1);
+        $res = Database::row($sql, $param);
+        if ($res) {
+            USUARIO->setId($res['idusuario']);
+            return true;
+        }
+    }
 
     // método para verificar la clave de ese usuario
     public function validateClaveAdmin($clave)

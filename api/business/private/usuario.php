@@ -238,13 +238,15 @@ if (isset($_GET['action'])) {
 
             case 'cerrar-sesion':
 
+                unset($_SESSION['usuario']);
+                unset($_SESSION['idusuario']);
                 // veríficar sí se pudo eliminar sesión
-                if (session_destroy()) {
-                    $res['status'] = 1;
-                    $res['msg'] = 'Sesión cerrada';
-                } else {
-                    $res['excep'] = 'Error al cerrar sesión';
-                }
+                // if (session_destroy()) {
+                //     $res['status'] = 1;
+                //     $res['msg'] = 'Sesión cerrada';
+                // } else {
+                //     $res['excep'] = 'Error al cerrar sesión';
+                // }
 
 
                 break;

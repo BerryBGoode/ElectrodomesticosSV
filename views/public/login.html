@@ -19,6 +19,19 @@
 
 <body class="view">
 
+    <div id="toast-c" class="toast" role="" aria-live="assertive" aria-atomic="true">
+        <div class="toast-body">
+            Bienvenido
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+
+    <div id="toast-e" class="toast" role="" aria-live="assertive" aria-atomic="true">
+        <div class="toast-body" id="toast-body-e">
+            Contenido del Toast
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
     <main>
 
         <div class="container login">
@@ -148,7 +161,7 @@
 
     <script src="../../resources/js/bootstrap.bundle.min.js"></script>
     <script src="../../controllers/public/render.js"></script>
-    <script src="../../controllers/public/login.js"></script>
+    <script type="module" src="../../controllers/public/login.js"></script>
 </body>
 
 </html>

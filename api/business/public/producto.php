@@ -13,6 +13,7 @@ if (!isset($_GET['action'])) {
     $res['excep'] = 'Acción no existente';
 } else {
 
+    session_start();
     // instanciar clase con los queries
     $queryproducto = new ProductoQuery;
     $querycomentario = new ComentarioQuery;
@@ -45,6 +46,7 @@ if (!isset($_GET['action'])) {
 
         case 'comentariosArticulo':
             
+        
             if ($res['data'] = $querycomentario->cargarComentariosProducto($_POST['producto'])) {
                 $res['status'] = 1;
             } else if (Database::getException()) {

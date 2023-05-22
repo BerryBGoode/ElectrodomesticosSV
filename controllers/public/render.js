@@ -46,3 +46,7 @@ if (FOOTER) {
         <p>ElectrodomesticosSV &copy; 2017–2021 Company, Inc. &middot;
     </div>`;
 }
+// método para validar estado de cuenta
+document.addEventListener('DOMContentLoaded', async event => {
+    event.preventDefault();
+})
