@@ -38,7 +38,12 @@ footer{text-align: center;}
 .hr-articulo{margin: 0;}
 #img-articulo{width: 50%; height: 55vh;}
 .ver-articulo{display: flex; gap: 5%; flex-wrap: wrap; margin-top: 5vh;}
-.detalle-producto{display: flex; flex-direction: column;}
+.detalle-producto{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly; 
+    flex-wrap: wrap;
+}
 .descripcion-producto{margin-top: 2.5vh;}
 .contador{cursor: pointer;}
 .view{overflow: hidden;}
