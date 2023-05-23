@@ -1,3 +1,5 @@
+import { request } from "../controller.js";
+
 // obtener el header para agregar nav
 const HEADER = document.querySelector('header');
 // obtener el footer para agregar contenido
@@ -23,10 +25,8 @@ if (HEADER) {
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="destacados.html">Destcados</a>
                     </li>
-                    <li class="nav-item">                        
-                        <!-- verificar sí se ha iniciado sesión y según eso inicar sesión o cuenta -->
-                        <a class="nav-link active" id="estado-cuenta"></a>
-                    </li>
+                    <!-- verificar sí se ha iniciado sesión y según eso inicar sesión o cuenta -->
+                    <li class="nav-item dropdown" id="estado-cuenta"></li>
                 </ul>
                 <form class="d-flex" method="get" id="buscador">
                     <input class="form-control me-2" id="input-buscar" type="search" placeholder="Buscar"
@@ -46,7 +46,28 @@ if (FOOTER) {
         <p>ElectrodomesticosSV &copy; 2017–2021 Company, Inc. &middot;
     </div>`;
 }
+const CUENTA = document.getElementById('estado-cuenta');
 // método para validar estado de cuenta
 document.addEventListener('DOMContentLoaded', async event => {
     event.preventDefault();
+    const JSON = await request('business/public/usuario.php', 'validarEstadoCuenta');
+    switch (JSON.status) {
+        case 1:
+            CUENTA.innerHTML = `<a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    ${JSON.data}
+                                </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <li><a class="dropdown-item" href="#">Account</a></li>
+            <li><a class="dropdown-item" href="#">Pedidos</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#">Cerrar Sesión</a></li>
+          </ul>`;
+            break;
+
+        case -1:
+            CUENTA.innerText = `Iniciar Sesión`;
+            break;
+        default:
+            break;
+    }
 })

@@ -31,11 +31,20 @@ if (!isset($_GET['action'])) {
             } else {
                 $res['excep'] = 'Usuario o contraseña incorrecta';
             }
-            
+
             break;
+            // acción para verificar el estado de la cuenta
+            // verífica sí se ha iniciado sesión para cargar dato en navbar
         case 'validarEstadoCuenta':
 
             // verificar sí existen sesión 
+            if (isset($_SESSION['idcliente']) && isset($_SESSION['cliente'])) {
+                $res['status'] = 1;
+                $res['data'] = $_SESSION['cliente'];
+            } else {
+                $res['status'] = -1;
+            }
+
 
             break;
 
