@@ -38,6 +38,7 @@ if (HEADER) {
         </div>
     </nav>
 
+    <!-- Aquí estan los toast-->
     <div class="toast" id="toast-confirm" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="toast-body">
             Desea cerrar sesión?
@@ -45,6 +46,21 @@ if (HEADER) {
             </div>
         </div>
     </div>
+
+    <div class="toast" id="toast-login" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-body">
+            Debe iniciar sesión antes
+                <button type="button" class="btn btn-primary btn-sm" id="login">iniciar sesión</button>                
+            </div>
+        </div>
+    </div>
+
+    <div class="toast align-items-center" id="normal-toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body" id="msg-toast"></div>
+        </div>
+    </div>
+
     `;
 }
 
@@ -57,8 +73,7 @@ if (FOOTER) {
     </div>`;
 }
 
-const TOAST = new bootstrap.Toast('#toast-confirm');
-
+const TOASTCONFIRM = new bootstrap.Toast('#toast-confirm');
 
 const CUENTA = document.getElementById('estado-cuenta');
 // método para validar estado de cuenta
@@ -88,15 +103,15 @@ document.addEventListener('DOMContentLoaded', async event => {
         // función para confirma cerrar sesión
         document.getElementById('logOut').addEventListener('click', () => {
             // validar confirmación
-            TOAST.show();
+            TOASTCONFIRM.show();
         });
-        
+
         // función para cerrar sesión
         document.getElementById('confirm-out').addEventListener('click', async event => {
             event.preventDefault();
             const JSON = await request('business/public/usuario.php', 'logOutCliente');
             if (JSON.status) {
-                setTimeout( ()=>{
+                setTimeout(() => {
                     location.href = '../../views/public/';
                 }, 1500);
             }

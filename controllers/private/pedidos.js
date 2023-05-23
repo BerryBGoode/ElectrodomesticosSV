@@ -98,7 +98,33 @@ const cargarTabla = async () => {
                 <td class="hide">${element.idproducto}</td>
                 <td>${element.nombre}</td>
                 <td>${element.precio}</td>
-                <td>${element.cantidad}</td>
+                <td>
+                
+                <div class="cantidad">
+                        
+                    <svg id="restar" class="restar" width="19" height="19" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M12.5 22.9168C18.2291 22.9168 22.9166 18.2293 22.9166 12.5002C22.9166 6.771 18.2291 2.0835 12.5 2.0835C6.77081 2.0835 2.08331 6.771 2.08331 12.5002C2.08331 18.2293 6.77081 22.9168 12.5 22.9168Z"
+                            stroke="#424242" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M8.33331 12.5H16.6666" stroke="#424242" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+
+                    <span id="contador" class="contador">${element.cantidad}</span>
+
+                    <svg id="sumar" class="sumar" width="19" height="19" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M12.5 22.9168C18.2292 22.9168 22.9167 18.2293 22.9167 12.5002C22.9167 6.771 18.2292 2.0835 12.5 2.0835C6.77084 2.0835 2.08334 6.771 2.08334 12.5002C2.08334 18.2293 6.77084 22.9168 12.5 22.9168Z"
+                            stroke="#424242" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M8.33334 12.5H16.6667" stroke="#424242" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                        <path d="M12.5 16.6668V8.3335" stroke="#424242" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+
+                </div>
+
+                </td>
                 <td>${element.subtotal}</td>
                 <td class="tb-switch">
                     ${(element.estado === 1) ?
@@ -166,6 +192,10 @@ const cargarTabla = async () => {
             })
         }
 
+
+        const SUMAR = document.getElementsByClassName('sumar');
+        const RESTAR = document.getElementsByClassName('restar');
+        const CONTADOR = document.getElementsByClassName('contador');
         // obtener todos los switches de la tabla
         const ESTADO = document.getElementsByClassName('estado');
         // recorrer los input encontrados
@@ -187,7 +217,8 @@ const cargarTabla = async () => {
                     // verificar sí está checkeado
                     // para sumar o restar total
                     if (ESTADO[i].checked) {
-                        // sumar el valor del subtotal en la posición del switch modificado
+                        // console.log(SUBTOTALES[i]);
+                        // // sumar el valor del subtotal en la posición del switch modificado
                         // total += SUBTOTALES[i]
 
                         // for (const UNIT of SUBTOTALES) {
@@ -198,19 +229,28 @@ const cargarTabla = async () => {
 
                         // }
 
-                        document.getElementById('total').innerText = '$ ' + total.toLocaleString(6);
-                        console.log('sumar')
+                        // document.getElementById('total').innerText = '$ ' + total.toLocaleString(6);
+                        // console.log('sumar')
                     } else {
-                        console.log('restar')
+                        // console.log(SUBTOTALES[i])
+                        
                         // for (const UNIT of SUBTOTALES) {
                         //     console.log(UNIT)
                         //     // al valor anterior sumarle el número
                         //     total -= parseFloat(UNIT + ' index: ' + index);
 
                         // }
-                        // total -= SUBTOTALES[i]
-                        document.getElementById('total').innerText = '$ ' + total.toLocaleString(6);
+                        // document.getElementById('total').innerText = '$ ' + total.toLocaleString(6);
                     }
+                }
+            })
+
+            RESTAR[i].addEventListener('click', async event => {
+                event.preventDefault();
+                const ID = new FormData;
+                ID.append('idpedido', ACTUALIZAR[i].value);
+                if (!CONTADOR[i].textContent < 1) {
+                    let result = parseInt(CONTADOR[i].textContent - 1);
                 }
             })
         }
@@ -274,7 +314,33 @@ const buscador = async event => {
                         <td class="hide">${pedidos.idproducto}</td>
                         <td>${pedidos.nombre}</td>
                         <td>${pedidos.precio}</td>
-                        <td>${pedidos.cantidad}</td>
+                        <td>
+                        
+                        <div class="cantidad">
+                        
+                            <svg id="restar" class="restar" width="19" height="19" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M12.5 22.9168C18.2291 22.9168 22.9166 18.2293 22.9166 12.5002C22.9166 6.771 18.2291 2.0835 12.5 2.0835C6.77081 2.0835 2.08331 6.771 2.08331 12.5002C2.08331 18.2293 6.77081 22.9168 12.5 22.9168Z"
+                                    stroke="#424242" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                <path d="M8.33331 12.5H16.6666" stroke="#424242" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+
+                            <span id="contador" class="contador">${pedidos.cantidad}</span>
+
+                            <svg id="sumar" class="sumar" width="19" height="19" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M12.5 22.9168C18.2292 22.9168 22.9167 18.2293 22.9167 12.5002C22.9167 6.771 18.2292 2.0835 12.5 2.0835C6.77084 2.0835 2.08334 6.771 2.08334 12.5002C2.08334 18.2293 6.77084 22.9168 12.5 22.9168Z"
+                                    stroke="#424242" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                <path d="M8.33334 12.5H16.6667" stroke="#424242" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                                <path d="M12.5 16.6668V8.3335" stroke="#424242" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+
+                        </div>
+                        
+                        </td>
                         <td>${pedidos.subtotal}</td>
                         <td class="tb-switch">
                             ${(pedidos.estado === 1) ?

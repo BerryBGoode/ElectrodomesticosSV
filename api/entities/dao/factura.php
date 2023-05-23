@@ -89,4 +89,16 @@ class FacturaQuery
         $params = array(FACTURA->getCliente(), FACTURA->getFecha(), FACTURA->getId());
         return Database::storeProcedure($sql, $params);
     }
+
+    /**
+     * Método para obtener las facturas pendientes de un cliente
+     */
+    public function getFacturasCliente($cliente, $estado)
+    {
+        $sql = 'SELECT idfactura 
+                FROM facturas 
+                WHERE idcliente = ? AND estado = ?';
+        $params = array($cliente, $estado);
+        return Database::all($sql, $params);
+    }
 }

@@ -82,3 +82,6 @@ si es mucho text en la col*/
 .fecha{
     max-width: 5vw;
 }
+.sumar, .restar{
+    cursor: pointer;
+}

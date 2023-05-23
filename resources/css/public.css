@@ -123,3 +123,6 @@ footer{text-align: center;}
 .form-floating{
     margin-bottom: 1%;
 }
+.sumar, .restar{
+    cursor: pointer;
+}

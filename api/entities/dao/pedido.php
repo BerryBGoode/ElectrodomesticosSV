@@ -76,7 +76,8 @@ class PedidoQuery
      * Método para eliminar pedido
      * retorna la cantidad de registros eliminados
      */
-    public function eliminar(){
+    public function eliminar()
+    {
         $sql = 'DELETE FROM pedidos WHERE idpedido = ?';
         $param = array(PEDIDO->getId());
         return Database::storeProcedure($sql, $param);
@@ -88,7 +89,8 @@ class PedidoQuery
      * retorna un arreglo con la cantidad de productos del pedido
      * a eliminar
      */
-    public function getCantidad(){
+    public function getCantidad()
+    {
         $sql = 'SELECT idproducto, cantidad FROM pedidos WHERE idpedido = ?';
         $param = array(PEDIDO->getId());
         return Database::row($sql, $param);
@@ -98,9 +100,55 @@ class PedidoQuery
      * Método para actualizar producto (sumar existencias)
      * retorna un arreglo 
      */
-    public function agregarExistencias(){
+    public function agregarExistencias()
+    {
         $sql = 'UPDATE productos SET existencias = existencias + ? WHERE idproducto = ?';
         $params = array(PEDIDO->getCantidad(), PEDIDO->getProducto());
+        return Database::storeProcedure($sql, $params);
+    }
+
+    /**
+     * Método para obtener los pedidos de una factura
+     */
+    public function getPedidosFactura($factura)
+    {
+        $sql = 'SELECT * FROM pedidos WHERE idfactura = ?';
+        $param = array($factura);
+        return Database::all($sql, $param);
+    }
+
+    /**
+     * Método para obtener los pedidos con la facturas especificada
+     * y el producto especificado
+     */
+    public function getPedidoFacturaProducto($factura, $producto)
+    {
+        $sql = 'SELECT * FROM pedidos WHERE idfactura = ? AND idproducto = ?';
+        $params = array($factura, $producto);
+        return Database::all($sql, $params);
+    }
+
+    /***
+     * 
+     * Método para modificar la cantidad del pedido
+     * { $ope } operación 1 sumar cantidad , 2 restar cantidad
+     */
+    public function modificarCantidad($cantidad, $pedido, $ope)
+    {
+        switch ($ope) {
+            case 1: //sumar
+                $sql = 'UPDATE pedidos 
+                        SET cantidad = cantidad + ? 
+                        WHERE idpedido = ?';
+                break;
+
+            case 2: //restar
+                $sql = 'UPDATE pedidos
+                        SET cantidad = cantidad - ?
+                        WHERE idpedido = ?';
+                break;
+        }
+        $params = array($cantidad, $pedido);
         return Database::storeProcedure($sql, $params);
     }
 }
