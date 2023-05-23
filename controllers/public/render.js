@@ -87,6 +87,7 @@ document.addEventListener('DOMContentLoaded', async event => {
                                 </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
             <li><a class="dropdown-item" href="#">Account</a></li>
+            <li><a class="dropdown-item" href="carrito.html">Carrito</a></li>
             <li><a class="dropdown-item" href="#">Pedidos</a></li>
             <li><hr class="dropdown-divider"></li>
             <li id="logOut"><a class="dropdown-item">Cerrar Sesión</a></li>

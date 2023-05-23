@@ -54,13 +54,37 @@ if (!isset($_GET['action'])) {
                         // verificar si la factura pendiente no tiene producto agregado 
                         // y sí ya tiene un pedido con es producto
                         if ($pedidoscliente = $pedidoquery->getPedidoFacturaProducto($factura, $_POST['producto'])) {
-                                                    
+
                             // modificar cantidad
-                            $pedidoquery->modificarCantidad($_POST['cantidad'],$pedidoscliente[$i]['idpedido'], 1);
+                            $pedidoquery->modificarCantidad($_POST['cantidad'], $pedidoscliente[$i]['idpedido'], 1);
                             $res['status'] = 1;
                             $res['msg'] = '+1 producto en el carrito';
                         } else {
-                            $res['msg'] = 'crear pedido';
+
+                            // definiar horario local
+                            date_default_timezone_set('America/El_Salvador');
+                            $hoy = date('Y-m-d');
+
+                            // crear pedido, con nuevo producto
+                            $disponible = 1;
+
+                            if (!PEDIDO->setFecha($hoy)) {
+                                $res['excep'] = 'Fecha incorrecta, revisar formato';
+                            } elseif (!PEDIDO->setProducto($_POST['producto'])) {
+                                $res['excep'] = 'Producto incorrecto';
+                            } elseif (!PEDIDO->setFactura($factura)) {
+                                $res['excep'] = 'Error al obtener factura';
+                            } elseif (!PEDIDO->setCantidad($_POST['cantidad'])) {
+                                $res['excep'] = 'Error con la cantidad seleccionada';
+                            } elseif (!PEDIDO->setEstado($disponible)) {
+                                $res['excep'] = 'Estado inexistente';
+                            } elseif ($pedidoquery->guardarPedido() && !Database::getException()) {
+                                // restar existencias
+                                $res['status'] = 1;
+                                $res['msg'] = 'Producto agregado al carrito';
+                            } else {
+                                $res['excep'] = Database::getException();
+                            }
                         }
                     }
                 } else {
