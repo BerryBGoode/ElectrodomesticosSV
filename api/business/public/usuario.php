@@ -45,9 +45,42 @@ if (!isset($_GET['action'])) {
                 $res['status'] = -1;
             }
 
-
             break;
 
+        case 'logOutCliente':
+            // eliminar vatiables de sesión con esos nombres
+            unset($_SESSION['idcliente']);
+            unset($_SESSION['cliente']);
+            $res['status'] = 1;
+            break;
+
+        case 'crearCuentaCliente':
+            $_POST = Validate::form($_POST);
+
+            if (!USUARIO->setNombres($_POST['nombres'])) {
+                $res['excep'] = 'Nombre incorrecto';
+            } elseif (!USUARIO->setApellidos(($_POST['apellidos']))) {
+                $res['excep'] = 'Apellido incorrecto';
+            } elseif (!USUARIO->setUsuario($_POST['usuario'])) {
+                $res['excep'] = 'Usuario incorrecto';
+            } elseif (!USUARIO->setClave($_POST['clave'])) {
+                $res['excep'] = 'Clave incorrecta';
+            } elseif (!USUARIO->setCorreo($_POST['correo'])) {
+                $res['excep'] = 'Formato de correo incorrecto';
+                // el usuario ingresado siempre será activo
+            } elseif (!USUARIO->setEstado(1)) {
+                $res['excep'] = 'Estado incorrecto';
+                // enviar tipo usuario admin
+                // no es tabla independiente, es campo
+            } elseif ($query->guardar($_POST['direccion'], 2) &&  !Database::getException()) {
+                $res['status'] = 1;
+                $res['msg'] = 'Registro guardado';
+            } elseif (Database::getException()) {
+                $res['excep'] = Database::getException();
+            } else {
+                $res['excep'] = 'Usuario o correo ya está registrado, utilizar otros datos';
+            }
+            break;
         default:
             # code...
             break;

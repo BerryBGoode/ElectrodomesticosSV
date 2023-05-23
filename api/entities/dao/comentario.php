@@ -124,8 +124,8 @@ class ComentarioQuery
                 INNER JOIN productos p ON p.idproducto = o.idproducto
                 INNER JOIN facturas f ON f.idfactura = o.idfactura
                 INNER JOIN usuarios u ON u.idusuario = f.idcliente
-                WHERE c.estado = ? AND u.estado = ?';
-        $params = array(true, 1);
+                WHERE c.estado = ? AND u.estado = ? AND p.idproducto = ?';
+        $params = array(true, 1, $producto);
         return Database::all($sql, $params);
     }
 }

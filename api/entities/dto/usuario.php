@@ -52,7 +52,7 @@ class Usuario
 
     public function setUsuario($usuario)
     {
-        if (Validate::checkAlphabetic($usuario, 1, 80)) {
+        if (Validate::checkAlphanumeric($usuario, 1, 80)) {
             $this->usuario = $usuario;
             return true;
         }

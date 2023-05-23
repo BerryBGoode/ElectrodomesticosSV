@@ -18,7 +18,7 @@
         <div class="form">
             <h2>Crear cuenta</h2>
             <div class="inputs">
-                <form method="post" id="primer-usuario">
+                <form method="post" id="crear-cuenta">
                     <div>
                         <div class="form-floating mb-3">
                             <input type="text" class="form-control" id="usuario" placeholder="Nombre de usuario"
@@ -46,7 +46,7 @@
                             <label for="correo">Correo</label>
                         </div>                        
                         <div class="form-floating mb-3">
-                            <input type="email" class="form-control" id="direccion" placeholder="Direccion"
+                            <input type="text" class="form-control" id="direccion" placeholder="Direccion"
                                 name="direccion" required>
                             <label for="direccion">Direccion</label>
                         </div>                        
@@ -143,7 +143,7 @@
 
     <script src="../../resources/js/bootstrap.bundle.min.js"></script>
     <script src="../../resources/js/sweetalert.min.js"></script>
-    <script type="module" src="../../controllers/private/login.js"></script>
+    <script type="module" src="../../controllers/public/login.js"></script>
 </body>
 
 </html>
