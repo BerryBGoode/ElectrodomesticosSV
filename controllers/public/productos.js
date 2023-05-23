@@ -74,6 +74,7 @@ document.addEventListener('DOMContentLoaded', async event => {
                     case 1:                        
                         document.getElementById('msg-toast').innerText = JSON.msg;
                         MSGTOAST.show();
+                        break;
                     default:
                         break;
                 }

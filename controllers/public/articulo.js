@@ -9,6 +9,9 @@ const DIR = '../../api/images/productos/';
 const COMENTARIOS = document.getElementById('comentarios-producto');
 // instanciar toast para mostrar mensaje
 const MSGTOAST = new bootstrap.Toast('#normal-toast');
+// constante para hacer peticiones al carrito
+const CARRITO = 'business/public/carrito.php';
+
 
 // gestionador de existencias del producto
 let existencias;
@@ -26,7 +29,7 @@ const cargarArticulo = async () => {
         // cargar los datos
         document.getElementById('nombre').innerText = JSON.data.nombre;
         document.getElementById('categoria').innerText = JSON.data.categoria;
-        document.getElementById('precio').innerText = '$'+JSON.data.precio;
+        document.getElementById('precio').innerText = '$' + JSON.data.precio;
         document.getElementById('marca').innerText = JSON.data.marca;
         document.getElementById('desc').innerText = JSON.data.descripcion;
         document.getElementById('contenedor-img-articulo').innerHTML = `
@@ -67,9 +70,9 @@ let cantidad = () => {
 
     document.getElementById('restar').addEventListener('click', async event => {
         event.preventDefault();
-        if(contador.textContent > 1){
+        if (contador.textContent > 1) {
             contador.textContent = parseInt(contador.textContent) - 1;
-        }else{            
+        } else {
             document.getElementById('msg-toast').innerText = 'Cantidad minima permitida';
             MSGTOAST.show();
         }
@@ -80,7 +83,7 @@ let cantidad = () => {
         if (contador.textContent >= existencias) {
             document.getElementById('msg-toast').innerText = 'Cantidad maxima permitida';
             MSGTOAST.show();
-        }else{
+        } else {
             contador.textContent = parseInt(contador.textContent) + 1;
         }
     })
@@ -92,6 +95,30 @@ document.getElementById('comprar').addEventListener('click', async event => {
     event.preventDefault();
     // obtener los datos
     const ARTICULO = new FormData;
-    ARTICULO.append('producto', getUrl('idproducto'));
-    // ARTICULO.append('cantidad', );
+    // validar que la cantidad del contenido del contador no sea menor a 1
+    // validar que la cantidad del contenido no sea mayor a las existencias
+    if (parseInt(contador.textContent) <= existencias &&
+        contador.textContent >= 1) {
+        ARTICULO.append('producto', getUrl('idproducto'));
+        ARTICULO.append('cantidad', parseInt(contador.textContent));
+        const JSON = await request(CARRITO, 'validarPedido', ARTICULO);
+        switch (JSON.status) {
+            case -1:
+                document.getElementById('login').addEventListener('click', () => {
+                    location.href = 'login.html';
+                })
+                TOASTACCION.show();
+                break;
+
+            case 1:
+                document.getElementById('msg-toast').innerText = JSON.msg;
+                MSGTOAST.show();
+                break;
+            default:
+                break;
+        }
+    } else {
+        document.getElementById('msg-toast').innerText = 'Cantidad no permitida';
+        MSGTOAST.show();
+    }
 })

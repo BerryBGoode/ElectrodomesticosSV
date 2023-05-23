@@ -58,7 +58,7 @@ if (!isset($_GET['action'])) {
                             // modificar cantidad
                             $pedidoquery->modificarCantidad($_POST['cantidad'], $pedidoscliente[$i]['idpedido'], 1);
                             $res['status'] = 1;
-                            $res['msg'] = '+1 producto en el carrito';
+                            $res['msg'] = 'Producto añadido al carrito';
                         } else {
 
                             // definiar horario local

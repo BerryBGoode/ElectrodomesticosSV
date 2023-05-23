@@ -23,7 +23,14 @@ if (!isset($_GET['action'])) {
             // acción para cargar productos
         case 'productos':
 
-            if ($res['data'] = $queryproducto->cargar()) {
+
+            if ($productosvista = $queryproducto->cargar()) {
+                // recorrer los productos para validar que tenga existencias
+                for ($i = 0; $i < count($productosvista); $i++) {                    
+                    if ($productosvista[$i]['existencias'] >= 1) {
+                        print_r($productosvista[$i]);
+                    }
+                }
                 $res['status'] = 1;
             } elseif (Database::getException()) {
                 $res['excep'] = Database::getException();
@@ -32,7 +39,7 @@ if (!isset($_GET['action'])) {
             }
 
             break;
-
+            // cargar articulo  
         case 'registro':
 
             if (!PRODUCTO->setId($_POST['idproducto'])) {
@@ -45,14 +52,14 @@ if (!isset($_GET['action'])) {
             break;
 
         case 'comentariosArticulo':
-            
-        
+
+
             if ($res['data'] = $querycomentario->cargarComentariosProducto($_POST['producto'])) {
                 $res['status'] = 1;
             } else if (Database::getException()) {
                 $res['excep'] = Database::getException();
             }
-            
+
 
             break;
         default:
