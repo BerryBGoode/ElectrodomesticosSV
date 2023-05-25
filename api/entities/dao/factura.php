@@ -101,4 +101,19 @@ class FacturaQuery
         $params = array($cliente, $estado);
         return Database::all($sql, $params);
     }
+
+    /**
+     * Método para obtener la factura actual 
+     * o pendiente de un cliente
+     */
+    public function getFacturaActual($cliente)
+    {
+        $estado = 2;
+        $sql = 'SELECT idfactura 
+                FROM facturas 
+                WHERE idcliente = ? 
+                AND estado = ?;';
+        $params = array($cliente, $estado);
+        return Database::row($sql, $params);
+    }
 }

@@ -5,6 +5,9 @@ const HEADER = document.querySelector('header');
 // obtener el footer para agregar contenido
 const FOOTER = document.querySelector('footer');
 
+// toast para mandar mensaje a usuario para iniciar sesión
+const TOASTACCION = new bootstrap.Toast('#toast-login');
+
 // verificar sí es usada la etiqueta header
 if (HEADER) {
     HEADER.innerHTML = `
@@ -42,15 +45,7 @@ if (HEADER) {
     <div class="toast" id="toast-confirm" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="toast-body">
             Desea cerrar sesión?
-                <button type="button" class="btn btn-primary btn-sm" id="confirm-out">Ok</button>                
-            </div>
-        </div>
-    </div>
-
-    <div class="toast" id="toast-login" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-body">
-            Debe iniciar sesión antes
-                <button type="button" class="btn btn-primary btn-sm" id="login">iniciar sesión</button>                
+                <a class="btn btn-secondary btn-sm" id="confirm-out">Ok</a>                
             </div>
         </div>
     </div>
@@ -62,6 +57,16 @@ if (HEADER) {
     </div>
 
     `;
+    // función para cerrar sesión
+    document.getElementById('confirm-out').addEventListener('click', async event => {
+        event.preventDefault();
+        const JSON = await request('business/public/usuario.php', 'logOutCliente');
+        if (JSON.status) {
+            setTimeout(() => {
+                location.href = '../../views/public/';
+            }, 1500);
+        }
+    })
 }
 
 // verificar sí es usada la etiqueta footer
@@ -73,12 +78,18 @@ if (FOOTER) {
     </div>`;
 }
 
-const TOASTCONFIRM = new bootstrap.Toast('#toast-confirm');
+
 
 const CUENTA = document.getElementById('estado-cuenta');
 // método para validar estado de cuenta
-document.addEventListener('DOMContentLoaded', async event => {
-    event.preventDefault();
+
+// instanciar toast para mostrar mensaje
+const MSGTOAST = new bootstrap.Toast('#normal-toast');
+// toast para mensaje de confirmación
+const TOASTCONFIRM = new bootstrap.Toast('#toast-confirm');
+
+
+const cargarNav = async () => {
     const JSON = await request('business/public/usuario.php', 'validarEstadoCuenta');
     switch (JSON.status) {
         case 1:
@@ -87,7 +98,7 @@ document.addEventListener('DOMContentLoaded', async event => {
                                 </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
             <li><a class="dropdown-item" href="#">Account</a></li>
-            <li><a class="dropdown-item" href="carrito.html">Carrito</a></li>
+            <li><a class="dropdown-item" id="carrito">Carrito</a></li>
             <li><a class="dropdown-item" href="#">Pedidos</a></li>
             <li><hr class="dropdown-divider"></li>
             <li id="logOut"><a class="dropdown-item">Cerrar Sesión</a></li>
@@ -100,23 +111,51 @@ document.addEventListener('DOMContentLoaded', async event => {
         default:
             break;
     }
+
     if (document.getElementById('logOut')) {
         // función para confirma cerrar sesión
         document.getElementById('logOut').addEventListener('click', () => {
             // validar confirmación
             TOASTCONFIRM.show();
         });
-
-        // función para cerrar sesión
-        document.getElementById('confirm-out').addEventListener('click', async event => {
+    }
+    // verificar sí agregar esa acción
+    // si el usuario a iniciado sesión
+    if (document.getElementById('carrito')) {
+        // acción para acceder al carrito
+        // validando antes sí existe una sesión, una factura pendiente, o no
+        document.getElementById('carrito').addEventListener('click', async event => {
             event.preventDefault();
-            const JSON = await request('business/public/usuario.php', 'logOutCliente');
-            if (JSON.status) {
-                setTimeout(() => {
-                    location.href = '../../views/public/';
-                }, 1500);
+            const JSON = await request('business/public/carrito.php', 'facturaActual');
+            switch (JSON.status) {
+                case -1:
+                    document.getElementById('login').addEventListener('click', () => {
+                        location.href = 'login.html';
+                    })
+                    TOASTACCION.show();
+                    break;
+
+                case 0:
+                    document.getElementById('msg-toast').innerText = JSON.excep;
+                    break;
+                // redirecionar a la factura pendiente
+                case 1:
+                    // encodeURIComponent valida dato valido para la URL
+                    const URL = 'carrito.html' + '?idfactura=' + encodeURIComponent(JSON.data);
+                    // console.log(VER[i].id);
+                    // redireccionar a la página con el producto seleccionado
+                    window.location.href = URL;
+                    break;
+                default:
+                    break;
             }
         })
     }
+
+}
+
+document.addEventListener('DOMContentLoaded', async event => {
+    event.preventDefault();
+    cargarNav();
 
 })

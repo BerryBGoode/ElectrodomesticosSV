@@ -151,4 +151,24 @@ class PedidoQuery
         $params = array($cantidad, $pedido);
         return Database::storeProcedure($sql, $params);
     }
+
+    /**
+     * Método para obtener los datos del carrito para la
+     * vista del cliente
+     */
+    public function getCarrito($factura)
+    {
+        $estado = 2;
+        // consulta parametrizada por la factura que se
+        // esta gestionando en proceso
+        $sql = 'SELECT o.idpedido, o.fecha, o.idproducto, p.nombre, 
+                p.precio, o.cantidad, p.precio * o.cantidad as Subtotal,
+                p.existencias,o.estado
+                FROM pedidos o
+                INNER JOIN facturas f ON f.idfactura = o.idfactura
+                INNER JOIN productos p ON p.idproducto = o.idproducto
+                WHERE f.estado = ? AND f.idfactura = ?';
+        $params = array($estado, $factura);
+        return Database::all($sql, $params);
+    }
 }

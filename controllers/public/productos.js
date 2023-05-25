@@ -4,9 +4,7 @@ import { request } from "../controller.js";
 // servidor donde hacer peticiones de productos, carrito
 const PRODUCTOS = 'business/public/producto.php';
 const CARRITO = 'business/public/carrito.php';
-// obtener elemento toast e inicializarlo
-const TOAST = new bootstrap.Toast('#toast');
-const TOASTACCION = new bootstrap.Toast('#toast-login');
+
 const MSGTOAST = new bootstrap.Toast('#normal-toast');
 // contenido donde cargan los productos
 const CONTAINER = document.getElementById('contenedor-productos')
@@ -31,7 +29,6 @@ document.addEventListener('DOMContentLoaded', async event => {
                         <p class="card-text">${element.descripcion}.</p>
                         <a class="btn btn-secondary ver" id="${element.idproducto}">Ver</a>
                         <a class="btn btn-secondary comprar">Comprar</a>
-
                     </div>
                 </div>        
             </div>
@@ -45,11 +42,11 @@ document.addEventListener('DOMContentLoaded', async event => {
 
 
         // recorer los botones de la card
-        for(let i = 0; i < VER.length; i++){
+        for (let i = 0; i < VER.length; i++) {
             // crear evento cuando detecte click en los botones especificados
             VER[i].addEventListener('click', () => {
                 // encodeURIComponent valida dato valido para la URL
-                const URL = 'articulo.html'+ '?idproducto=' + encodeURIComponent(VER[i].id);
+                const URL = 'articulo.html' + '?idproducto=' + encodeURIComponent(VER[i].id);
                 // console.log(VER[i].id);
                 // redireccionar a la página con el producto seleccionado
                 window.location.href = URL;
@@ -64,13 +61,26 @@ document.addEventListener('DOMContentLoaded', async event => {
                 const JSON = await request(CARRITO, 'validarPedido', ID);
                 switch (JSON.status) {
                     case -1:
+                        document.querySelector('body').innerHTML += `
+                        <div class="toast" id="toast-login" role="alert" aria-live="assertive" aria-atomic="true">
+                            <div class="toast-body">
+                                Debe iniciar sesión antes
+                                    <button type="button" class="btn btn-primary btn-sm" id="login">iniciar sesión</button>                
+                                </div>
+                            </div>
+                        </div>
+                        `;
+                        const TOASTACCION = new bootstrap.Toast('#toast-login');
+
+                        TOASTACCION.show();
+
                         document.getElementById('login').addEventListener('click', () => {
                             location.href = 'login.html';
-                        })
-                        TOASTACCION.show();
+                        });
+
                         break;
-        
-                    case 1:                        
+
+                    case 1:
                         document.getElementById('msg-toast').innerText = JSON.msg;
                         MSGTOAST.show();
                         break;
@@ -79,8 +89,8 @@ document.addEventListener('DOMContentLoaded', async event => {
                 }
             })
         }
-        
-        
+
+
     } else {
 
     }
