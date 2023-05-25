@@ -48,10 +48,14 @@ footer{text-align: center;}
     justify-content: space-evenly; 
     flex-wrap: wrap;
 }
-#contenedor-img-articulo{
+#img-articulo{
     border: var(--secondary-bt) solid 3.5px;
     border-radius: 3px;
+    padding: 1.5%;
 }
+/* #contenedor-img-articulo{
+    
+} */
 .descripcion-producto{margin-top: 2.5vh;}
 .contador{cursor: pointer;}
 .view{overflow: hidden;}

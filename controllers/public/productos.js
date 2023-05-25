@@ -21,7 +21,6 @@ document.addEventListener('DOMContentLoaded', async event => {
     const JSON = await request(PRODUCTOS, 'productos');
     if (JSON.status) {
         // TOAST.show();
-        let i = 0;
         JSON.data.forEach(element => {
             CONTAINER.innerHTML += `
             <div class="col-md-3">
