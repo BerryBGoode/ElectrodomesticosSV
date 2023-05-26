@@ -130,3 +130,7 @@ footer{text-align: center;}
 #sumar, #restar{
     cursor: pointer;
 }
+.col-estado{
+    display: flex;
+    align-items: center
+}

@@ -92,22 +92,28 @@ if (!isset($_GET['action'])) {
                 }
 
                 break;
-            // Acción para obtener la factura actual pendiente
+                // Acción para obtener la factura actual pendiente
             case 'facturaActual':
-                
+
                 if ($factura = $facturaquery->getFacturaActual($_SESSION['idcliente'])) {
                     // retornar arreglo ocn factura;
                     $res['data'] = implode(' ', $factura);
                     $res['status'] = 1;
-                }else{
+                } else {
                     $res['excep'] = 'Debe agregar producto al carrito';
                 }
 
                 break;
                 // acción para obtener los datos del carrito de la factura por gestionar
             case 'verCarrito':
-                
 
+                if ($res['data'] = $pedidoquery->getCarrito($_POST['factura'])) {
+                    $res['status'] = 1;
+                }elseif (Database::getException()) {
+                    $res['excep'] = Database::getException();
+                }else{
+                    $res['excep'] = 'No hay pedido';
+                }
 
                 break;
             default:
