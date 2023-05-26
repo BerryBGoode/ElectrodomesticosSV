@@ -109,12 +109,21 @@ if (!isset($_GET['action'])) {
 
                 if ($res['data'] = $pedidoquery->getCarrito($_POST['factura'])) {
                     $res['status'] = 1;
-                }elseif (Database::getException()) {
+                } elseif (Database::getException()) {
                     $res['excep'] = Database::getException();
-                }else{
+                } else {
                     $res['excep'] = 'No hay pedido';
                 }
 
+                break;
+
+                // acción que se realiza cuando se modifica la cantidad en carrito
+            case 'modificarCantidad':
+
+                if ($_POST['existencias'] >= $_POST['cantidad']) {                    
+                    ($pedidoquery->modificarCantidad($_POST['cantidad'], $_POST['pedido'], $_POST['ope'])) ? 
+                    $res['status'] = 1 : $res['excep'] = Database::getException();
+                }
                 break;
             default:
                 # code...
