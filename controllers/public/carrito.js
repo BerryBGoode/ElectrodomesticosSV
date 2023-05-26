@@ -123,6 +123,8 @@ let cargarCarrito = async () => {
                 // evento para el boton de restar
                 RESTA[i].addEventListener('click', async event => {
                     event.preventDefault();
+                    // verificar sí la cantidad no es menor o igual a 1 
+                    // para poder restar
                     if (parseInt(cantidad[i].textContent) <= 1) {
                         // enviar mensaje
                         document.getElementById('msg-toast').innerText = `No puede eliminar más`;
@@ -136,20 +138,45 @@ let cargarCarrito = async () => {
                         PEDIDO.append('cantidad', result);
                         PEDIDO.append('existencias', existencias[i].textContent);
                         PEDIDO.append('pedido', pedido[i].textContent);
+                        // enviar operación de restar
                         PEDIDO.append('ope', 2);
-                        
+
                         const JSON = await request(CARRITO, 'modificarCantidad', PEDIDO);
                         if (JSON.status) {
-                            cantidad[i].innerHTML = result; 
-                        }        
+                            cantidad[i].innerHTML = result;
+                        }
                     }
                 })
 
-                SUMA[i].addEventListener('click', async event =>{
+                SUMA[i].addEventListener('click', async event => {
                     event.preventDefault();
-                    if (existencias[i].textContent >= cantidad[i].textContent) {
-                        
-
+                    // verificar si las existencias de ese producto son
+                    // mayores a la cantidad
+                    // o igual a la cantidad
+                    let result = parseInt(cantidad[i].textContent) + 1;
+                    if (existencias[i].textContent >= result) {
+                        const PEDIDO = new FormData;
+                        PEDIDO.append('cantidad', result);
+                        PEDIDO.append('existencias', existencias[i].textContent);
+                        PEDIDO.append('pedido', pedido[i].textContent);
+                        // enviar operación de sumar                    
+                        PEDIDO.append('ope', 1);
+                        // hacer petición para modificar la cantidad
+                        const JSON = await request(CARRITO, 'modificarCantidad', PEDIDO);
+                        if (JSON.status) {
+                            cantidad[i].innerHTML = result;
+                        } else {
+                            // enviar mensaje
+                            document.getElementById('msg-toast').innerText = `No puede  agregar más`;
+                            // mostrar toast
+                            MSGTOAST.show();
+                        }
+                    } else {
+                        // enviar mensaje
+                        document.getElementById('msg-toast').innerText = `No puede  agregar más`;
+                        // mostrar toast
+                        MSGTOAST.show();
+                        console.log(existencias[i].textContent + '>=' + result);
                     }
                 })
             }

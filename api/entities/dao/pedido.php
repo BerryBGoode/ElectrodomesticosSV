@@ -138,13 +138,13 @@ class PedidoQuery
         switch ($ope) {
             case 1: //sumar
                 $sql = 'UPDATE pedidos 
-                        SET cantidad = cantidad + ? 
+                        SET cantidad = ? 
                         WHERE idpedido = ?';
                 break;
 
             case 2: //restar
                 $sql = 'UPDATE pedidos
-                        SET cantidad = cantidad - ?
+                        SET cantidad = ?
                         WHERE idpedido = ?';
                 break;
         }
@@ -167,7 +167,8 @@ class PedidoQuery
                 FROM pedidos o
                 INNER JOIN facturas f ON f.idfactura = o.idfactura
                 INNER JOIN productos p ON p.idproducto = o.idproducto
-                WHERE f.estado = ? AND f.idfactura = ?';
+                WHERE f.estado = ? AND f.idfactura = ?
+                ORDER BY o.idpedido DESC';
         $params = array($estado, $factura);
         return Database::all($sql, $params);
     }
