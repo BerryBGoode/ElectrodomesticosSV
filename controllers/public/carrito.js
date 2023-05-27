@@ -5,12 +5,16 @@ import { request, getUrl } from "../controller.js";
 const CARRITO = 'business/public/carrito.php';
 // contenido de la tabla
 const TABLA = document.getElementById('tbody-pedidos');
+// arreglo para guardar los subtotales
+const SUBTOTALES = [];
 
 
 // método para cargar los datos en el carrito
 let cargarCarrito = async () => {
     // limipiar tabla
     TABLA.innerHTML = ``;
+    // reiniciar los valores del arreglo
+    SUBTOTALES.splice(0, SUBTOTALES.length);
     // obtener los datos
     const ID = new FormData;
     ID.append('factura', getUrl('idfactura'));
@@ -51,7 +55,7 @@ let cargarCarrito = async () => {
                 <td class="col-grap">${element.fecha}</td>
                 <td class="hide existencias">${element.existencias}</td>
                 <td>${element.nombre}</td>
-                <td>${element.precio}</td>
+                <td>$${element.precio}</td>
                 <td>
                     <svg id="restar" class="restar" width="19" height="19" viewBox="0 0 25 25" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
@@ -75,7 +79,7 @@ let cargarCarrito = async () => {
                             stroke-linecap="round" stroke-linejoin="round" />
                     </svg>                                
                 </td>
-                <td>${element.subtotal}</td>
+                <td>$${element.subtotal}</td>
                 <td class="tb-switch">
                     ${(element.estado === 1) ?
 
@@ -94,8 +98,21 @@ let cargarCarrito = async () => {
                 </td>                
     
                 `;
+                // verificar el estado activo del pedido
+                if (element.estado === 1) {
+                    // para agregarselo al arreglo y después sumarlo
+                    SUBTOTALES.push(element.subtotal);
+                }
             });
-
+            // asignar y reiniciar una variable con el total y un para el indice
+            let total = 0, index = 0;
+            for (const UNIDAD of SUBTOTALES) {
+                // subtotal va ser igual más el valor anterior
+                console.log(UNIDAD);
+                total += parseFloat(UNIDAD + 'index : ' +index);
+            }
+            // agregar total al pedido
+            document.getElementById('total').innerHTML = '$'+ total.toLocaleString(6);
 
             // botones para eliminar y tambien 
             // para obtener la cantidad de columnas
@@ -179,6 +196,8 @@ let cargarCarrito = async () => {
                         console.log(existencias[i].textContent + '>=' + result);
                     }
                 })
+
+
             }
 
 

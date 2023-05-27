@@ -29,9 +29,13 @@ if (!isset($_GET['action'])) {
                 // recorrer los productos para validar que tenga existencias
                 for ($i = 0; $i < count($productosvista); $i++) {
                     
-                    if ($productosvista[$i]['existencias'] >= 1) {
+                    // validar que datos mostrar
+                    //  ! cuando las existencias sean 1 o mayores
+                    //  ! cuando el estado de este no sea false
+                    if ($productosvista[$i]['existencias'] >= 1 && $productosvista[$i]['estado']) {
                         $productos[] = $productosvista[$i];
                         $res['data'] = $productos;
+                        
                     }
                 }
                 $res['status'] = 1;
