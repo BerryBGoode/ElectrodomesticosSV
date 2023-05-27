@@ -11,7 +11,7 @@ const FORM = document.getElementById('form-orden');
 const MODAL = new bootstrap.Modal(document.getElementById('Modal'));
 // obtener la tabla donde cargar los datos
 const TABLA = document.getElementById('tbody-pedido');
-// objeto para guardar los subtotales
+// arreglo para guardar los subtotales
 const SUBTOTALES = [];
 // formulario para buscar
 const BUSCADOR = document.getElementById('buscador');

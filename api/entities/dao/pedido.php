@@ -168,7 +168,7 @@ class PedidoQuery
                 INNER JOIN facturas f ON f.idfactura = o.idfactura
                 INNER JOIN productos p ON p.idproducto = o.idproducto
                 WHERE f.estado = ? AND f.idfactura = ?
-                ORDER BY o.idpedido DESC';
+                ORDER BY o.idpedido ASC';
         $params = array($estado, $factura);
         return Database::all($sql, $params);
     }

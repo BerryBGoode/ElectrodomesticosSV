@@ -1,5 +1,5 @@
 // importando modulo para hacer peticiones
-import { request, getUrl } from "../controller.js";
+import { request, getUrl, notificacionAccion } from "../controller.js";
 
 // archivo para hacer las peticiones al servidor
 const CARRITO = 'business/public/carrito.php';
@@ -8,6 +8,18 @@ const TABLA = document.getElementById('tbody-pedidos');
 // arreglo para guardar los subtotales
 const SUBTOTALES = [];
 
+
+
+let sumarSubotates = () => {
+    // asignar y reiniciar una variable con el total y un para el indice
+    let total = 0, index = 0;
+    for (const UNIDAD of SUBTOTALES) {
+        // subtotal va ser igual más el valor anterior
+        total += parseFloat(UNIDAD + 'index : ' + index);
+    }
+    // agregar total al pedido
+    document.getElementById('total').innerHTML = '$' + total.toLocaleString(6);
+}
 
 // método para cargar los datos en el carrito
 let cargarCarrito = async () => {
@@ -54,6 +66,7 @@ let cargarCarrito = async () => {
                 <td class="hide pedido">${element.idpedido}</td>
                 <td class="col-grap">${element.fecha}</td>
                 <td class="hide existencias">${element.existencias}</td>
+                <td class="hide producto">${element.idproducto}</td>
                 <td>${element.nombre}</td>
                 <td>$${element.precio}</td>
                 <td>
@@ -104,15 +117,7 @@ let cargarCarrito = async () => {
                     SUBTOTALES.push(element.subtotal);
                 }
             });
-            // asignar y reiniciar una variable con el total y un para el indice
-            let total = 0, index = 0;
-            for (const UNIDAD of SUBTOTALES) {
-                // subtotal va ser igual más el valor anterior
-                console.log(UNIDAD);
-                total += parseFloat(UNIDAD + 'index : ' +index);
-            }
-            // agregar total al pedido
-            document.getElementById('total').innerHTML = '$'+ total.toLocaleString(6);
+            sumarSubotates();
 
             // botones para eliminar y tambien 
             // para obtener la cantidad de columnas
@@ -121,7 +126,8 @@ let cargarCarrito = async () => {
             const RESTA = document.getElementsByClassName('restar');
             // obtener los botones para sumar 
             const SUMA = document.getElementsByClassName('sumar');
-
+            // obtener los switchs
+            const ESTADO = document.getElementsByClassName('estado');
 
             // toasts
             // instanciar toast para mostrar mensaje
@@ -133,6 +139,9 @@ let cargarCarrito = async () => {
             let existencias = document.getElementsByClassName('existencias');
             // obtener el idpedido
             let pedido = document.getElementsByClassName('pedido');
+            // obtener el idproducto
+            let producto = document.getElementsByClassName('producto');
+
 
             // crear eventos
             for (let i = 0; i < ELIMINAR.length; i++) {
@@ -194,6 +203,28 @@ let cargarCarrito = async () => {
                         // mostrar toast
                         MSGTOAST.show();
                         console.log(existencias[i].textContent + '>=' + result);
+                    }
+                })
+
+                // por el momento no funcióna la eliminación en tiempo real
+                // ESTADO[i].addEventListener('click', async event => {
+                    
+                //     SUBTOTALES.splice(ESTADO[i], 1);                    
+                //     sumarSubotates();
+                    
+                // })
+                ELIMINAR[i].addEventListener('click', async event => {
+                    event.preventDefault();
+                    let accion = await notificacionAccion('Desea eliminar este pedido?')
+                    if (accion) {
+                        const PEDIDO = new FormData;
+                        PEDIDO.append('idpedido', ELIMINAR[i].value);
+                        PEDIDO.append('cantidad', cantidad[i].textContent);
+                        PEDIDO.append('idproducto', producto[i].textContent);
+                        const JSON = await request('business/private/pedido.php', 'eliminar', PEDIDO);
+                        if (JSON.status) {
+                            location.reload();
+                        }
                     }
                 })
 
