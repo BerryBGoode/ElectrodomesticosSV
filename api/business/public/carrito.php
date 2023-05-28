@@ -21,6 +21,10 @@ if (!isset($_GET['action'])) {
     $pedidoquery = new PedidoQuery;
     $facturaquery = new FacturaQuery;
 
+    // definiar horario local
+    date_default_timezone_set('America/El_Salvador');
+    $hoy = date('Y-m-d');
+
     // verifícar sesión de cliente
     if (!isset($_SESSION['idcliente'])) {
         $res['status'] = -1;
@@ -56,14 +60,10 @@ if (!isset($_GET['action'])) {
                         if ($pedidoscliente = $pedidoquery->getPedidoFacturaProducto($factura, $_POST['producto'])) {
 
                             // modificar cantidad
-                            $pedidoquery->modificarCantidad($_POST['cantidad'], $pedidoscliente[$i]['idpedido'], 1);
+                            $pedidoquery->AgregarCantidad($_POST['cantidad'], $pedidoscliente[$i]['idpedido']);
                             $res['status'] = 1;
                             $res['msg'] = 'Producto añadido al carrito';
                         } else {
-
-                            // definiar horario local
-                            date_default_timezone_set('America/El_Salvador');
-                            $hoy = date('Y-m-d');
 
                             // crear pedido, con nuevo producto
                             $disponible = 1;
@@ -88,7 +88,48 @@ if (!isset($_GET['action'])) {
                         }
                     }
                 } else {
-                    $res['msg'] = 'Crear factura-> pedido';
+
+                    // crear factura
+                    $_POST = Validate::form($_POST);
+                    $pendiente = 2;
+                    if (!FACTURA->setCliente($_SESSION['idcliente'])) {
+                        $res['excep'] = 'Error al seleccionar cliente';
+                    } elseif (!FACTURA->setFecha($hoy)) {
+                        $res['excep'] = 'Error con el formato de fecha';
+                    } elseif ($facturaquery->guardaFactura($pendiente)) {
+
+                        // crear pedido
+                        // obtener el id del última factura ingresada
+                        $idfactura = implode(' ', $facturaquery->getLastFactura());
+                        if ($idfactura) {
+
+                            // crear pedido
+                            $disponible = 1;
+
+                            if (!PEDIDO->setFecha($hoy)) {
+                                $res['excep'] = 'Fecha incorrecta, revisar formato';
+                            } elseif (!PEDIDO->setProducto($_POST['producto'])) {
+                                $res['excep'] = 'Producto incorrecto';
+                            } elseif (!PEDIDO->setFactura($idfactura)) {
+                                $res['excep'] = 'Error al obtener factura';
+                            } elseif (!PEDIDO->setCantidad($_POST['cantidad'])) {
+                                $res['excep'] = 'Error con la cantidad seleccionada';
+                            } elseif (!PEDIDO->setEstado($disponible)) {
+                                $res['excep'] = 'Estado inexistente';
+                            } elseif ($pedidoquery->guardarPedido() && !Database::getException()) {
+                                // restar existencias
+                                $res['status'] = 1;
+                                $res['msg'] = 'Producto agregado al carrito';
+                            } else {
+                                $res['excep'] = Database::getException();
+                            }
+                        } else {
+                            $res['excep'] = Database::getException();
+                        }
+                    } else {
+                        $res['excep'] = Database::getException();
+                    }
+                    break;
                 }
 
                 break;
@@ -120,19 +161,47 @@ if (!isset($_GET['action'])) {
                 // acción que se realiza cuando se modifica la cantidad en carrito
             case 'modificarCantidad':
 
-                if ($_POST['existencias'] >= $_POST['cantidad']) {                    
-                    ($pedidoquery->modificarCantidad($_POST['cantidad'], $_POST['pedido'], $_POST['ope'])) ? 
-                    $res['status'] = 1 : $res['excep'] = Database::getException();
+                switch ($_POST['ope']) {
+                    case 1:
+                        if ($_POST['existencias'] >= $_POST['cantidad']) {
+                            ($pedidoquery->modificarCantidad($_POST['cantidad'], $_POST['pedido'], $_POST['ope'])) ?
+                                $res['status'] = 1 : $res['excep'] = Database::getException();
+                        }
+                        break;
+
+                    case 2:
+                        $res['data'] = $_POST['cantidad'];
+                        ($pedidoquery->modificarCantidad($_POST['cantidad'], $_POST['pedido'], $_POST['ope'])) ?
+                            $res['status'] = 1 : $res['excep'] = Database::getException();
+                        break;
+                    default:
+                        $res['excep'] = 'Acción no identificada';
+                        break;
                 }
                 break;
                 // acción para cancelar pedidos
                 // eliminar los pedidos de una factura
             case 'cancelarPedidos':
-                
-                if($pedidoquery->eliminarPedidosFactura($_POST['factura'])){
+
+                // eliminar pedidos
+                if ($pedidoquery->eliminarPedidosFactura($_POST['factura'])) {
+                    // eliminar facturas
+                    FACTURA->setId($_POST['factura']);
+                    if ($facturaquery->eliminar()) {
+                        $res['status'] = 1;
+                    }
+                }
+
+                break;
+                // acción para finalizar compra
+            case 'finalizarCompra':
+
+                $finalizada = 1;
+                FACTURA->setEstado($finalizada);
+                FACTURA->setId($_POST['factura']);
+                if ($facturaquery->actualizarEstado()) {
                     $res['status'] = 1;
                 }
-                
                 break;
             default:
                 $res['excep'] = 'Acción no disponible';

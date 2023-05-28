@@ -38,7 +38,7 @@ if (!isset($_GET['action'])) {
 
             case 'crear':
                 $_POST = Validate::form($_POST);
-                $disponible = 1;
+                $disponible = 2;
                 if (!FACTURA->setCliente($_POST['usuarios'])) {
                     $res['excep'] = 'Error al seleccionar cliente';
                 } elseif (!FACTURA->setFecha($_POST['fecha'])) {

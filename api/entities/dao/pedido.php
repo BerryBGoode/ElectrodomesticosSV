@@ -128,13 +128,28 @@ class PedidoQuery
         return Database::all($sql, $params);
     }
 
+
+    /***
+     * 
+     * Método para modificar la cantidad del pedido
+     * 
+     */
+    public function AgregarCantidad($cantidad, $pedido)
+    {
+        $sql = 'UPDATE pedidos 
+                SET cantidad = cantidad + ?
+                WHERE idpedido = ?';
+        $params = array($cantidad, $pedido);
+        return Database::storeProcedure($sql, $params);
+    }
+
     /***
      * 
      * Método para modificar la cantidad del pedido
      * { $ope } operación 1 sumar cantidad , 2 restar cantidad
      */
     public function modificarCantidad($cantidad, $pedido, $ope)
-    {
+    {        
         switch ($ope) {
             case 1: //sumar
                 $sql = 'UPDATE pedidos 

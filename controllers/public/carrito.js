@@ -244,7 +244,7 @@ document.getElementById('cancelarPedido').addEventListener('click', async event 
     // mostrar mensaje de confirmación
     let confirmar = await notificacionAccion('Desea cancelar estos pedidos?');
     if (confirmar) {
-        // eliminar pedidos y cambiar estado factura
+        // eliminar pedidos y eliminar factura
         const FACTURA = new FormData;
         // adjuntar idfactura
         FACTURA.append('factura', getUrl('idfactura'));
@@ -252,6 +252,22 @@ document.getElementById('cancelarPedido').addEventListener('click', async event 
         const JSON = await request(CARRITO, 'cancelarPedidos', FACTURA);
         if (JSON.status) {
             notificacionURL('info', 'Pedidos eliminados', false, 'productos.html');
+        }
+    }
+})
+
+// evento click cunado se finalice la compra
+document.getElementById('finalizarPedido').addEventListener('click', async event => {
+    event.preventDefault();
+    let confirmar = await notificacionAccion('Desea finalizar compra?');
+    if (confirmar) {
+        // cambiar estado de la factura
+        const FACTURA = new FormData;
+        // adjuntar idfactura
+        FACTURA.append('factura', getUrl('idfactura'));
+        const JSON = await request(CARRITO, 'finalizarCompra', FACTURA);
+        if (JSON.status) {
+            notificacionURL('success', 'Pedido finalizado', false, 'productos.html');
         }
     }
 })

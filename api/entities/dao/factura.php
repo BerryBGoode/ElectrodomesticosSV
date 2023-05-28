@@ -116,4 +116,16 @@ class FacturaQuery
         $params = array($cliente, $estado);
         return Database::row($sql, $params);
     }
+
+    /**
+     * Método para obtener el id de la última factura
+     * para poder crear un pedido con esa factura
+     */
+    public function getLastFactura()
+    {
+        $sql = 'SELECT idfactura 
+                FROM facturas 
+                ORDER BY idfactura DESC LIMIT 1';
+        return Database::row($sql);
+    }
 }
