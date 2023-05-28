@@ -172,4 +172,14 @@ class PedidoQuery
         $params = array($estado, $factura);
         return Database::all($sql, $params);
     }
+
+    /**
+     * Método para eliminar todos los pedidos de una factura
+     */
+    public function eliminarPedidosFactura($factura)
+    {
+        $sql = 'DELETE FROM pedidos WHERE idfactura = ?';
+        $param = array($factura);
+        return Database::storeProcedure($sql, $param);
+    }
 }

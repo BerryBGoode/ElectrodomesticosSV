@@ -1,5 +1,5 @@
 // importando modulo para hacer peticiones
-import { request, getUrl, notificacionAccion } from "../controller.js";
+import { request, getUrl, notificacionAccion, notificacionURL } from "../controller.js";
 
 // archivo para hacer las peticiones al servidor
 const CARRITO = 'business/public/carrito.php';
@@ -208,10 +208,10 @@ let cargarCarrito = async () => {
 
                 // por el momento no funcióna la eliminación en tiempo real
                 // ESTADO[i].addEventListener('click', async event => {
-                    
+
                 //     SUBTOTALES.splice(ESTADO[i], 1);                    
                 //     sumarSubotates();
-                    
+
                 // })
                 ELIMINAR[i].addEventListener('click', async event => {
                     event.preventDefault();
@@ -237,6 +237,24 @@ let cargarCarrito = async () => {
             break;
     }
 }
+
+// evento click cuando se cancele un pedido
+document.getElementById('cancelarPedido').addEventListener('click', async event => {
+    event.preventDefault();
+    // mostrar mensaje de confirmación
+    let confirmar = await notificacionAccion('Desea cancelar estos pedidos?');
+    if (confirmar) {
+        // eliminar pedidos y cambiar estado factura
+        const FACTURA = new FormData;
+        // adjuntar idfactura
+        FACTURA.append('factura', getUrl('idfactura'));
+        // hacer petición de eliminar pedidos de factura
+        const JSON = await request(CARRITO, 'cancelarPedidos', FACTURA);
+        if (JSON.status) {
+            notificacionURL('info', 'Pedidos eliminados', false, 'productos.html');
+        }
+    }
+})
 
 // evento que se ejecuta cuando cargar la página
 document.addEventListener('DOMContentLoaded', event => {

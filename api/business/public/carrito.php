@@ -125,8 +125,17 @@ if (!isset($_GET['action'])) {
                     $res['status'] = 1 : $res['excep'] = Database::getException();
                 }
                 break;
+                // acción para cancelar pedidos
+                // eliminar los pedidos de una factura
+            case 'cancelarPedidos':
+                
+                if($pedidoquery->eliminarPedidosFactura($_POST['factura'])){
+                    $res['status'] = 1;
+                }
+                
+                break;
             default:
-                # code...
+                $res['excep'] = 'Acción no disponible';
                 break;
         }
     }
