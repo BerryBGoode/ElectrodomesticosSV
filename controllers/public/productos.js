@@ -10,23 +10,31 @@ const MSGTOAST = new bootstrap.Toast('#normal-toast');
 const CONTAINER = document.getElementById('contenedor-productos')
 // directorio del api donde se encuentran las imagenes de los productos
 const DIR = '../../api/images/productos/';
+// input del buscador
+const BUSCADOR = document.getElementById('buscador');
+// arreglo para guardar los productos cargados
+let datos = [];
 
-// evento que se ejecuta cada vez que carga la página
-document.addEventListener('DOMContentLoaded', async event => {
-    event.preventDefault();
+let cargar = async () => {
     // limpiar contenedor
     CONTAINER.innerHTML += ``;
     const JSON = await request(PRODUCTOS, 'productos');
     if (JSON.status) {
         // TOAST.show();
+        // asignar valores al arreglo para podes utilizar en el buscador
+        datos = JSON.data;
         JSON.data.forEach(element => {
             CONTAINER.innerHTML += `
             <div class="col-md-3">
                 <div class="card producto">
                     <img src="${DIR + element.imagen}" class="card-img-top" alt="${element.nombre}">
                     <div class="card-body">
-                        <h5 class="card-title">${element.nombre}</h5>
-                        <p class="card-text">${element.descripcion}.</p>
+                        <div class="datos">
+                            <h5 class="card-title">${element.nombre}</h5>
+                            <p class="card-text">${element.categoria}</p>
+                            <p class="card-text">${element.marca}</p>
+                            <p class="card-text">$${element.precio}</p>
+                        </div>
                         <a class="btn btn-secondary ver" id="${element.idproducto}">Ver</a>
                         <a class="btn btn-secondary comprar">Comprar</a>
                     </div>
@@ -86,13 +94,66 @@ document.addEventListener('DOMContentLoaded', async event => {
                         break;
                     default:
                         break;
+
                 }
             })
         }
-
-
     } else {
+        document.getElementById('msg-toast').innerText = 'No se encontraron producto disponibles';
+        MSGTOAST.show();
+    }
+
+}
+
+// evento que se ejecuta cada vez que carga la página
+document.addEventListener('DOMContentLoaded', async event => {
+    event.preventDefault();
+    cargar();
+})
+
+BUSCADOR.addEventListener('keyup', event => {
+    event.preventDefault();
+    // limpiar el contendor con los productos
+    CONTAINER.innerHTML = ``;
+    // convertir a minusculas los valores del input
+    let input = document.getElementById('input-buscar').value.toLowerCase();
+    // verificar si el input esta vacío
+    if (input === '') {
+        // cargar productos por defecto
+        cargar();
+    } else {
+        
+        // recorrer los datos del arreglo con los productos
+        for (const PRODUCTO of datos) {
+            //convertir los datos de los productos a minusculas
+            // solamete los datos alfabeticos
+            let nombre = PRODUCTO.nombre.toLowerCase();
+            let categoria = PRODUCTO.categoria.toLowerCase();
+            let marca = PRODUCTO.marca.toLowerCase();
+            // let descripcion = PRODUCTO.descripcion.toLowerCase();
+            if (nombre.indexOf(input) !== -1 || categoria.indexOf(input) !== -1 ||
+                marca.indexOf(input) !== -1 || /*descripcion.indexOf(input) !== -1 || */
+                PRODUCTO.precio.indexOf(input) !== -1) {
+                    console.log(PRODUCTO);
+                    CONTAINER.innerHTML += `
+                    <div class="col-md-3">
+                        <div class="card producto">
+                            <img src="${DIR + PRODUCTO.imagen}" class="card-img-top" alt="${PRODUCTO.nombre}">
+                            <div class="card-body">
+                                <div class="datos">
+                                    <h5 class="card-title">${PRODUCTO.nombre}</h5>
+                                    <p class="card-text">${PRODUCTO.categoria}.</p>
+                                    <p class="card-text">${PRODUCTO.marca}.</p>
+                                    <p class="card-text">$${PRODUCTO.precio}.</p>
+                                </div>
+                                <a class="btn btn-secondary ver" id="${PRODUCTO.idproducto}">Ver</a>
+                                <a class="btn btn-secondary comprar">Comprar</a>
+                            </div>
+                        </div>        
+                    </div>
+                    `;
+            }
+        }
 
     }
 })
-

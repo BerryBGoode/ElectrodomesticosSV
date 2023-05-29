@@ -13,6 +13,9 @@ const MSGTOAST = new bootstrap.Toast('#normal-toast');
 const CARRITO = 'business/public/carrito.php';
 // formulario para comentar
 const FORMCOMENTARIO = document.getElementById('comentario-form');
+// input del buscador
+const BUSCADOR = document.getElementById('buscador');
+
 
 // gestionador de existencias del producto
 let existencias;
