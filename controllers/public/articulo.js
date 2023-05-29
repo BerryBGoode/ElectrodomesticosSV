@@ -17,11 +17,14 @@ const FORMCOMENTARIO = document.getElementById('comentario-form');
 const BUSCADOR = document.getElementById('buscador');
 
 
+// Arreglo para guardar los datos de los comentarios
+let comentarios = [];
 // gestionador de existencias del producto
 let existencias;
 // contador
 let contador = document.getElementById('contador');
 
+// Método para cargar el articulo, se ejecuta cada vez que carga la página
 const cargarArticulo = async () => {
     const DATO = new FormData;
     // adjuntar id del producto
@@ -44,6 +47,7 @@ const cargarArticulo = async () => {
     }
 }
 
+// Método para carga los comentario de ese producto, se ejecuta cada vez que carga la página
 const cargarComentarios = async () => {
     // limpiar contenido con los comentarios
     COMENTARIOS.innerHTML = ``;
@@ -51,6 +55,7 @@ const cargarComentarios = async () => {
     producto.append('producto', getUrl('idproducto'));
     const JSON = await request(PRODUCTO, 'comentariosArticulo', producto);
     if (JSON.status) {
+        comentarios = JSON.data;
         JSON.data.forEach(element => {
             COMENTARIOS.innerHTML += `
             <div class="comentario" id=${element.idcomentario}>
@@ -62,14 +67,17 @@ const cargarComentarios = async () => {
         });
     }
 }
-
+// evento que se ejecuta cada vez que carga la página
 document.addEventListener('DOMContentLoaded', async event => {
     event.preventDefault();
     cargarArticulo();
     cargarComentarios();
     cantidad();
+    document.getElementById('input-buscar').setAttribute('placeholder', 'Buscar comentario');
 })
 
+
+// Método para validar los contadores para agregar o quitar cantidad al producto a comprar
 let cantidad = () => {
 
     document.getElementById('restar').addEventListener('click', async event => {
@@ -127,6 +135,7 @@ document.getElementById('comprar').addEventListener('click', async event => {
     }
 })
 
+// Evento que se ejecuta cada vez que se da click al boton para enviar comentario
 FORMCOMENTARIO.addEventListener('submit', async event => {
     event.preventDefault();
     const COMENTARIO = new FormData(FORMCOMENTARIO);
@@ -134,8 +143,51 @@ FORMCOMENTARIO.addEventListener('submit', async event => {
     const JSON = await request('business/private/comentario.php', 'publicarComentario', COMENTARIO);
     if (JSON.status) {
         location.reload();
-    }else{
+    } else {
         document.getElementById('msg-toast').innerText = JSON.excep;
         MSGTOAST.show();
     }
+})
+
+// Evento que se ejecuta cada vez que se escribe algo en el buscador
+BUSCADOR.addEventListener('keyup', event => {
+    event.preventDefault();
+    // location.href = '#comentarios';
+
+    // limpiar contenedor
+    COMENTARIOS.innerHTML = ``;
+    // document.getElementById('input-buscar').focus();
+
+    // convertir a minusculas el texto escrito en el buscador
+    let buscar = document.getElementById('input-buscar').value.toLowerCase();
+
+    // verificar si el buscador no tiene datos
+    if (buscar === '') {
+        COMENTARIOS.innerHTML = ``;
+        // para cargar comentarios por defecto
+        cargarComentarios();
+    } else {
+        // recorrer los comentarios cargados del articulo
+        for (const COMENTARIOVISTA of comentarios) {
+            // convertir a minusculas los datos de los comentarios cargados
+            let usuario = COMENTARIOVISTA.nombreusuario.toLowerCase();
+            let comentario = COMENTARIOVISTA.comentario.toLowerCase();
+            // compara sí es igual el dato en el buscador al cargado
+            if (usuario.indexOf(buscar) !== -1 || comentario.indexOf(buscar) !== -1 ||
+                COMENTARIOVISTA.fecha.indexOf(buscar) !== -1) {
+                COMENTARIOS.innerHTML += `
+                    <div class="comentario" id=${COMENTARIOVISTA.idcomentario}>
+                        <span>${COMENTARIOVISTA.nombreusuario}</span>
+                        <span>${COMENTARIOVISTA.comentario}</span>
+                        <span>${COMENTARIOVISTA.fecha}</span>
+                    </div>
+                `;
+                
+            } else{
+                
+                COMENTARIOVISTA.innerText = `Comentario no encontrado`;
+            }
+        }
+    }
+
 })

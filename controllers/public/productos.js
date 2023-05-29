@@ -119,6 +119,7 @@ BUSCADOR.addEventListener('keyup', event => {
     let input = document.getElementById('input-buscar').value.toLowerCase();
     // verificar si el input esta vacío
     if (input === '') {
+        CONTAINER.innerHTML = ``;
         // cargar productos por defecto
         cargar();
     } else {
@@ -154,6 +155,5 @@ BUSCADOR.addEventListener('keyup', event => {
                     `;
             }
         }
-
     }
 })
