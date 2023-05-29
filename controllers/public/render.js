@@ -137,6 +137,7 @@ const cargarNav = async () => {
 
                 case 0:
                     document.getElementById('msg-toast').innerText = JSON.excep;
+                    MSGTOAST.show();
                     break;
                 // redirecionar a la factura pendiente
                 case 1:

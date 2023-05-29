@@ -11,7 +11,8 @@ const COMENTARIOS = document.getElementById('comentarios-producto');
 const MSGTOAST = new bootstrap.Toast('#normal-toast');
 // constante para hacer peticiones al carrito
 const CARRITO = 'business/public/carrito.php';
-
+// formulario para comentar
+const FORMCOMENTARIO = document.getElementById('comentario-form');
 
 // gestionador de existencias del producto
 let existencias;
@@ -119,6 +120,19 @@ document.getElementById('comprar').addEventListener('click', async event => {
         }
     } else {
         document.getElementById('msg-toast').innerText = 'Cantidad no permitida';
+        MSGTOAST.show();
+    }
+})
+
+FORMCOMENTARIO.addEventListener('submit', async event => {
+    event.preventDefault();
+    const COMENTARIO = new FormData(FORMCOMENTARIO);
+    COMENTARIO.append('producto', getUrl('idproducto'));
+    const JSON = await request('business/private/comentario.php', 'publicarComentario', COMENTARIO);
+    if (JSON.status) {
+        location.reload();
+    }else{
+        document.getElementById('msg-toast').innerText = JSON.excep;
         MSGTOAST.show();
     }
 })

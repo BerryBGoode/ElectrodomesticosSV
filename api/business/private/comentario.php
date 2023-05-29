@@ -18,7 +18,7 @@ if (!isset($_GET['action'])) {
     $query = new ComentarioQuery;
 
     // veríficar si existe una sesión
-    if (!isset($_SESSION['idusuario'])) {
+    if (!isset($_SESSION['idusuario']) || !isset($_SESSION['idcliente'])) {
         // cuando no exista sesión enviará un mensaje de warning para redireccionar al login
         $res['status'] = -1;
         $res['excep'] = 'Sesion inactiva, se te redireccionará para iniciar sesión';
@@ -32,9 +32,11 @@ if (!isset($_GET['action'])) {
                 // settear datos
 
                 if (!COMENTARIO->setPedido($_POST['pedidos'])) {
-                    # code...
+                    $res['excep'] = 'Error al obtener pedido';
                 }elseif (!COMENTARIO->setEstado(true)) {
+                    $res['excep'] = 'Error al obtener estado';
                 }elseif (!COMENTARIO->setComentario($_POST['comentario'])) {
+                    $res['excep'] = 'Erro al obtener comentario';
                 }elseif ($query->guardar()) {
                     $res['status'] = 1;
                     $res['msg']  = 'Registro guardado';
@@ -146,6 +148,57 @@ if (!isset($_GET['action'])) {
                 
 
                 break;
+
+                // acción para publicar comentario
+            case 'publicarComentario':
+                
+                // arreglos vacíos para obtener los datos después del filtro
+                // de verificar sí tiene las facturas de un cliente
+                // y en las facturas de este cliente donde este el producto que desea comentar
+                $factura = [];
+                $pedido = [];
+                // obtener las facturas del cliente
+                if ($facturas = $query->getFacturasCliente($_SESSION['idcliente'])) {
+                    // recorrer las facturas encontradas
+                    // para encontrar las facturas que tengan el producto a comentar
+                    foreach ($facturas as $facturascliente) {
+                        $factura[] = $facturascliente;
+                        // verificar que la orden que esta pasando tenga el producto a comentar
+                        if ($pedidos = $query->getPedidosFactoraCliente(implode(' ',$facturascliente), $_POST['producto'])) {
+                            
+                            foreach ($pedidos as $pedidoscliente) {
+                                $pedido[] = $pedidoscliente;                                      
+                            }                        
+
+                        }
+                        
+                    }
+                    if ($pedido) {                        
+                        // establecer un indice random
+                        $rndindex = array_rand($pedido);
+                        // obtener el valor del indice random
+                        // aquí ya se obtiene el valor random
+                        $rndpedido[1] = $pedido[$rndindex];
+                        // ahora se procede a agregar comentario
+                            // enviar valores del comentanrio                                                
+                        // $res['data'] = $rndpedido;
+                        COMENTARIO->setComentario($_POST['comentario']);
+                        COMENTARIO->setPedido(implode(' ', $rndpedido[1]));
+                        COMENTARIO->setEstado(true);
+                        // validar que resulto bien la inserción
+                        if ($query->guardar()) {
+                            $res['status'] = 1;                                
+                        }else {
+                            $res['excep'] = Database::getException();
+                        }
+                    }else {
+                        $res['excep'] = 'No ha comprado este producto';
+                    }
+                } else {
+                    $res['excep'] = 'Debe comprar producto antes de comentar';
+                }                
+
+                break;
             default:
                 $res['excep'] = 'Acción no encontrada';
                 break;
@@ -156,4 +209,3 @@ if (!isset($_GET['action'])) {
 
 header('content-type: application/json; charset=utf-8');
 print(json_encode($res));
-?>

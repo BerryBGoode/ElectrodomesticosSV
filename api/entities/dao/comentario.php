@@ -128,4 +128,33 @@ class ComentarioQuery
         $params = array(true, 1, $producto);
         return Database::all($sql, $params);
     }
+
+    /**
+     * Método para obtener las facturas de un cliente
+     * y que el factura este comprada
+     */
+    public function getFacturasCliente($cliente)
+    {
+        $estado = 1;
+        $sql = 'SELECT idfactura 
+                FROM facturas 
+                WHERE idcliente = ? AND estado = ?';
+        $params = array($cliente, $estado);
+        return Database::all($sql, $params);
+    }
+
+    /**
+     * Método para obtener los pedidos que tengan 
+     * factura - registrada según envia el cliente
+     * producto - seleccionado, para comentar
+     */
+    public function getPedidosFactoraCliente($factura, $producto)
+    {
+        $estado = 1;
+        $sql = 'SELECT idpedido
+                FROM pedidos
+                WHERE idfactura = ? AND idproducto = ? AND estado = ?';
+        $params = array($factura, $producto, $estado);
+        return Database::all($sql, $params);
+    }
 }
