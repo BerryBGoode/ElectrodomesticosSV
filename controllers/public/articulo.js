@@ -154,6 +154,8 @@ BUSCADOR.addEventListener('keyup', event => {
     event.preventDefault();
     // location.href = '#comentarios';
 
+    // variable para identificar dato no encotrado
+    let found;
     // limpiar contenedor
     COMENTARIOS.innerHTML = ``;
     // document.getElementById('input-buscar').focus();
@@ -182,11 +184,13 @@ BUSCADOR.addEventListener('keyup', event => {
                         <span>${COMENTARIOVISTA.fecha}</span>
                     </div>
                 `;
-                
-            } else{
-                
-                COMENTARIOVISTA.innerText = `Comentario no encontrado`;
-            }
+                // cuando se encontra datos
+                found = true;                
+            }            
+        }
+        // verificar si encontraron datos
+        if (!found) {
+            COMENTARIOS.innerText = 'Comentario no encontrado';
         }
     }
 

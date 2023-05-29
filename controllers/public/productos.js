@@ -113,6 +113,8 @@ document.addEventListener('DOMContentLoaded', async event => {
 
 BUSCADOR.addEventListener('keyup', event => {
     event.preventDefault();
+    // variable para indetificar si se encontro el dato
+    let found;
     // limpiar el contendor con los productos
     CONTAINER.innerHTML = ``;
     // convertir a minusculas los valores del input
@@ -125,35 +127,42 @@ BUSCADOR.addEventListener('keyup', event => {
     } else {
         
         // recorrer los datos del arreglo con los productos
-        for (const PRODUCTO of datos) {
+        for (const PRODUCTOVISTA of datos) {
             //convertir los datos de los productos a minusculas
             // solamete los datos alfabeticos
-            let nombre = PRODUCTO.nombre.toLowerCase();
-            let categoria = PRODUCTO.categoria.toLowerCase();
-            let marca = PRODUCTO.marca.toLowerCase();
-            // let descripcion = PRODUCTO.descripcion.toLowerCase();
+            let nombre = PRODUCTOVISTA.nombre.toLowerCase();
+            let categoria = PRODUCTOVISTA.categoria.toLowerCase();
+            let marca = PRODUCTOVISTA.marca.toLowerCase();
+            // let descripcion = PRODUCTOVISTA.descripcion.toLowerCase();
             if (nombre.indexOf(input) !== -1 || categoria.indexOf(input) !== -1 ||
                 marca.indexOf(input) !== -1 || /*descripcion.indexOf(input) !== -1 || */
-                PRODUCTO.precio.indexOf(input) !== -1) {
-                    console.log(PRODUCTO);
+                PRODUCTOVISTA.precio.indexOf(input) !== -1) {
+                    
                     CONTAINER.innerHTML += `
                     <div class="col-md-3">
                         <div class="card producto">
-                            <img src="${DIR + PRODUCTO.imagen}" class="card-img-top" alt="${PRODUCTO.nombre}">
+                            <img src="${DIR + PRODUCTOVISTA.imagen}" class="card-img-top" alt="${PRODUCTOVISTA.nombre}">
                             <div class="card-body">
                                 <div class="datos">
-                                    <h5 class="card-title">${PRODUCTO.nombre}</h5>
-                                    <p class="card-text">${PRODUCTO.categoria}.</p>
-                                    <p class="card-text">${PRODUCTO.marca}.</p>
-                                    <p class="card-text">$${PRODUCTO.precio}.</p>
+                                    <h5 class="card-title">${PRODUCTOVISTA.nombre}</h5>
+                                    <p class="card-text">${PRODUCTOVISTA.categoria}.</p>
+                                    <p class="card-text">${PRODUCTOVISTA.marca}.</p>
+                                    <p class="card-text">$${PRODUCTOVISTA.precio}.</p>
                                 </div>
-                                <a class="btn btn-secondary ver" id="${PRODUCTO.idproducto}">Ver</a>
+                                <a class="btn btn-secondary ver" id="${PRODUCTOVISTA.idproducto}">Ver</a>
                                 <a class="btn btn-secondary comprar">Comprar</a>
                             </div>
                         </div>        
                     </div>
                     `;
+
+                    // identificar que se encontraron datos
+                    found = true;
             }
+        }
+        // verificar si encontraron datos
+        if (!found){
+            CONTAINER.innerText = 'Producto no encontrado';
         }
     }
 })
