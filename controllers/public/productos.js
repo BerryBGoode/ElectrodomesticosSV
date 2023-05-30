@@ -15,10 +15,10 @@ const BUSCADOR = document.getElementById('buscador');
 // arreglo para guardar los productos cargados
 let datos = [];
 
-let cargar = async () => {
+let cargar = async (accion) => {
     // limpiar contenedor
     CONTAINER.innerHTML += ``;
-    const JSON = await request(PRODUCTOS, 'productos');
+    const JSON = await request(PRODUCTOS, accion);
     if (JSON.status) {
         // TOAST.show();
         // asignar valores al arreglo para podes utilizar en el buscador
@@ -108,7 +108,11 @@ let cargar = async () => {
 // evento que se ejecuta cada vez que carga la página
 document.addEventListener('DOMContentLoaded', async event => {
     event.preventDefault();
-    cargar();
+    // verificar la página la cual esta cargando
+    // es de productos sino es de destacados
+    // para cambiar la acción al cargar (CARGAR DESTACADOS)
+    (location.href.indexOf('productos') !== -1) ? cargar('productos') : cargar('destacados')
+    // cargar('productos');
 })
 
 // método para validar funcionamiento del buscador

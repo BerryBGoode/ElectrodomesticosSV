@@ -28,14 +28,13 @@ if (!isset($_GET['action'])) {
             if ($productosvista = $queryproducto->cargar()) {
                 // recorrer los productos para validar que tenga existencias
                 for ($i = 0; $i < count($productosvista); $i++) {
-                    
+
                     // validar que datos mostrar
                     //  ! cuando las existencias sean 1 o mayores
                     //  ! cuando el estado de este no sea false
                     if ($productosvista[$i]['existencias'] >= 1 && $productosvista[$i]['estado']) {
                         $productos[] = $productosvista[$i];
                         $res['data'] = $productos;
-                        
                     }
                 }
                 $res['status'] = 1;
@@ -44,6 +43,33 @@ if (!isset($_GET['action'])) {
             } else {
                 $res['excep'] = 'No existen productos registrados';
             }
+
+            break;
+
+            // acción para cargar destacados
+        case 'destacados':
+
+            $productos = [];
+
+            if ($productosvista = $queryproducto->cargarDestacados()) {
+                // recorrer los productos para validar que tenga existencias
+                for ($i = 0; $i < count($productosvista); $i++) {
+
+                    // validar que datos mostrar
+                    //  ! cuando las existencias sean 1 o mayores
+                    //  ! cuando el estado de este no sea false
+                    if ($productosvista[$i]['existencias'] >= 1 && $productosvista[$i]['estado']) {
+                        $productos[] = $productosvista[$i];
+                        $res['data'] = $productos;
+                    }
+                }
+                $res['status'] = 1;
+            } elseif (Database::getException()) {
+                $res['excep'] = Database::getException();
+            } else {
+                $res['excep'] = 'No existen productos registrados';
+            }
+
 
             break;
             // cargar articulo  

@@ -19,6 +19,15 @@
 
 <body>
 
+    <div id="toast" class="toast" role="" aria-live="assertive" aria-atomic="true">
+        <div class="toast-body">
+            Contenido del Toast
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+
+
+
     <header></header>
 
     <main>
@@ -33,67 +42,19 @@
 
 
         <hr class="featurette-divider">
-
-        <div class="container productos-container">             
-
-            <div class="card producto">
-                <img src="..." class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                        card's content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
-                </div>
-            </div>
-            <div class="card producto">
-                <img src="..." class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                        card's content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
-                </div>
-            </div>
-            <div class="card producto">
-                <img src="..." class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                        card's content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
-                </div>
-            </div>
-            <div class="card producto">
-                <img src="..." class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                        card's content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
-                </div>
-            </div>
-            <div class="card producto">
-                <img src="..." class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                        card's content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
-                </div>
-            </div>
+        <div class="container">
+            <div class="container productos-container" id="contenedor-productos"></div>
         </div>
 
         <!-- /END THE FEATURETTES -->
 
-        </div>
-
-
-        <footer></footer>
     </main>
+    <footer></footer>
 
 
     <script src="../../resources/js/bootstrap.bundle.min.js"></script>
     <script type="module" src="../../controllers/public/render.js"></script>
+    <script type="module" src="../../controllers/public/productos.js"></script>
 
 </body>
 

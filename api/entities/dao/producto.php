@@ -35,6 +35,25 @@ class ProductoQuery
         return Database::all($sql);
     }
 
+
+    /**
+     * Método para cargar productos destacados
+     */
+    public function cargarDestacados(){
+        $sql = 'SELECT p.idproducto, p.nombre, p.precio, p.existencias, 
+                p.imagen, c.categoria, c.idcategoria, m.marca, m.idmarca, 
+                p.estado, p.descripcion, count(o.idproducto)
+                FROM productos p
+                INNER JOIN categorias c ON c.idcategoria = p.idcategoria
+                INNER JOIN marcas m ON m.idmarca = p.idmarca
+                LEFT JOIN pedidos o ON o.idproducto = p.idproducto
+                GROUP BY p.idproducto, p.nombre, p.precio, p.existencias, 
+                p.imagen, c.categoria, c.idcategoria, m.marca, m.idmarca, 
+                p.estado, p.descripcion
+                ORDER BY count(o.idproducto) DESC';
+        return Database::all($sql);
+    }
+
     /**
      * Método para eliminar producto seleccionado
      * retorna el número de registros eliminados
