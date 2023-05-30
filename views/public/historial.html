@@ -19,48 +19,60 @@
 
 <body>
 
+    <div id="toast" class="toast" role="" aria-live="assertive" aria-atomic="true">
+        <div class="toast-body">
+            Contenido del Toast
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+
+
+
     <header></header>
 
     <main>
 
+        <div class="container-parallax">
+            <div class="content-parallax">
+                <span>
+                    Historial
+                </span>
+            </div>
+        </div>
+
+
+        <hr class="featurette-divider">
+        <div class="container">
+            <div class="container productos-container" id="contenedor-productos"></div>
+        </div>
+
         <div class="container mt-4">
-            <h4>Carrito de compras</h4>
             <div class="table">
                 <table class="table table-striped table-hover">
                     <thead>
                         <tr>
-                            <th>Total</th>
-                            <th id="total"></th>
-                            <th class="" id="estado-factura"></th>
-                        </tr>
-                        <tr>
+                            <th>No.</th>
                             <th class="col-grap">Fecha</th>
-                            <th class="hide"></th>
-                            <th>Producto</th>
-                            <th>Precio</th>
-                            <th>Cantidad</th>
-                            <th>Subtotal</th>
-                            <th id="header-estado">Estado</th>
-                            <th id="header-accion">Accion</th>
+                            <th>Productos</th>
+                            <th>Total</th>
+                            <th>Pedidos</th>
+                            <th>Estado</th>
                         </tr>
                     </thead>
-                    <tbody id="tbody-pedidos"></tbody>
+                    <tbody id="tbody-historial"></tbody>
+                    
                 </table>
             </div>
-            <div id="buttons-carrito">
-                <button type="button" id="finalizarPedido" class="btn btn-success">Comprar</button>
-                <button type="button" id="cancelarPedido" class="btn btn-danger">Cancelar</button>
-            </div>
         </div>
+        <!-- /END THE FEATURETTES -->
 
-        <footer></footer>
     </main>
+    <footer></footer>
 
 
     <script src="../../resources/js/bootstrap.bundle.min.js"></script>
-    <script src="../../resources/js/sweetalert.min.js"></script>
     <script type="module" src="../../controllers/public/render.js"></script>
-    <script type="module" src="../../controllers/public/carrito.js"></script>
+    <script type="module" src="../../controllers/public/historial.js"></script>
 
 </body>
 

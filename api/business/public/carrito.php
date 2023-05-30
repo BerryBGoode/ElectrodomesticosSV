@@ -203,6 +203,19 @@ if (!isset($_GET['action'])) {
                     $res['status'] = 1;
                 }
                 break;
+
+            case 'historial':
+
+                // print_r($_SESSION);
+                if ($res['data'] = $facturaquery->getHistorial($_SESSION['idcliente'])) {
+                    $res['status'] = 1;
+                } elseif (Database::getException()) {
+                    $res['excep'] = Database::getException();
+                }else{
+                    $res['excep'] = 'No tiene pedidos registrados';
+                }
+
+                break;
             default:
                 $res['excep'] = 'Acción no disponible';
                 break;

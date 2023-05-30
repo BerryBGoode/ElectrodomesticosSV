@@ -128,4 +128,20 @@ class FacturaQuery
                 ORDER BY idfactura DESC LIMIT 1';
         return Database::row($sql);
     }
+
+    /**
+     * Método para cargar el historial 
+     * de facturas que tiene un cliente
+     */
+    public function getHistorial($cliente)
+    {
+        $sql = 'SELECT f.idfactura, f.fecha, sum(o.cantidad) productos ,sum(p.precio * o.cantidad) as total , f.estado
+                FROM facturas f
+                INNER JOIN pedidos o ON o.idfactura = f.idfactura
+                INNER JOIN productos p ON p.idproducto = o.idproducto
+                WHERE f.idcliente = ?
+                GROUP BY f.idfactura, f.fecha, f.estado';
+        $param = array($cliente);    
+        return Database::all($sql, $param);
+    }
 }

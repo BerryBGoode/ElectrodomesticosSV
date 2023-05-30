@@ -149,9 +149,8 @@ FORMCOMENTARIO.addEventListener('submit', async event => {
     }
 })
 
-// Evento que se ejecuta cada vez que se escribe algo en el buscador
-BUSCADOR.addEventListener('keyup', event => {
-    event.preventDefault();
+// método para validar funcionamiento del buscador
+let buscador = () => {
     // location.href = '#comentarios';
 
     // variable para identificar dato no encotrado
@@ -185,13 +184,19 @@ BUSCADOR.addEventListener('keyup', event => {
                     </div>
                 `;
                 // cuando se encontra datos
-                found = true;                
-            }            
+                found = true;
+            }
         }
         // verificar si encontraron datos
         if (!found) {
+            // mostrar mensaje de que no encontro el dato
             COMENTARIOS.innerText = 'Comentario no encontrado';
         }
     }
+}
 
+// Evento que se ejecuta cada vez que se escribe algo en el buscador
+BUSCADOR.addEventListener('keyup', event => {
+    event.preventDefault();
+    buscador();
 })

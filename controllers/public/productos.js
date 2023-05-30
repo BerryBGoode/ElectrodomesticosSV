@@ -111,8 +111,8 @@ document.addEventListener('DOMContentLoaded', async event => {
     cargar();
 })
 
-BUSCADOR.addEventListener('keyup', event => {
-    event.preventDefault();
+// método para validar funcionamiento del buscador
+let buscador = () => {
     // variable para indetificar si se encontro el dato
     let found;
     // limpiar el contendor con los productos
@@ -125,7 +125,7 @@ BUSCADOR.addEventListener('keyup', event => {
         // cargar productos por defecto
         cargar();
     } else {
-        
+
         // recorrer los datos del arreglo con los productos
         for (const PRODUCTOVISTA of datos) {
             //convertir los datos de los productos a minusculas
@@ -137,8 +137,8 @@ BUSCADOR.addEventListener('keyup', event => {
             if (nombre.indexOf(input) !== -1 || categoria.indexOf(input) !== -1 ||
                 marca.indexOf(input) !== -1 || /*descripcion.indexOf(input) !== -1 || */
                 PRODUCTOVISTA.precio.indexOf(input) !== -1) {
-                    
-                    CONTAINER.innerHTML += `
+
+                CONTAINER.innerHTML += `
                     <div class="col-md-3">
                         <div class="card producto">
                             <img src="${DIR + PRODUCTOVISTA.imagen}" class="card-img-top" alt="${PRODUCTOVISTA.nombre}">
@@ -156,13 +156,19 @@ BUSCADOR.addEventListener('keyup', event => {
                     </div>
                     `;
 
-                    // identificar que se encontraron datos
-                    found = true;
+                // identificar que se encontraron datos
+                found = true;
             }
         }
         // verificar si encontraron datos
-        if (!found){
+        if (!found) {
+            // mostrar mensaje de que no encontro el dato
             CONTAINER.innerText = 'Producto no encontrado';
         }
     }
+}
+
+BUSCADOR.addEventListener('keyup', event => {
+    event.preventDefault();
+    buscador();
 })

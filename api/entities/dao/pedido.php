@@ -173,18 +173,17 @@ class PedidoQuery
      */
     public function getCarrito($factura)
     {
-        $estado = 2;
         // consulta parametrizada por la factura que se
         // esta gestionando en proceso
         $sql = 'SELECT o.idpedido, o.fecha, o.idproducto, p.nombre, 
                 p.precio, o.cantidad, p.precio * o.cantidad as Subtotal,
-                p.existencias,o.estado
+                p.existencias,o.estado, f.estado as estadofactura
                 FROM pedidos o
                 INNER JOIN facturas f ON f.idfactura = o.idfactura
                 INNER JOIN productos p ON p.idproducto = o.idproducto
-                WHERE f.estado = ? AND f.idfactura = ?
+                WHERE f.idfactura = ?
                 ORDER BY o.idpedido ASC';
-        $params = array($estado, $factura);
+        $params = array($factura);
         return Database::all($sql, $params);
     }
 

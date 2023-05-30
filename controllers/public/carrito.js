@@ -59,8 +59,10 @@ let cargarCarrito = async () => {
             break;
 
         case 1:
-
+            
             JSON.data.forEach(element => {
+                // asignar estado de la factura
+                document.getElementById('estado-factura').value  = element.estadofactura;
 
                 TABLA.innerHTML += `
                 <td class="hide pedido">${element.idpedido}</td>
@@ -92,7 +94,7 @@ let cargarCarrito = async () => {
                             stroke-linecap="round" stroke-linejoin="round" />
                     </svg>                                
                 </td>
-                <td>$${element.subtotal}</td>
+                <td>$${element.subtotal}</td>                
                 <td class="tb-switch">
                     ${(element.estado === 1) ?
 
@@ -105,7 +107,7 @@ let cargarCarrito = async () => {
                                     </div>`
                     }
                 </td>
-                <td>
+                <td class="button-eliminar">
                     <!-- boton para eliminar -->
                     <button class="btn btn-danger eliminar" value="${element.idpedido}">Eliminar</button>
                 </td>                
@@ -129,6 +131,7 @@ let cargarCarrito = async () => {
             // obtener los switchs
             const ESTADO = document.getElementsByClassName('estado');
 
+
             // toasts
             // instanciar toast para mostrar mensaje
             const MSGTOAST = new bootstrap.Toast('#normal-toast');
@@ -143,8 +146,27 @@ let cargarCarrito = async () => {
             let producto = document.getElementsByClassName('producto');
 
 
+            // verificar si el estado ha sido finalizada
+            if (document.getElementById('estado-factura').value === 1){
+                // ocultas elementos
+                document.getElementById('buttons-carrito').hidden = true;
+                // ocultas las cabezeras de la tabla
+                document.getElementById('header-estado').hidden = true;
+                document.getElementById('header-accion').hidden = true;
+
+            }
+
             // crear eventos
             for (let i = 0; i < ELIMINAR.length; i++) {
+        
+
+                // verificar sí la factura ya fue comprada o finalizada
+                if (document.getElementById('estado-factura').value === 1){
+                    // ocultas elementos pertenecientes a los pedidos
+                    document.getElementsByClassName('tb-switch')[i].classList.toggle('hide');
+                    document.getElementsByClassName('button-eliminar')[i].classList.toggle('hide');            
+    
+                }
 
                 // evento para el boton de restar
                 RESTA[i].addEventListener('click', async event => {
@@ -226,11 +248,8 @@ let cargarCarrito = async () => {
                             location.reload();
                         }
                     }
-                })
-
-
+                })            
             }
-
 
             break;
         default:
