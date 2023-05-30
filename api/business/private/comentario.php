@@ -182,12 +182,18 @@ if (!isset($_GET['action'])) {
                         // ahora se procede a agregar comentario
                             // enviar valores del comentanrio                                                
                         // $res['data'] = $rndpedido;
-                        COMENTARIO->setComentario($_POST['comentario']);
-                        COMENTARIO->setPedido(implode(' ', $rndpedido[1]));
-                        COMENTARIO->setEstado(true);
+                        if (!COMENTARIO->setComentario($_POST['comentario'])){
+                            $res['excep'] = 'Error en el comentario';
+                        }
+                        else if (!COMENTARIO->setPedido(implode(' ', $rndpedido[1]))){
+                            $res['excep'] = 'Error al obtener publicar comentario';                        
+                        }
+                        else if (!COMENTARIO->setEstado(true)){
+                            $res['excep'] = 'Error en el estado';
+                        }
                         // validar que resulto bien la inserción
-                        if ($query->guardar()) {
-                            $res['status'] = 1;                                
+                        else if ($query->guardar()) {
+                            $res['status'] = 1;                            
                         }else {
                             $res['excep'] = Database::getException();
                         }

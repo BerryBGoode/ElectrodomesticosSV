@@ -127,7 +127,10 @@ let buscador = () => {
     if (input === '') {
         CONTAINER.innerHTML = ``;
         // cargar productos por defecto
-        cargar();
+        // verificar la página la cual esta cargando
+    // es de productos sino es de destacados
+    // para cambiar la acción al cargar (CARGAR DESTACADOS)
+    (location.href.indexOf('productos') !== -1) ? cargar('productos') : cargar('destacados')
     } else {
 
         // recorrer los datos del arreglo con los productos

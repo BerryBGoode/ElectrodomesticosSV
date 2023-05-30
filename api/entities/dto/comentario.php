@@ -34,10 +34,10 @@ class Comentario
 
     public function setComentario($com)
     {
-        if (Validate::checkAlphanumeric($com, 1, 350)) {
+        // if (Validate::checkString($com, 1, 350)) {
             $this->comentario = $com;
             return true;
-        }
+        // }
     }
 
     public function setEstado($estado)
