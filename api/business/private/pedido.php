@@ -117,7 +117,7 @@ if (!isset($_GET['action'])) {
                 break;
 
             case 'eliminar':
-
+                
                 // enviar datos                
                 if (!PEDIDO->setId($_POST['idpedido'])) {
                     $res['excep'] = 'Error al obtener registro';

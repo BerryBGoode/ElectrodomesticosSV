@@ -150,7 +150,7 @@ if (!isset($_GET['action'])) {
                 break;
 
                 // acción para publicar comentario
-            case 'publicarComentario':
+            case 'publicarComentario': 
                 
                 // arreglos vacíos para obtener los datos después del filtro
                 // de verificar sí tiene las facturas de un cliente

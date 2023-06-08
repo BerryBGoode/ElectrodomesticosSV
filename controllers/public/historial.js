@@ -7,7 +7,8 @@ const CONTENIDO = document.getElementById('tbody-historial');
 // columna donde cargan los switch
 // obtener cada columna de la tabla, para ir agregando los switch del estado
 const COL = document.querySelectorAll('tb-switch')
-
+// instanciar toast para mostrar mensaje
+const MSGTOAST = new bootstrap.Toast('#normal-toast');
 
 // evento para cargar el historial
 let cargar = async () => {
@@ -22,7 +23,7 @@ let cargar = async () => {
             break;
 
         case 0:
-            document.getElementById('msg-toast').innerText = JSON.msg;
+            document.getElementById('msg-toast').innerText = 'No tiene ningún producto registrado';
             MSGTOAST.show();
             break;
 
@@ -33,6 +34,9 @@ let cargar = async () => {
                 <td>${element.fecha}</td>
                 <td>${element.productos}</td>
                 <td>$${element.total}</td>
+                <td>
+                <button type="button" class="btn btn-secondary ver" id="${element.idfactura}">Ver</button>
+                </td>
                 <td class="tb-switch">
                     ${(element.estado === 1) ?
 
@@ -41,9 +45,6 @@ let cargar = async () => {
                         COL.innerHTML = `<span class="btn btn-danger pendiente">Pendiente</span>`
                     }
                 </td>                    
-                <td>
-                    <button type="button" class="btn btn-secondary ver" id="${element.idfactura}">Ver</button>
-                </td>
                 `;
 
                 // obtener los ids
@@ -70,7 +71,7 @@ let cargar = async () => {
                                     break;
 
                                 case 0:
-                                    document.getElementById('msg-toast').innerText = JSON.excep;
+                                    document.getElementById('msg-toast').innerText = 'No ha comprado ningún producto';
                                     MSGTOAST.show();
                                     break;
                                 // redirecionar a la factura pendiente

@@ -22,7 +22,7 @@ if (!isset($_GET['action'])) {
     switch ($_GET['action']) {
             // acción para cargar productos
         case 'productos':
-
+            // arreglo vacío
             $productos = [];
 
             if ($productosvista = $queryproducto->cargar()) {

@@ -23,6 +23,7 @@ let cargar = async (accion) => {
         // TOAST.show();
         // asignar valores al arreglo para podes utilizar en el buscador
         datos = JSON.data;
+
         JSON.data.forEach(element => {
             CONTAINER.innerHTML += `
             <div class="col-md-3">
@@ -128,9 +129,9 @@ let buscador = () => {
         CONTAINER.innerHTML = ``;
         // cargar productos por defecto
         // verificar la página la cual esta cargando
-    // es de productos sino es de destacados
-    // para cambiar la acción al cargar (CARGAR DESTACADOS)
-    (location.href.indexOf('productos') !== -1) ? cargar('productos') : cargar('destacados')
+        // es de productos sino es de destacados
+        // para cambiar la acción al cargar (CARGAR DESTACADOS)
+        (location.href.indexOf('productos') !== -1) ? cargar('productos') : cargar('destacados')
     } else {
 
         // recorrer los datos del arreglo con los productos

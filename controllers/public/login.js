@@ -21,7 +21,7 @@ if (FORMULARIO) {
             TOAST.show();
             setTimeout(() => {
                 location.href = '../../views/public/';
-            }, 2500);
+            }, 2000);
         }else{        
             document.getElementById('toast-body-e').innerText = JSON.excep;
             TOAST.show();
