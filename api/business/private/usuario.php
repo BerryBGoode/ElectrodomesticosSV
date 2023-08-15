@@ -162,6 +162,17 @@ if (isset($_GET['action'])) {
                 }
                 break;
 
+            case 'getClientesFrecuentesReporte':
+                if ($res['data'] = $query->getClientesFrecuentesReporte()) {
+                    $res['status'] = 1;
+                } elseif (Database::getException()) {
+                    $res['excep'] = Database::getException();
+                } else {
+                    $res['excep'] = 'No se encontraron registros';
+                }
+
+                break;
+
             case 'cargar':
                 if ($res['data'] = $query->getCorreo()) {
                     $res['status'] = 1;

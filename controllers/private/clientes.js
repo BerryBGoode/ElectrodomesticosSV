@@ -1,5 +1,5 @@
 import { cargarTabla, enviarDatos, checkProceso } from './usuarios.js';
-import { notificacionURL, request } from '../controller.js';
+import { API, notificacionURL, request } from '../controller.js';
 
 const PROCESO = document.getElementById('proceso')
 const COL = document.querySelectorAll('.tb-switch');
@@ -141,3 +141,11 @@ const buscadorCliente = async event => {
 }
 
 SEARCH.addEventListener('keyup', async event => buscadorCliente(event));
+
+/**
+ * Método para redireccionar a los reportes
+ */
+document.getElementById('reporte').addEventListener('click', () => {
+    const PATH = new URL(`${API}/reports/private/clientes.php`);;
+    window.open(PATH.href);
+})

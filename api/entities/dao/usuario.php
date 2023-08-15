@@ -136,7 +136,7 @@ class UsuarioQuery
         return Database::storeProcedure($sql, $params);
     }
 
-    
+
     /**
      * Método para verificar sí existen usuarios
      * sí existen retorna true sino false
@@ -146,6 +146,21 @@ class UsuarioQuery
         $sql = 'SELECT * FROM usuarios WHERE tipousuario = ?';
         $param = array(1);
         return Database::all($sql, $param);
+    }
+
+    /**
+     * Método para obtener los datos para el generar el reporte con los clientes
+     * más frecuentes
+     */
+    public function getClientesFrecuentesReporte()
+    {
+        $sql = 'SELECT u.nombre, u.apellido, count(f.idcliente) as compras
+                FROM facturas f
+                INNER JOIN usuarios u ON u.idusuario = f.idcliente
+                WHERE u.tipousuario = 2
+                GROUP BY u.nombre, u.apellido
+                ORDER BY count(f.idcliente) DESC LIMIT 7';
+        return Database::all($sql);
     }
 }
 // try {
