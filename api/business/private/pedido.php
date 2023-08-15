@@ -26,6 +26,25 @@ if (!isset($_GET['action'])) {
 
         // evaluar la acción (endpoints)
         switch ($_GET['action']) {
+            case 'ventasMes':
+                # code...
+                if ($res['data'] = $query->getVentasByMes()) {
+                    $res['status'] = 1;
+                } elseif (Database::getException()) {
+                    $res['exception'] = Database::getException();
+                } else {
+                    $res['exception'] = 'No se encontraron resultados';
+                }
+                break;
+            case 'masVendido':
+                if ($res['data'] = $query->getMasVendido()) {
+                    $res['status'] = 1;
+                } elseif (Database::getException()) {
+                    $res['exception'] = Database::getException();
+                } else {
+                    $res['exception'] = 'No se encontraron resultados';
+                }
+                break;
             case 'guardar':
 
                 $_POST = Validate::form($_POST);
@@ -117,7 +136,7 @@ if (!isset($_GET['action'])) {
                 break;
 
             case 'eliminar':
-                
+
                 // enviar datos                
                 if (!PEDIDO->setId($_POST['idpedido'])) {
                     $res['excep'] = 'Error al obtener registro';
@@ -129,12 +148,11 @@ if (!isset($_GET['action'])) {
                     } elseif (!PEDIDO->setProducto($producto['idproducto'])) {
                         $res['excep'] = 'Error al obtener producto del pedido';
                     } elseif ($query->agregarExistencias()) {
-                        
+
                         if ($query->eliminar()) {
                             $res['status'] = 1;
                             $res['msg'] = 'Registro eliminado';
                         }
-
                     } else {
                         $res['excep'] =  Database::getException();
                     }

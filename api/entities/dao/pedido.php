@@ -149,7 +149,7 @@ class PedidoQuery
      * { $ope } operación 1 sumar cantidad , 2 restar cantidad
      */
     public function modificarCantidad($cantidad, $pedido, $ope)
-    {        
+    {
         switch ($ope) {
             case 1: //sumar
                 $sql = 'UPDATE pedidos 
@@ -195,5 +195,27 @@ class PedidoQuery
         $sql = 'DELETE FROM pedidos WHERE idfactura = ?';
         $param = array($factura);
         return Database::storeProcedure($sql, $param);
+    }
+
+    /**
+     * Método para obtener los productos más vendidos (gráfica)
+     */
+    public function getMasVendido()
+    {
+        $sql = 'SELECT count(p.idproducto), p.nombre
+                FROM pedidos o
+                INNER JOIN productos p ON p.idproducto = o.idproducto
+                GROUP BY p.idproducto
+                ORDER BY count(p.idproducto) DESC LIMIT 5';
+        return Database::all($sql);
+    }
+
+    /**
+     * Método para obtener las ventas por mes 
+     */
+    public function getVentasByMes()
+    {
+        $sql = 'SELECT * FROM ventas';
+        return Database::all($sql);
     }
 }

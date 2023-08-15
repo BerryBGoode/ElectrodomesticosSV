@@ -18,76 +18,81 @@ if (!isset($_GET['action'])) {
     $query = new ComentarioQuery;
 
     // veríficar si existe una sesión
-    if (!isset($_SESSION['idusuario']) || !isset($_SESSION['idcliente'])) {
-        // cuando no exista sesión enviará un mensaje de warning para redireccionar al login
-        $res['status'] = -1;
-        $res['excep'] = 'Sesion inactiva, se te redireccionará para iniciar sesión';
-    } else {
-        
+
+    if (isset($_SESSION['idusuario']) || isset($_SESSION['idcliente'])) {
         // evaluar la acción enviada de la petición del front
         switch ($_GET['action']) {
+            case 'cantidadComentariosProducto':
+                if ($res['data'] = $query->getCantidadComentariosByProductos()) {
+                    $res['status'] = 1;
+                } elseif (Database::getException()) {
+                    $res['excep'] = Database::getException();
+                } else {
+                    $res['excep'] = 'No se encontraron resultados';
+                }
+                break;
             case 'guardar':
-                
+
                 $_POST = Validate::form($_POST);
                 // settear datos
 
                 if (!COMENTARIO->setPedido($_POST['pedidos'])) {
                     $res['excep'] = 'Error al obtener pedido';
-                }elseif (!COMENTARIO->setEstado(true)) {
+                } elseif (!COMENTARIO->setEstado(true)) {
                     $res['excep'] = 'Error al obtener estado';
-                }elseif (!COMENTARIO->setComentario($_POST['comentario'])) {
+                } elseif (!COMENTARIO->setComentario($_POST['comentario'])) {
                     $res['excep'] = 'Erro al obtener comentario';
-                }elseif ($query->guardar()) {
+                } elseif ($query->guardar()) {
                     $res['status'] = 1;
                     $res['msg']  = 'Registro guardado';
-                }  else {
+                } else {
                     $res['excep'] = Database::getException();
                 }
-                
+
                 break;
-        
+
             case 'cargarPedidos':
                 // buscar las facturas que tiene este cliente
                 if ($facturas = $query->validarCliente($_POST['usuarios'])) {
                     // recorrer la cantidad de facturas encontradas
-                    for($i = 0; $i < count($facturas); $i++){
+                    for ($i = 0; $i < count($facturas); $i++) {
                         // convertir de array a string la factura recorrida
-                        $factura = implode(' ',$facturas[$i]);
+                        $factura = implode(' ', $facturas[$i]);
                         // buscar el pedido con el producto selccionado
                         // y el valor de la factura por la que está pasando
-                        if($res['data'] = $query->validatePedido($factura, $_POST['productos'])){
+                        if ($res['data'] = $query->validatePedido($factura, $_POST['productos'])) {
                             $res['status'] = 1;
                             $res['excep'] = null;
-                        }elseif (Database::getException()) {
+                        } elseif (Database::getException()) {
                             $res['excep'] = Database::getException();
-                        }else {
+                        } else {
                             $res['excep'] = 'Este cliente no tiene un pedido con este producto';
                         }
                     }
-                }elseif (Database::getException()) {
+                } elseif (Database::getException()) {
                     $res['excep'] = Database::getException();
                 } else {
                     $res['excep'] = 'Este cliente no tiene facturas registradas';
                 }
-                
+
                 break;
 
             case 'cargar':
-                
+
                 if ($res['data'] = $query->cargar()) {
                     $res['status'] = 1;
                     $res['msg'] = count($res['data']);
                 } elseif (Database::getException()) {
                     $res['excep'] = Database::getException();
-                } else {                    
+                } else {
                     $res['excep'] = 'No existen registros';
                 }
-                
+
                 break;
 
             case 'actualizarEstado':
-                
-                
+
+
                 if (!COMENTARIO->setId($_POST['idcomentario'])) {
                     $res['exce'] = 'Error al obtener registro';
                 } elseif (!COMENTARIO->setEstado($_POST['estado'])) {
@@ -97,22 +102,22 @@ if (!isset($_GET['action'])) {
                 } else {
                     $res['excep'] = Database::getException();
                 }
-                
+
 
                 break;
 
             case 'registro':
-                
+
                 if (!COMENTARIO->setId($_POST['idcomentario'])) {
                     $res['excep'] = 'Error al obtener registro';
                 } elseif ($res['data'] = $query->registro()) {
-                    $res['status'] = 1;                    
+                    $res['status'] = 1;
                 } elseif (Database::getException()) {
                     $res['excep'] = Database::getException();
                 } else {
                     $res['excep'] = 'Registro no encontrado';
                 }
-                
+
                 break;
 
             case 'actualizar':
@@ -132,11 +137,11 @@ if (!isset($_GET['action'])) {
                 } else {
                     $res['excep'] = 'Error al modificar registro';
                 }
-                
+
                 break;
 
             case 'eliminar':
-                
+
                 if (!COMENTARIO->setId($_POST['idcomentario'])) {
                     $res['excep'] = 'Error al obtener registro';
                 } elseif ($query->eliminar()) {
@@ -145,13 +150,13 @@ if (!isset($_GET['action'])) {
                 } else {
                     $res['excep'] = Database::getException();
                 }
-                
+
 
                 break;
 
                 // acción para publicar comentario
-            case 'publicarComentario': 
-                
+            case 'publicarComentario':
+
                 // arreglos vacíos para obtener los datos después del filtro
                 // de verificar sí tiene las facturas de un cliente
                 // y en las facturas de este cliente donde este el producto que desea comentar
@@ -164,52 +169,51 @@ if (!isset($_GET['action'])) {
                     foreach ($facturas as $facturascliente) {
                         $factura[] = $facturascliente;
                         // verificar que la orden que esta pasando tenga el producto a comentar
-                        if ($pedidos = $query->getPedidosFactoraCliente(implode(' ',$facturascliente), $_POST['producto'])) {
-                            
-                            foreach ($pedidos as $pedidoscliente) {
-                                $pedido[] = $pedidoscliente;                                      
-                            }                        
+                        if ($pedidos = $query->getPedidosFactoraCliente(implode(' ', $facturascliente), $_POST['producto'])) {
 
+                            foreach ($pedidos as $pedidoscliente) {
+                                $pedido[] = $pedidoscliente;
+                            }
                         }
-                        
                     }
-                    if ($pedido) {                        
+                    if ($pedido) {
                         // establecer un indice random
                         $rndindex = array_rand($pedido);
                         // obtener el valor del indice random
                         // aquí ya se obtiene el valor random
                         $rndpedido[1] = $pedido[$rndindex];
                         // ahora se procede a agregar comentario
-                            // enviar valores del comentanrio                                                
+                        // enviar valores del comentanrio                                                
                         // $res['data'] = $rndpedido;
-                        if (!COMENTARIO->setComentario($_POST['comentario'])){
+                        if (!COMENTARIO->setComentario($_POST['comentario'])) {
                             $res['excep'] = 'Error en el comentario';
-                        }
-                        else if (!COMENTARIO->setPedido(implode(' ', $rndpedido[1]))){
-                            $res['excep'] = 'Error al obtener publicar comentario';                        
-                        }
-                        else if (!COMENTARIO->setEstado(true)){
+                        } else if (!COMENTARIO->setPedido(implode(' ', $rndpedido[1]))) {
+                            $res['excep'] = 'Error al obtener publicar comentario';
+                        } else if (!COMENTARIO->setEstado(true)) {
                             $res['excep'] = 'Error en el estado';
                         }
                         // validar que resulto bien la inserción
                         else if ($query->guardar()) {
-                            $res['status'] = 1;                            
-                        }else {
+                            $res['status'] = 1;
+                        } else {
                             $res['excep'] = Database::getException();
                         }
-                    }else {
+                    } else {
                         $res['excep'] = 'No ha comprado este producto';
                     }
                 } else {
                     $res['excep'] = 'Debe comprar producto antes de comentar';
-                }                
+                }
 
                 break;
             default:
                 $res['excep'] = 'Acción no encontrada';
                 break;
         }
-
+    } else {
+        // cuando no exista sesión enviará un mensaje de warning para redireccionar al login
+        $res['status'] = -1;
+        $res['excep'] = 'Sesion inactiva, se te redireccionará para iniciar sesión';
     }
 }
 

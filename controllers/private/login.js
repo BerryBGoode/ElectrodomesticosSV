@@ -33,7 +33,7 @@ if (PRIMERUSUARIO) {
     })
 }
 // verificar sí esta en el archivo para crear primer usuario
-if (location.href.indexOf('primerusuario.html') < 0) {
+if (location.href.indexOf('primerusuario') > 0) {
     // login
     document.addEventListener('DOMContentLoaded', async event => {
         event.preventDefault();

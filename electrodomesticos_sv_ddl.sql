@@ -158,5 +158,17 @@ EXECUTE FUNCTION FUN_agregarExistencia();
 --                 INNER JOIN usuarios u ON u.idusuario = f.idcliente
 -- 				WHERE c.idcomentario = 1
 --                 ORDER BY c.idcomentario ASC           
-				
+CREATE VIEW ventas AS
+WITH meses AS (
+		SELECT TO_CHAR(month, 'Month') AS mes, EXTRACT(MONTH FROM month) AS num
+    	FROM generate_series(
+			to_char(date_trunc('year', current_date), 'yyyy-mm-dd')::date, 
+    	    to_char(date_trunc('year', current_date) + interval '1 year - 1 day', 'yyyy-mm-dd')::date, 
+    	    '1 month'
+    	) AS month)
+    SELECT meses.mes, count(idpedido) as ventas
+    FROM meses
+    LEFT JOIN pedidos o ON meses.num = EXTRACT(MONTH FROM o.fecha)
+    GROUP BY meses.mes, meses.num
+    ORDER BY meses.num ASC
 					

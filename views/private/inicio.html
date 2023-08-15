@@ -13,16 +13,23 @@
     <title>Electrodomesticos SV</title>
 </head>
 
-<body class="view">
+<body>
     <div class="nav-render"></div>
     <div class="container">
-
+        <div class="graphics">
+            <canvas id="comentarios-producto"></canvas>
+            <canvas id="mas-vendidos"></canvas>
+            <canvas id="producto-categoria"></canvas>
+            <canvas id="ventas"></canvas>
+            <canvas id="producto-marca"></canvas>
+        </div>
     </div>
+    <script src="../../resources/js/bootstrap.bundle.min.js"></script>
+    <script src="../../resources/js/sweetalert.min.js"></script>
+    <script src="../../controllers/private/render.js"></script>
+    <script type="module" src="../../controllers/private/login.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module" src="../../controllers/private/graficas.js"></script>
 </body>
-
-<script src="../../resources/js/bootstrap.bundle.min.js"></script>
-<script src="../../resources/js/sweetalert.min.js"></script>
-<script src="../../controllers/private/render.js"></script>
-<script type="module" src="../../controllers/private/login.js"></script>
 
 </html>

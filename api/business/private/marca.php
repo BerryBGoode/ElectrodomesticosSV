@@ -19,6 +19,17 @@ if (isset($_GET['action'])) {
         $query = new MarcaQuery;
 
         switch ($_GET['action']) {
+            case 'productosCategoria':
+                if ($res['data'] = $query->productosMarca()) {
+                    $res['status'] = 1;
+                } elseif (Database::getException()) {
+                    $res['excep'] = Database::getException();
+                } else {
+                    $res['excep'] = 'No existen datos registrados';
+                }
+
+                break;
+
             case 'cargar':
 
                 if ($res['data'] = $query->cargarMarcas()) {
@@ -51,7 +62,7 @@ if (isset($_GET['action'])) {
                     $res['excep'] = 'Error al seleccionar registro';
                 } elseif ($res['data'] = $query->obtenerRegistro()) {
                     $res['status'] = 1;
-                }elseif (Database::getException()) {
+                } elseif (Database::getException()) {
                     $res['excep'] = Database::getException();
                 } else {
                     $res['excep'] = 'No se encontraron registros';
@@ -60,7 +71,7 @@ if (isset($_GET['action'])) {
                 break;
 
             case 'actualizar':
-                
+
                 if (!MARCA->setId($_POST['idmarca'])) {
                     $res['excep'] = 'Error al obtener registro o no coincide';
                 } elseif (!MARCA->setMarca($_POST['marca'])) {
@@ -71,12 +82,12 @@ if (isset($_GET['action'])) {
                 } else {
                     $res['excep'] = Database::getException();
                 }
-                
+
 
                 break;
 
             case 'eliminar':
-                
+
                 if (!MARCA->setId($_POST['idmarca'])) {
                     $res['excep'] = 'Error al seleccionar registro';
                 } elseif ($query->eliminarMarca()) {
@@ -85,7 +96,7 @@ if (isset($_GET['action'])) {
                 } else {
                     $res['excep'] = 'Error al eliminar, probablemte está marca tiene productos registrados, se recomienda no eliminar';
                 }
-                
+
 
                 break;
             default:
@@ -104,4 +115,3 @@ if (isset($_GET['action'])) {
 
 header('content-type: application/json; charset=utf-8');
 print(json_encode($res));
-?>

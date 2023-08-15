@@ -14,6 +14,7 @@ if (isset($_GET['action'])) {
     // instancia con los queries
     $query = new UsuarioQuery;
     // verificar sí se ha iniciado sesión, para limitar los permisos
+    // print_r($_SESSION);
     if (!isset($_SESSION['idusuario'])) {
         $res['session'] = 1;
         // verificar que acción se quiere realizar
@@ -78,7 +79,7 @@ if (isset($_GET['action'])) {
                 break;
         }
     } else {
-
+        // cuando ha iniciado sesión
         switch ($_GET['action']) {
             case 'crearAdmin':
                 $_POST = Validate::form($_POST);

@@ -1,18 +1,30 @@
 /* body{background-color: rgb(47, 47, 47); } */
 /* uso general */
-.hide{
+.hide {
     display: none;
 }
+
 /* estilos en login */
-.view{overflow: hidden;}
-.login{
+.buttons-container {
+    display: flex;
+    width: 15%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.view {
+    overflow: hidden;
+}
+
+.login {
     height: 100vh;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-around;
 }
-.form{
+
+.form {
     height: 100%;
     width: 45%;
     display: flex;
@@ -21,67 +33,79 @@
     gap: 5%;
     justify-content: center;
 }
-.buttons{
+
+.buttons {
     display: flex;
     gap: 3%;
     flex-direction: column;
 }
-.btn-login{
+
+.btn-login {
     margin: 4% 0;
 }
 
 /* estilos navbar */
-.nav-logo{
+.nav-logo {
     width: 5%;
 }
-.nav-title{
+
+.nav-title {
     font-weight: bold;
     font-size: 700;
 }
+
 /* estilos en general */
-.container-catalog{
+.container-catalog {
     margin-top: 1.5%;
 }
-.top{
+
+.top {
     display: flex;
     justify-content: space-between;
 }
+
 /* estilos para agregar producto */
-.switch{
+.switch {
     display: flex;
     align-items: center;
     justify-content: space-evenly;
 }
 
-.form-check-input:checked{
+.form-check-input:checked {
     background-color: #6c757d;
     border-color: #6c757d;
 }
-.form-check-input:focus{
+
+.form-check-input:focus {
     border-color: #6c757d;
     box-shadow: #5f676e;
 }
+
 /* estilos en tabla productos, col botones, form */
-.buttons-tb{
+.buttons-tb {
     flex-direction: row;
     display: flex;
     gap: .5%;
 }
-#comentario{
+
+#comentario {
     height: 20%;
 }
 
 /*esta clase agrega '...'
 si es mucho text en la col*/
-.col-grap{
+.col-grap {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 12vw;
 }
-.fecha{
+
+.fecha {
     max-width: 5vw;
 }
-.sumar, .restar{
+
+.sumar,
+.restar {
     cursor: pointer;
 }

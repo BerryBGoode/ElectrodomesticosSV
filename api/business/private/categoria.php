@@ -22,6 +22,17 @@ if (!isset($_GET['action'])) {
         $res['excep'] = 'Sesion inactiva, se te redireccionará para iniciar sesión';
     } else {
         switch ($_GET['action']) {
+
+            case 'getProductosCategoria':
+                if ($res['data'] = $query->getProductosCategoria()) {
+                    $res['status'] = 1;
+                }elseif (Database::getException()) {
+                    $res['exception'] = Database::getException();
+                }else{
+                    $res['exception'] = 'No se encontraron resultados';
+                }
+                break;
+
             case 'cargar':
 
                 if ($res['data'] = $query->cargar()) {

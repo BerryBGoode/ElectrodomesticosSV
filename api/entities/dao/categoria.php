@@ -62,4 +62,17 @@ class CategoriaQuery
         $param = array(CATEGORIA->getId());
         return Database::storeProcedure($sql, $param);
     }
+
+    /**
+     * Método para obtener la cantidad de productos que tiene una categoria
+     */
+    public function getProductosCategoria()
+    {
+        $sql = 'SELECT count(c.idcategoria), c.categoria
+                FROM productos p
+                INNER JOIN categorias c ON c.idcategoria = p.idcategoria
+                GROUP BY c.categoria
+                ORDER BY count(c.idcategoria) DESC';
+        return Database::all($sql);
+    }
 }

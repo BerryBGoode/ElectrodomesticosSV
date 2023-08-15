@@ -4,9 +4,10 @@ require_once('config.php');
 
 header('Access-Control-Allow-Origin: *');
 
-class Database{
+class Database
+{
     // attr para instanciar PDO
-    private static $con= null;
+    private static $con = null;
     // attr para ejecutar sentencias
     private static $statement = null;
     // attr para obtener y restornar errores
@@ -76,8 +77,8 @@ class Database{
     public static function getLastId($query, $data)
     {
         if (self::storeProcedure($query, $data)) {
-            $id = self::$con->lastInsertId();            
-        }else {
+            $id = self::$con->lastInsertId();
+        } else {
             $id = 0;
         }
         return $id;
@@ -127,4 +128,3 @@ class Database{
         return self::$err;
     }
 }
-

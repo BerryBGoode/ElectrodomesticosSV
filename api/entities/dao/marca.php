@@ -62,4 +62,16 @@ class MarcaQuery
         $param = array(MARCA->getId());
         return Database::storeProcedure($sql, $param);
     }
+    /**
+     * Metodo para obtener la cantidad de productos que hay por marca
+     */
+    public function productosMarca()
+    {
+        $sql = 'SELECT count(m.idmarca), m.marca
+                FROM productos p
+                INNER JOIN marcas m ON m.idmarca = p.idmarca
+                GROUP BY m.idmarca
+                ORDER BY count(m.idmarca) DESC';
+        return Database::all($sql);
+    }
 }

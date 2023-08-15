@@ -157,4 +157,19 @@ class ComentarioQuery
         $params = array($factura, $producto, $estado);
         return Database::all($sql, $params);
     }
+
+    /**
+     * Método para obtener la cantidad de comentarios que tienen los productos
+     * de manera ordenada descendente
+     */
+    public function getCantidadComentariosByProductos()
+    {
+        $sql = 'SELECT count(p.idproducto), p.nombre
+                FROM comentarios c
+                INNER JOIN pedidos o ON o.idpedido = c.idpedido
+                INNER JOIN productos p ON p.idproducto = o.idproducto
+                GROUP BY p.idproducto
+                ORDER BY count(p.idproducto) DESC LIMIT 5';
+        return Database::all($sql);
+    }
 }
