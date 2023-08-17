@@ -228,3 +228,12 @@ const buscador = async evt => {
 
 SEARCH.addEventListener('submit', async (event) => buscador(event));
 SEARCH.addEventListener('keyup', async (event) => buscador(event));
+
+/**
+ * Método para redireccionar a los reportes
+ */
+const API = 'http://localhost/ElectrodomesticosSV/api/';
+document.getElementById('reporte').addEventListener('click', () => {
+    const PATH = new URL(`${API}/reports/private/marcas.php`);
+    window.open(PATH.href);
+})

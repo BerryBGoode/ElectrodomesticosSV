@@ -39,7 +39,8 @@ class ProductoQuery
     /**
      * Método para cargar productos destacados
      */
-    public function cargarDestacados(){
+    public function cargarDestacados()
+    {
         $sql = 'SELECT p.idproducto, p.nombre, p.precio, p.existencias, 
                 p.imagen, c.categoria, c.idcategoria, m.marca, m.idmarca, 
                 p.estado, p.descripcion, count(o.idproducto)
@@ -143,5 +144,15 @@ class ProductoQuery
             PRODUCTO->getId()
         );
         return Database::storeProcedure($sql, $params);
+    }
+
+    /**
+     * Metodo para obtener los productos por marcas
+     */
+    public function getProductosByMarca($marca)
+    {
+        $sql = 'SELECT * FROM productos WHERE idmarca = ?';
+        $param = array($marca);
+        return Database::all($sql, $param);
     }
 }
