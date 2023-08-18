@@ -129,6 +129,35 @@ class FacturaQuery
         return Database::row($sql);
     }
 
+    public function getCountPedidos($factura)
+    {
+        $sql = 'SELECT count(idfactura) as pedidos
+                FROM pedidos
+                WHERE idfactura = ?';
+        $param = array($factura);
+        return Database::all($sql, $param);
+    }
+
+    public function getFechasFacturas()
+    {
+        $sql = 'SELECT fecha
+                FROM facturas
+                GROUP BY fecha
+                ORDER BY fecha ASC';
+        return Database::all($sql);
+    }
+
+    public function getFacturasByFechas($fecha)
+    {
+        $sql = 'SELECT u.nombre, u.apellido, u.correo, f.idfactura
+                FROM facturas f
+                INNER JOIN usuarios u ON u.idusuario = f.idcliente
+                WHERE f.fecha = ?
+                ORDER BY f.idfactura ASC';
+        $param = array($fecha);
+        return Database::all($sql, $param);
+    }
+
     /**
      * Método para cargar el historial 
      * de facturas que tiene un cliente
@@ -141,7 +170,7 @@ class FacturaQuery
                 INNER JOIN productos p ON p.idproducto = o.idproducto
                 WHERE f.idcliente = ?
                 GROUP BY f.idfactura, f.fecha, f.estado';
-        $param = array($cliente);    
+        $param = array($cliente);
         return Database::all($sql, $param);
     }
 }

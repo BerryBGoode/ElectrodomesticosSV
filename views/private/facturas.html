@@ -18,11 +18,17 @@
     <div class="container container-catalog">
         <div class="top">
             <h3>Facturas</h3>
-            <!-- trigger del modal -->
-            <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#Modal"
-                id="btn-agregar">
-                Agregar
-            </button>
+            <div class="buttons-container">
+                <button type="button" class="btn btn-secondary" id="reporte">
+                    Imprimir
+                </button>
+
+                <!-- trigger del modal -->
+                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#Modal"
+                    id="btn-agregar">
+                    Agregar
+                </button>
+            </div>
         </div>
         <div class="table">
             <table class="table table-striped table-hover">
@@ -67,7 +73,8 @@
                         </div>
                         <!-- nombre cliente -->
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="nombres" placeholder="Nombres" name="nombres" readonly>
+                            <input type="text" class="form-control" id="nombres" placeholder="Nombres" name="nombres"
+                                readonly>
                             <label for="nombres">Nombres</label>
                         </div>
 
@@ -80,7 +87,8 @@
 
                         <!-- fecha -->
                         <div class="form-floating mb-3">
-                            <input type="date" class="form-control" id="fecha" placeholder="Fecha" name="fecha" required>
+                            <input type="date" class="form-control" id="fecha" placeholder="Fecha" name="fecha"
+                                required>
                             <label for="fecha">Fecha</label>
                         </div>
                     </div>

@@ -1,5 +1,5 @@
 // importar modulos (métodos) del controller
-import { request, cargarSelect, notificacionAccion, notificacionURL } from '../controller.js';
+import { request, cargarSelect, notificacionAccion, notificacionURL, API } from '../controller.js';
 import { USUARIO } from "./usuarios.js";
 
 // archivo donde van las peticiones 
@@ -304,3 +304,8 @@ const buscador = async event => {
 }
 
 SEARCH.addEventListener('keyup', async event => buscador(event));
+
+document.getElementById('reporte').addEventListener('click', () => {
+    const PATH = new URL(`${API}reports/private/ventas.php`);
+    window.open(PATH);
+})
