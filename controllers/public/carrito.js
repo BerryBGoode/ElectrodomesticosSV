@@ -59,10 +59,10 @@ let cargarCarrito = async () => {
             break;
 
         case 1:
-            
+
             JSON.data.forEach(element => {
                 // asignar estado de la factura
-                document.getElementById('estado-factura').value  = element.estadofactura;
+                document.getElementById('estado-factura').value = element.estadofactura;
 
                 TABLA.innerHTML += `
                 <td class="hide pedido">${element.idpedido}</td>
@@ -147,7 +147,7 @@ let cargarCarrito = async () => {
 
 
             // verificar si el estado ha sido finalizada
-            if (document.getElementById('estado-factura').value === 1){
+            if (document.getElementById('estado-factura').value === 1) {
                 // ocultas elementos
                 document.getElementById('buttons-carrito').hidden = true;
                 // ocultas las cabezeras de la tabla
@@ -158,14 +158,14 @@ let cargarCarrito = async () => {
 
             // crear eventos
             for (let i = 0; i < ELIMINAR.length; i++) {
-        
+
 
                 // verificar sí la factura ya fue comprada o finalizada
-                if (document.getElementById('estado-factura').value === 1){
+                if (document.getElementById('estado-factura').value === 1) {
                     // ocultas elementos pertenecientes a los pedidos
                     document.getElementsByClassName('tb-switch')[i].classList.toggle('hide');
-                    document.getElementsByClassName('button-eliminar')[i].classList.toggle('hide');            
-    
+                    document.getElementsByClassName('button-eliminar')[i].classList.toggle('hide');
+
                 }
 
                 // evento para el boton de restar
@@ -248,7 +248,7 @@ let cargarCarrito = async () => {
                             location.reload();
                         }
                     }
-                })            
+                })
             }
 
             break;
@@ -286,7 +286,12 @@ document.getElementById('finalizarPedido').addEventListener('click', async event
         FACTURA.append('factura', getUrl('idfactura'));
         const JSON = await request(CARRITO, 'finalizarCompra', FACTURA);
         if (JSON.status) {
-            notificacionURL('success', 'Pedido finalizado', false, 'productos.html');
+            await notificacionURL('success', 'Pedido finalizado', false, 'productos.html');
+            const JSON2 = await request(CARRITO, 'generateFactura', FACTURA);
+            if (JSON.status) {
+                const PATH = new URL(JSON2.data);
+                window.open(PATH);
+            }
         }
     }
 })

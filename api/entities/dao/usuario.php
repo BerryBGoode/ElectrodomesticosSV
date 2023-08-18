@@ -162,6 +162,13 @@ class UsuarioQuery
                 ORDER BY count(f.idcliente) DESC LIMIT 7';
         return Database::all($sql);
     }
+
+    public function getClienteByUser($user)
+    {
+        $sql = 'SELECT nombre, apellido FROM usuarios WHERE nombreusuario = ?';
+        $param = array($user);
+        return Database::row($sql, $param);
+    }
 }
 // try {
 //     //code...

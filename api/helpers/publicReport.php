@@ -5,7 +5,7 @@ require_once('../../libraries/fpdf182/fpdf.php');
 /**
  * clase de hereda de FPDF para personalizar la página
  */
-class Report extends FPDF
+class PublicReport extends FPDF
 {
     // url para acceder a las acciones o endpoints
     const URL = 'http://localhost/electrodomesticossv/private/';
@@ -26,7 +26,7 @@ class Report extends FPDF
         //Se inicia una sesión o sigue la actual para poder utilizar variables de sesión en el reporte
         session_start();
         //Se verifica si se ha iniciado sesión en el sitio privado para generar el reporte, si no es así, se direcciona a la página principal.
-        if (isset($_SESSION['idusuario'])) {
+        if (isset($_SESSION['idcliente'])) {
             //Se asigna un título al documento a la propiedad de la clase.
             $this->title = $title;
             //Se esablece el título del documento (true = utf-8).
@@ -69,7 +69,7 @@ class Report extends FPDF
         $this->cell(20);
         $this->setFont('Arial', 'B', 10);
         $this->cell(166, 10, 'Date: ' . date('d/m/Y'), 0, 1, 'C');
-        $this->cell(25, 10, 'Usuario: ' . $_SESSION['usuario'], 1, 1, 'C');
+        $this->cell(25, 10, 'Usuario: ' . $_SESSION['cliente'], 1, 1, 'C');
         $this->ln(10);
     }
 

@@ -173,4 +173,15 @@ class FacturaQuery
         $param = array($cliente);
         return Database::all($sql, $param);
     }
+
+    public function getFactura($factura)
+    {
+        $sql = 'SELECT o.idpedido, f.idfactura, o.fecha, p.nombre, p.precio, o.cantidad, (p.precio * o.cantidad) as subtotal
+                FROM pedidos o
+                INNER JOIN productos p on o.idproducto = p.idproducto
+                INNER JOIN facturas f on f.idfactura = o.idfactura
+                WHERE f.idfactura = ?';
+        $param = array($factura);
+        return Database::all($sql, $param);
+    }
 }

@@ -32,6 +32,12 @@ if (!isset($_GET['action'])) {
 
         // evaluar la acción
         switch ($_GET['action']) {
+            case 'generateFactura':
+
+                $_SESSION['factura'] = $_POST['factura'];
+                $res['status'] = 1;
+                $res['data'] = 'http://localhost/electrodomesticossv/api/reports/public/factura.php';
+                break;
             case 'validarPedido':
 
 
@@ -211,7 +217,7 @@ if (!isset($_GET['action'])) {
                     $res['status'] = 1;
                 } elseif (Database::getException()) {
                     $res['excep'] = Database::getException();
-                }else{
+                } else {
                     $res['excep'] = 'No tiene pedidos registrados';
                 }
 
