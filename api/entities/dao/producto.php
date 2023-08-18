@@ -151,8 +151,18 @@ class ProductoQuery
      */
     public function getProductosByMarca($marca)
     {
-        $sql = 'SELECT * FROM productos WHERE idmarca = ?';
+        $sql = 'SELECT nombre, precio FROM productos WHERE idmarca = ?';
         $param = array($marca);
+        return Database::all($sql, $param);
+    }
+
+    /**
+     * Método para obetener los productos por categoria
+     */
+    public function getProductoByCategoria($categoria)
+    {
+        $sql = 'SELECT nombre, precio FROM productos WHERE idcategoria = ?';
+        $param = array($categoria);
         return Database::all($sql, $param);
     }
 }

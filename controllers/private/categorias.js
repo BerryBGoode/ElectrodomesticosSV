@@ -1,5 +1,5 @@
 // importación de modulos
-import { notificacionAccion, notificacionURL, request } from "../controller.js";
+import { API, notificacionAccion, notificacionURL, request } from "../controller.js";
 
 // api para hacer peticiones de categorias
 export const CATEGORIA = 'business/private/categoria.php';
@@ -111,7 +111,7 @@ AGREGAR.addEventListener('click', (event) => {
 
 const buscador = async event => {
     event.preventDefault();
-    const JSON = await request(CATEGORIA, 'cargar');    
+    const JSON = await request(CATEGORIA, 'cargar');
     if (!JSON.status) {
         notificacionURL('error', JSON.excep, false);
     } else {
@@ -192,3 +192,8 @@ const buscador = async event => {
 }
 SEARCH.addEventListener('submit', async event => buscador(event));
 SEARCH.addEventListener('keyup', async event => buscador(event));
+
+document.getElementById('reporte').addEventListener('click', () => {
+    const PATH = new URL(`${API}reports/private/categorias.php`);
+    window.open(PATH)
+})

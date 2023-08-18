@@ -18,10 +18,18 @@
     <div class="container container-catalog">
         <div class="top">
             <h3>Categorias</h3>
-            <!-- trigger del modal -->
-            <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#Modal" id="btn-agregar">
-                Agregar
-            </button>
+            <div class="buttons-container">
+                <button type="button" class="btn btn-secondary" id="reporte">
+                    Imprimir
+                </button>
+
+                <!-- trigger del modal -->
+                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#Modal"
+                    id="btn-agregar">
+                    Agregar
+                </button>
+
+            </div>
         </div>
         <div class="table">
             <table class="table table-striped table-hover">
@@ -49,12 +57,14 @@
                     <div class="modal-body">
                         <input type="number" name="idcategoria" id="idcategoria" class="hide">
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="categoria" placeholder="categoria" name="categoria">
+                            <input type="text" class="form-control" id="categoria" placeholder="categoria"
+                                name="categoria">
                             <label for="categoria">Categoria</label>
-                        </div>               
+                        </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="reset" id="cancelar" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="reset" id="cancelar" class="btn btn-danger"
+                            data-bs-dismiss="modal">Cancelar</button>
                         <button type="submit" class="btn btn-success" id="proceso"></button>
                     </div>
                 </form>
